@@ -1,4 +1,4 @@
-# MilkLoader
+# Milk
 Milk is a mod loader made for Karlson (itch.io version)
 
 # Building Solution
@@ -7,4 +7,5 @@ Compiling the solution requieres the assembly files of the game, and a custom br
 - Karlson_Data/Managed/Unity.TextMeshPro.dll
 - Karlson_Data/Managed/UnityEngine.dll
 - Karlson_Data/Managed/UnityEngine.\*.dll
+
 You can also do this by running the [devkit bootstrapper](github.com/devilExE3/Milk)
