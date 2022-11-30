@@ -8,3 +8,5 @@ Internal/Loadson deps/0Harmony.dll
 Internal/Loadson deps/Mono.Cecil.dll
 Internal/Loadson deps/MonoMod.RuntimeDetour.dll
 Internal/Loadson deps/MonoMod.Utils.dll
+Launcher/Launcher.exe
+Launcher/MInject.dll

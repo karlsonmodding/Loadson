@@ -4,3 +4,5 @@ Internal/Loadson deps/0Harmony.dll:01108219953638d61f111c9370ae5d3b
 Internal/Loadson deps/Mono.Cecil.dll:50ae8a86b701c83fce3a814ae8d79321
 Internal/Loadson deps/MonoMod.RuntimeDetour.dll:e25d371f46817b293dc79923f1a92e02
 Internal/Loadson deps/MonoMod.Utils.dll:7c38fef83d02785d8d519d241f4cb403
+Launcher/Launcher.exe:c0dc8699906b215f3a1ece6d9f16b577
+Launcher/MInject.exe:f0070cc39abc1092a2f88382f7543097
