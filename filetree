@@ -1,1 +1,10 @@
-
+Internal/
+Internal/Common deps/
+Internal/Loadson deps/
+Launcher/
+Internal/Kernel.dll
+Internal/Loadson.dll
+Internal/Loadson deps/0Harmony.dll
+Internal/Loadson deps/Mono.Cecil.dll
+Internal/Loadson deps/MonoMod.RuntimeDetour.dll
+Internal/Loadson deps/MonoMod.Utils.dll
