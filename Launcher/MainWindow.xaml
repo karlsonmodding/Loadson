@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Launcher"
         mc:Ignorable="d" WindowStyle="None" AllowsTransparency="True"
         Background="#0000" ResizeMode="NoResize"
-        Title="Loadson" Height="173" Width="190" WindowStartupLocation="CenterScreen">
+        Title="Loadson" Height="173" Width="190" WindowStartupLocation="CenterScreen" Icon="/Loadson.ico">
     <Border BorderBrush="Black" BorderThickness="1">
         <Grid Background="#555">
             <Grid

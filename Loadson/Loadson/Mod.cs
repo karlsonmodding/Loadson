@@ -21,10 +21,17 @@ namespace Loadson
         public virtual void FixedUpdate(float fixedDeltaTime) { }
 
         // Mod-specific API
-        protected T LoadAsset<T>(string name)
+        /// <summary>
+        /// Load an asset by its name from your asset bundle. The same as <see cref="UnityEngine.AssetBundle.LoadAsset{T}(string)"/>
+        /// </summary>
+        /// <typeparam name="T">Asset type</typeparam>
+        /// <param name="name">Asset name</param>
+        /// <returns>The loaded asset</returns>
+        protected T LoadAsset<T>(string name) where T : UnityEngine.Object
         {
-            // TODO: Add resolver
-            return default;
+            // get mod instance
+            ModEntry e = (from x in ModEntry.List where x.ModGUID == Assembly.GetCallingAssembly().GetName().Name select x).FirstOrDefault();
+            return e.AssetBundle.LoadAsset<T>(name);
         }
 
         /// <summary>
@@ -32,21 +39,20 @@ namespace Loadson
         /// </summary>
         /// <param name="name">Name of the function. Be carefull to add a prefix to it that is unique to your mod.</param>
         /// <param name="execute">The API function itself, takes one parameter as list of objects, returns an object (can be null for void functions)</param>
-        protected void AddAPIFunction(string name, Action<object[], object> execute)
+        protected void AddAPIFunction(string name, CrossModAPI.cmm execute)
         {
-            // TODO: Implement functionality and callable to modlist
+            CrossModAPI.AddMethod(name, execute);
         }
 
         /// <summary>
         /// "Call" an API function. Be sure to add the mod that you are calling to the dependencies list.
         /// </summary>
         /// <param name="name">Name of the function.</param>
-        /// <param name="param">Function parameters as an object list</param>
+        /// <param name="args">Function parameters as an object list</param>
         /// <returns>API function return value</returns>
-        protected object CallAPIFunction(string name, object[] param)
+        protected object CallAPIFunction(string name, object[] args)
         {
-            // TODO: Call api function from callable modlist
-            return null;
+            return CrossModAPI.CallMethod(name, args);
         }
     }
 }

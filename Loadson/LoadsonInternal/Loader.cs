@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -17,12 +18,9 @@ namespace LoadsonInternal
         public static extern bool SetWindowText(IntPtr hwnd, string lpString);
         [DllImport("user32.dll", EntryPoint = "FindWindow")]
         public static extern IntPtr FindWindow(string className, string windowName);
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
         #endregion
 
         public static string LOADSON_ROOT;
-        public static AppDomain rootDomain;
         public static Harmony Harmony;
         public static MonoHooks MonoHooks;
 
@@ -33,14 +31,7 @@ namespace LoadsonInternal
             IntPtr hWnd = FindWindow(null, Application.productName);
             SetWindowText(hWnd, "Loadson");
 
-            if (Environment.GetEnvironmentVariable("KarlsonLoaderDir") == null)
-            {
-                MessageBox(IntPtr.Zero, "There was an error launching Loadson (no environment variable set). Please re-launch with Loadson.exe", "[Loadson] Error", 0x00040010);
-                Process.GetCurrentProcess().Kill();
-                return;
-            }
-
-            LOADSON_ROOT = Environment.GetEnvironmentVariable("KarlsonLoaderDir");
+            LOADSON_ROOT = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Loadson");
 
             Harmony = new Harmony("loadson");
             Harmony.PatchAll();

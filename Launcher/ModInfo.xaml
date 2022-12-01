@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Launcher"
         mc:Ignorable="d" WindowStyle="None" ResizeMode="NoResize"
-        Title="ModInfo" Height="450" Width="400" WindowStartupLocation="CenterScreen">
+        Title="Mod Info" Height="450" Width="400" WindowStartupLocation="CenterScreen" Icon="/Loadson.ico">
     <Border BorderBrush="Black" BorderThickness="1">
         <Grid Background="#555">
             <Grid

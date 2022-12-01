@@ -91,12 +91,14 @@ namespace Launcher
                 Process.GetCurrentProcess().Kill();
                 return;
             }
+#if false
             if(Environment.GetEnvironmentVariable("Loadson") == null)
             {
                 MessageBox(IntPtr.Zero, "Please launch Loadson with Loadson.exe (Bootstrapper).", "[Loadson Launcher] Error", 0x00040010);
                 Process.GetCurrentProcess().Kill();
                 return;
             }
+#endif
             if (!Directory.Exists(ROOT))
             {
                 MessageBox(IntPtr.Zero, "Couldn't find Loadson directory. Try running Loadson.exe", "[Loadson Launcher] Error", 0x00040010);
