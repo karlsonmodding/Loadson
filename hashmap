@@ -1,8 +1,8 @@
-Internal/Kernel.dll:d8ab51a37f32bc9088730bdadeac9a95
-Internal/Loadson.dll:c635b6d238779c10ed8322d88d69f00e
+Internal/Kernel.dll:9f50d2bd0a956e4aa6c4756a52e197aa
+Internal/Loadson.dll:d92ed545b6b27eb1a5d296ccfaeaa409
 Internal/Loadson deps/0Harmony.dll:01108219953638d61f111c9370ae5d3b
 Internal/Loadson deps/Mono.Cecil.dll:50ae8a86b701c83fce3a814ae8d79321
 Internal/Loadson deps/MonoMod.RuntimeDetour.dll:e25d371f46817b293dc79923f1a92e02
 Internal/Loadson deps/MonoMod.Utils.dll:7c38fef83d02785d8d519d241f4cb403
-Launcher/Launcher.exe:c0dc8699906b215f3a1ece6d9f16b577
+Launcher/Launcher.exe:55c585d57baaf3e665b540b7b4a8dd9b
 Launcher/MInject.exe:f0070cc39abc1092a2f88382f7543097
