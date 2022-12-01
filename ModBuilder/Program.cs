@@ -65,7 +65,8 @@ namespace ModBuilder
                 }
                 Console.WriteLine("Downloading LoadsonAPI.dll");
                 HttpClient hc = new HttpClient();
-                RawCopy(hc.GetStreamAsync(API_ENDPOINT + "/files/LoadsonAPI.dll").GetAwaiter().GetResult(), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "Loadson.dll"));
+                File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "LoadsonAPI.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/LoadsonAPI.dll").GetAwaiter().GetResult());
+                File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "LoadsonAPI.xml"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/LoadsonAPI.xml").GetAwaiter().GetResult());
                 Console.WriteLine("ModBuilder installed succesfully the lib folder. Press any key to exit..");
                 Console.ReadKey();
                 return;
@@ -84,9 +85,7 @@ namespace ModBuilder
                 Console.ReadKey();
                 return;
             }
-            string mod_guid = Path.GetFileNameWithoutExtension((from x in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Release")).ToList()
-                                                                where x.EndsWith(".pdb")
-                                                                select x).FirstOrDefault());
+            string mod_guid = Path.GetFileNameWithoutExtension(Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Release")).FirstOrDefault());
             Console.WriteLine("Detected mod GUID: " + mod_guid);
             Console.WriteLine("Loading mod binary..");
             byte[] mod_asm = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Release", mod_guid + ".dll"));

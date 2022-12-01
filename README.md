@@ -1,11 +1,14 @@
-# Milk
-Milk is a mod loader made for Karlson (itch.io version)
+# Loadson
+Loadson is an external mod loader made for Karlson (itch.io version)
 
 # Building Solution
-Compiling the solution requieres the assembly files of the game, and a custom branch of MInject (found [here](https://github.com/devilExE3/MInject). Create a folder named `lib` in the root of this project and copy over there the following files from your copy of the game:
-- Karlson_Data/Managed/Assembly-CSharp.dll
-- Karlson_Data/Managed/Unity.TextMeshPro.dll
-- Karlson_Data/Managed/UnityEngine.dll
-- Karlson_Data/Managed/UnityEngine.\*.dll
+- Run the `DevKit.exe` found in the root of the solution.
+- Open the `Loadson.sln` solution in Visual Studio 2022 (earlier version should also work)
+- Build Solution and the output is found in the `build` folder in solution root
+- To run your assemblies, you will need to change [this line](https://github.com/karlsonmodding/Loadson/blob/main/- Launcher/App.xaml.cs#L94) from `true` to `false` to bypass the bootstrapper.
+- Copy the files you modified from the `build` folder to the `%appdata%/Loadson` folder
+- Run the bypassed launcher from `%appdata%/Loadson/Launcher/Launcher.exe`
 
-You can also do this by running the [devkit bootstrapper](github.com/devilExE3/Milk)
+# Used dependencies
+- MInject: https://github.com/devilExE3/MInject
+- Harmony: https://github.com/BepInEx/BepInEx (stole it a long time ago from here)
