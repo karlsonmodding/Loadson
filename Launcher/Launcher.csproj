@@ -125,4 +125,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>mkdir "$(SolutionDir)build"
+mkdir "$(SolutionDir)build\launcher"
+copy "$(TargetPath)" "$(SolutionDir)build\launcher\Launcher.exe" /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>

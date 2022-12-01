@@ -28,7 +28,6 @@ namespace Bootstrapper
         public MainWindow()
         {
             InitializeComponent();
-            Icon = GetThumbnail(Assembly.GetEntryAssembly().GetManifestResourceStream("Bootstrapper.Loadson.ico"));
         }
 
         private void Window_Initialized(object sender, EventArgs e)
@@ -61,7 +60,7 @@ namespace Bootstrapper
                     {
                         List<string> path = new List<string> { root };
                         path.AddRange(file.Split('/'));
-                        File.WriteAllBytes(Path.Combine(path.ToArray()), hc.GetByteArrayAsync(API_ENDPOINT + "/files/" + path).GetAwaiter().GetResult());
+                        File.WriteAllBytes(Path.Combine(path.ToArray()), hc.GetByteArrayAsync(API_ENDPOINT + "/files/" + file.Replace(" ", "%20")).GetAwaiter().GetResult());
                     }
                 }
             }
@@ -93,7 +92,7 @@ namespace Bootstrapper
                         path.AddRange(file.Split('/'));
                         if (!File.Exists(Path.Combine(path.ToArray())))
                             update.Add(file);
-                        else if (hashmap[file] != CheckHash(Path.Combine(path.ToArray()))) {
+                        else if (hashmap.ContainsKey(file) && hashmap[file] != CheckHash(Path.Combine(path.ToArray()))) {
                             File.Delete(Path.Combine(path.ToArray()));
                             update.Add(file);
                         }
@@ -104,7 +103,7 @@ namespace Bootstrapper
                 {
                     List<string> path = new List<string> { root };
                     path.AddRange(file.Split('/'));
-                    File.WriteAllBytes(Path.Combine(path.ToArray()), hc.GetByteArrayAsync(API_ENDPOINT + "/files/" + path).GetAwaiter().GetResult());
+                    File.WriteAllBytes(Path.Combine(path.ToArray()), hc.GetByteArrayAsync(API_ENDPOINT + "/files/" + file.Replace(" ", "%20")).GetAwaiter().GetResult());
                 }
             }
             logText.Text += "Starting Loadson..";
@@ -131,18 +130,6 @@ namespace Bootstrapper
                     return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
                 }
             }
-        }
-        private ImageSource GetThumbnail(Stream icon)
-        {
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.DecodePixelWidth = 64;
-            bitmap.DecodePixelHeight = 64;
-            bitmap.StreamSource = icon;
-            bitmap.EndInit();
-            bitmap.Freeze();
-
-            return bitmap;
         }
     }
 }

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kernel", "Kernel\Kernel.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModBuilder", "ModBuilder\ModBuilder.csproj", "{3497622D-3448-4CBE-BC9C-75115C46D523}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevKit", "DevKit\DevKit.csproj", "{169E9A96-CAFD-4DBA-9C6F-AEDE6663176E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,14 @@ Global
 		{3497622D-3448-4CBE-BC9C-75115C46D523}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3497622D-3448-4CBE-BC9C-75115C46D523}.Release|x64.ActiveCfg = Release|Any CPU
 		{3497622D-3448-4CBE-BC9C-75115C46D523}.Release|x64.Build.0 = Release|Any CPU
+		{169E9A96-CAFD-4DBA-9C6F-AEDE6663176E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{169E9A96-CAFD-4DBA-9C6F-AEDE6663176E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{169E9A96-CAFD-4DBA-9C6F-AEDE6663176E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{169E9A96-CAFD-4DBA-9C6F-AEDE6663176E}.Debug|x64.Build.0 = Debug|Any CPU
+		{169E9A96-CAFD-4DBA-9C6F-AEDE6663176E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{169E9A96-CAFD-4DBA-9C6F-AEDE6663176E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{169E9A96-CAFD-4DBA-9C6F-AEDE6663176E}.Release|x64.ActiveCfg = Release|Any CPU
+		{169E9A96-CAFD-4DBA-9C6F-AEDE6663176E}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

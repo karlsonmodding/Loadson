@@ -261,13 +261,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>del "$(TargetDir)/*" /Q</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>echo Cleaning bin folder..
-del "$(TargetDir)0Harmony.dll"
-del "$(TargetDir)Assembly-CSharp.dll"
-del "$(TargetDir)Mono*"
-del "$(TargetDir)Unity*"</PostBuildEvent>
+    <PostBuildEvent>mkdir "$(SolutionDir)build"
+mkdir "$(SolutionDir)build\internal"
+copy "$(TargetPath)" "$(SolutionDir)build\internal\Loadson.dll" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

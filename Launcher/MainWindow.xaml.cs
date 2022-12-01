@@ -314,6 +314,8 @@ namespace Launcher
         {
             if (!Directory.Exists(Path.Combine(App.ROOT, "Mods")))
                 Directory.CreateDirectory(Path.Combine(App.ROOT, "Mods"));
+            if (!Directory.Exists(Path.Combine(App.ROOT, "Mods", "Disabled")))
+                Directory.CreateDirectory(Path.Combine(App.ROOT, "Mods", "Disabled"));
             Process.Start(Path.Combine(App.ROOT, "Mods"));
         }
 
@@ -350,6 +352,8 @@ namespace Launcher
             List<string> modList = new List<string>();
             foreach (var file in Directory.GetFiles(Path.Combine(App.ROOT, "Mods")))
                 if (file.EndsWith(".klm")) modList.Add(file);
+            if (!Directory.Exists(Path.Combine(App.ROOT, "Mods", "Disabled")))
+                Directory.CreateDirectory(Path.Combine(App.ROOT, "Mods", "Disabled"));
             foreach (var file in Directory.GetFiles(Path.Combine(App.ROOT, "Mods", "Disabled")))
                 if (file.EndsWith(".klm")) modList.Add(file);
             modList.Sort(new FileComparer());

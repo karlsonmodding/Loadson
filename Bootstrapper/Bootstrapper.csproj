@@ -98,7 +98,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Loadson.ico" />
+    <Resource Include="Loadson.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>mkdir "$(SolutionDir)build"
+copy "$(TargetPath)" "$(SolutionDir)build\Loadson.exe" /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>

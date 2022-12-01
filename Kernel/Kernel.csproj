@@ -45,4 +45,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>mkdir "$(SolutionDir)build"
+mkdir "$(SolutionDir)build\internal"
+copy "$(TargetPath)" "$(SolutionDir)build\internal\Kernel.dll" /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
