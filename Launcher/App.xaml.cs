@@ -29,7 +29,8 @@ namespace Launcher
         public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
         #endregion
 
-        public const string VERSION = "1.0";
+        public const string VERSION = "1.1";
+        public const int TIMEOUT = 50;
         public static string ROOT;
 
         private void Application_Startup(object sender, StartupEventArgs e)
@@ -54,13 +55,14 @@ namespace Launcher
             if(Environment.GetCommandLineArgs().Length > 1 && Environment.GetCommandLineArgs()[1] == "-silent")
             {
                 string krlPath = File.ReadAllText(Path.Combine(ROOT, "Internal", "karlsonpath")).Trim();
-                Process karlson = new Process {
+                Process karlson = new Process
+                {
                     StartInfo = new ProcessStartInfo(Path.Combine(krlPath, "Karlson.exe"))
                 };
                 karlson.Start();
                 while (karlson.MainWindowHandle == IntPtr.Zero) Thread.Sleep(0);
                 PostMessage(karlson.MainWindowHandle, WM_KEYDOWN, 0xD, 0); // enter key
-                Thread.Sleep(100);
+                Thread.Sleep(TIMEOUT);
 
                 // run MInject
                 // Method: Kernel.Kernel.Start()

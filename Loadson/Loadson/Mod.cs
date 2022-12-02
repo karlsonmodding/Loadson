@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,7 +31,23 @@ namespace Loadson
         protected T LoadAsset<T>(string name) where T : UnityEngine.Object
         {
             // get mod instance
-            ModEntry e = (from x in ModEntry.List where x.ModGUID == Assembly.GetCallingAssembly().GetName().Name select x).FirstOrDefault();
+            ModEntry e = null;
+            // selector doesn't work, don't ask me why, i'm going insane
+            foreach(var a in ModEntry.List)
+            {
+                LoadsonInternal.Console.Log(a.assembly.GetName().Name);
+                if(a.assembly.GetName().Name == Assembly.GetCallingAssembly().GetName().Name)
+                {
+                    e = a;
+                    break;
+                }
+            }
+            if(e == null)
+            {
+                LoadsonInternal.Console.Log("<color=red>Couldn't find matching mod for " + Assembly.GetCallingAssembly().GetName() + "</color>");
+                LoadsonInternal.Console.OpenConsole();
+                return default;
+            }
             return e.AssetBundle.LoadAsset<T>(name);
         }
 

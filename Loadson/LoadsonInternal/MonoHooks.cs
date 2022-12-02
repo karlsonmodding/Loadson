@@ -15,7 +15,7 @@ namespace LoadsonInternal
         {
             try
             {
-                foreach(ModEntry mod in ModEntry.List)
+                foreach(ModEntry mod in from x in ModEntry.List where x.instance != null select x)
                     mod.instance.OnGUI();
             } catch { }
             Console._ongui();
@@ -25,7 +25,7 @@ namespace LoadsonInternal
         {
             try
             {
-                foreach (ModEntry mod in ModEntry.List)
+                foreach (ModEntry mod in from x in ModEntry.List where x.instance != null select x)
                     mod.instance.Update(Time.deltaTime);
             }
             catch { }
@@ -36,7 +36,7 @@ namespace LoadsonInternal
         {
             try
             {
-                foreach (ModEntry mod in ModEntry.List)
+                foreach (ModEntry mod in from x in ModEntry.List where x.instance != null select x)
                     mod.instance.FixedUpdate(Time.fixedDeltaTime);
             }
             catch { }
@@ -46,7 +46,7 @@ namespace LoadsonInternal
         {
             try
             {
-                foreach (ModEntry mod in ModEntry.List)
+                foreach (ModEntry mod in from x in ModEntry.List where x.instance != null select x)
                     mod.instance.OnDisable();
             }
             catch { }

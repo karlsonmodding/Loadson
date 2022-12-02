@@ -32,13 +32,20 @@ namespace LoadsonInternal
             SetWindowText(hWnd, "Loadson");
 
             LOADSON_ROOT = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Loadson");
-
-            Harmony = new Harmony("loadson");
-            Harmony.PatchAll();
-
+            
             GameObject go = new GameObject("Loadson_MonoHooks");
             MonoHooks = go.AddComponent<MonoHooks>();
             UnityEngine.Object.DontDestroyOnLoad(go);
+
+            Harmony = new Harmony("loadson");
+            try
+            {
+                Harmony.PatchAll();
+            } catch (Exception e)
+            {
+                Console.Log(e.ToString());
+            }
+            
         }
     }
 }

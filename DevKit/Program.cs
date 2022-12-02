@@ -81,9 +81,10 @@ namespace DevKit_Bootstrapper
             Console.WriteLine("Downloading other assemblies..");
             HttpClient hc = new HttpClient();
             File.WriteAllBytes(Path.Combine(solutionRoot, "lib", "0Harmony.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/Internal/Loadson%20deps/0Harmony.dll").GetAwaiter().GetResult());
+            /* Changed Harmony version
             File.WriteAllBytes(Path.Combine(solutionRoot, "lib", "Mono.Cecil.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/Internal/Loadson%20deps/Mono.Cecil.dll").GetAwaiter().GetResult());
             File.WriteAllBytes(Path.Combine(solutionRoot, "lib", "MonoMod.RuntimeDetour.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/Internal/Loadson%20deps/MonoMod.RuntimeDetour.dll").GetAwaiter().GetResult());
-            File.WriteAllBytes(Path.Combine(solutionRoot, "lib", "MonoMod.Utils.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/Internal/Loadson%20deps/MonoMod.Utils.dll").GetAwaiter().GetResult());
+            File.WriteAllBytes(Path.Combine(solutionRoot, "lib", "MonoMod.Utils.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/Internal/Loadson%20deps/MonoMod.Utils.dll").GetAwaiter().GetResult());*/
             File.WriteAllBytes(Path.Combine(solutionRoot, "lib", "MInject.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/Launcher/MInject.dll").GetAwaiter().GetResult());
             Console.WriteLine("DevKit installed succesfully the lib folder. Press any key to exit..");
             Console.ReadKey();

@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 namespace LoadsonInternal
 {
     [HarmonyPatch(typeof(Managers), "Start")]
-    class Hook_Managers_Start
+    public class Hook_Managers_Start
     {
         public static bool done { get; private set; } = false;
         public static bool Prefix(Managers __instance)
@@ -48,13 +48,13 @@ namespace LoadsonInternal
             if (done) return;
             if (scene.name == "0Tutorial")
             {
-                Console.startLog += "Initializing prefabs..\n";
+                Console.Log("Initializing prefabs..");
                 LoadsonAPI.PrefabManager.Init();
                 SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
-                Console.startLog += "Building mod list..\n";
+                Console.Log("Building mod list..");
                 ModLoader.BuildList();
-                Console.startLog += "Mod count: " + ModEntry.List.Count + "\nLoading mods..\n";
-                ModLoader.LoadList();//*/
+                Console.Log("Mod count: " + ModEntry.List.Count + "\nLoading mods..");
+                ModLoader.LoadList();
             }
         }
 

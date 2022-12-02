@@ -238,8 +238,6 @@ namespace Launcher
             {
                 StartInfo = new ProcessStartInfo(Path.Combine(karlsonFolder, "Karlson.exe"))
             };
-            karlson.StartInfo.UseShellExecute = false;
-            karlson.StartInfo.EnvironmentVariables.Add("KarlsonLoaderDir", App.ROOT);
             if (!karlson.Start())
             {
                 MessageBox(IntPtr.Zero, "Couldn't start Karlson, please try again.", "[Loadson Injector] Error", 0x00040010);
@@ -247,7 +245,7 @@ namespace Launcher
             }
             while (karlson.MainWindowHandle == IntPtr.Zero) Thread.Sleep(0);
             PostMessage(karlson.MainWindowHandle, WM_KEYDOWN, 0xD, 0); // enter key
-            Thread.Sleep(100);
+            Thread.Sleep(App.TIMEOUT);
 
             // run MInject
             // Method: Kernel.Kernel.Start()
@@ -357,8 +355,10 @@ namespace Launcher
             foreach (var file in Directory.GetFiles(Path.Combine(App.ROOT, "Mods", "Disabled")))
                 if (file.EndsWith(".klm")) modList.Add(file);
             modList.Sort(new FileComparer());
+            int hoff = -1;
             foreach(var m in modList)
             {
+                hoff++;
                 using (BinaryReader br = new BinaryReader(File.OpenRead(m)))
                 {
                     string ModGUID = Path.GetFileNameWithoutExtension(m);
@@ -382,7 +382,7 @@ namespace Launcher
                     g.Height = 100;
                     g.VerticalAlignment = VerticalAlignment.Top;
                     g.HorizontalAlignment = HorizontalAlignment.Center;
-                    g.Margin = new Thickness(0, 10, 0, 0);
+                    g.Margin = new Thickness(0, 10 + 110 * hoff, 0, 0);
                     g.Background = new SolidColorBrush(Color.FromRgb(51, 51, 51));
                     CheckBox cb = new CheckBox();
                     g.Children.Add(cb);

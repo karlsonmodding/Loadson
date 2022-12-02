@@ -14,6 +14,7 @@ namespace LoadsonInternal
     {
         public static void BuildList()
         {
+            Console.Log("Loadson root: " + Loader.LOADSON_ROOT);
             foreach (string file in from x in Directory.GetFiles(Path.Combine(Loader.LOADSON_ROOT, "Mods")) where x.EndsWith(".klm") select x)
             {
                 using (BinaryReader br = new BinaryReader(File.OpenRead(file)))

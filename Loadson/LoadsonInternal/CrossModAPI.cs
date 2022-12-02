@@ -32,6 +32,6 @@ namespace LoadsonInternal
             return MethodMap[name](args);
         }
 
-        private static Dictionary<string, cmm> MethodMap = new Dictionary<string, cmm>();
+        private static readonly Dictionary<string, cmm> MethodMap = new Dictionary<string, cmm>();
     }
 }

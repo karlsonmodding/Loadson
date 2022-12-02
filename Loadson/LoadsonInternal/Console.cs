@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace LoadsonInternal
@@ -9,10 +11,8 @@ namespace LoadsonInternal
         private static string content = "Loadson\n  made by devilExE\n  licensed under MIT license\n\n";
         public static void Log(string s)
         {
+            File.AppendAllText(Path.Combine(Directory.GetCurrentDirectory(), "log"), s + "\n");
             content += s + '\n';
-            startLog += s + "\n";
-            if (content.Split('\n').Count() > 40)
-                content = content.Substring(content.IndexOf('\n') + 1);
         }
 
         private static bool consoleOpen = false;
@@ -20,22 +20,29 @@ namespace LoadsonInternal
 
         private static Texture2D blackTx = new Texture2D(1, 1);
 
-        public static string startLog = "Loadson\n  made by devilExE\n  licensed under MIT license\n\n";
+        private static Rect consoleWindow = new Rect(50, 50, 1000, 800);
+        private static Vector2 consoleScroll = new Vector2(0, 0);
+
+        //public static string startLog = "Loadson\n  made by devilExE\n  licensed under MIT license\n\n";
         public static void _ongui()
         {
             if (consoleOpen)
             {
-                GUI.Box(new Rect(5f, 5f, 1500f, 825f), "Loadson console");
-                GUI.Label(new Rect(10f, 25f, 1490f, 800f), content);
+                consoleWindow = GUI.Window(1000, consoleWindow, (windowId) =>
+                {
+                    GUI.DragWindow(new Rect(0, 0, 1000, 20));
+                    Vector2 size = GUI.skin.label.CalcSize(new GUIContent(content));
+                    consoleScroll = GUI.BeginScrollView(new Rect(5, 20, 995, 780), consoleScroll, new Rect(0, 0, size.x + 50, size.y + 50));
+                    GUI.Label(new Rect(0, 0, size.x + 50, size.y + 50), content);
+                    GUI.EndScrollView();
+                }, "Loadson console");
             }
             if (!Hook_Managers_Start.done)
             {
                 blackTx.SetPixel(0, 0, new Color(35f / 255f, 31f / 255f, 32f / 255f));
                 blackTx.Apply();
                 GUI.DrawTextureWithTexCoords(new Rect(0f, 0f, Screen.width, Screen.height), blackTx, new Rect(0, 0, 1, 1));
-                if (startLog.Split('\n').Length >= 50)
-                    startLog = startLog.Substring(startLog.IndexOf('\n') + 1);
-                GUI.Label(new Rect(100f, 100f, 1000f, 1000f), "[Loadson]\n" + startLog);
+                GUI.Label(new Rect(0f, 0f, Screen.width, Screen.height), "[Loadson]\n" + content);
             }
             GUI.Label(new Rect(0f, Screen.height - 20f, 1000f, 100f), "<b>Loadson v" + Version.ver + "</b> Loaded " + ModLoader.LoadedMods + " mods.");
         }

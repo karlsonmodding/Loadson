@@ -3,3 +3,5 @@ lib
 */obj
 .vs
 build
+**/packages/*
+!**/packages/repositories.config
