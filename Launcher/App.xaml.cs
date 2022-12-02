@@ -138,7 +138,7 @@ namespace Launcher
                 Process.GetCurrentProcess().Kill();
                 return;
             }
-#if false // set to false to be able to launch without bootstrapper
+#if true // set to false to be able to launch without bootstrapper
             if(Environment.GetEnvironmentVariable("Loadson") == null)
             {
                 MessageBox(IntPtr.Zero, "Please launch Loadson with Loadson.exe (Bootstrapper).", "[Loadson Launcher] Error", 0x00040010);
