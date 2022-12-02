@@ -1,4 +1,5 @@
-﻿using MInject;
+﻿using Microsoft.Win32;
+using MInject;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -7,7 +8,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Remoting.Contexts;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -37,9 +40,51 @@ namespace Launcher
         {
             ROOT = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Loadson");
 
+            if(Environment.GetCommandLineArgs().Length > 2 && Environment.GetCommandLineArgs()[1] == "-install")
+            { // install a klmi mod
+                if(!File.Exists(Environment.GetCommandLineArgs()[2]))
+                {
+                    MessageBox(IntPtr.Zero, "The file you are trying to install does not exist.", "[Loadson] Error", 0x00040010);
+                    Process.GetCurrentProcess().Kill();
+                    return;
+                }
+                if (!Environment.GetCommandLineArgs()[2].EndsWith(".klmi"))
+                {
+                    MessageBox(IntPtr.Zero, "You are trying to install a non-klmi file.\nOnly Karlson Loader Mod Install files can be installed", "[Loadson] Error", 0x00040010);
+                    Process.GetCurrentProcess().Kill();
+                    return;
+                }
+                if(File.Exists(Path.Combine(ROOT, "Mods", Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[2]) + ".klm")))
+                {
+                    MessageBox(IntPtr.Zero, "You already installed this mod.", "[Loadson] Error", 0x00040010);
+                    Process.GetCurrentProcess().Kill();
+                    return;
+                }
+                using(BinaryReader br = new BinaryReader(File.OpenRead(Environment.GetCommandLineArgs()[2])))
+                {
+                    int _extDeps = br.ReadInt32();
+                    List<(string, byte[])> extDeps = new List<(string, byte[])>();
+                    for(int i = 0; i < _extDeps; i++)
+                    {
+                        string name = br.ReadString();
+                        int _len = br.ReadInt32();
+                        byte[] data = br.ReadBytes(_len);
+                        extDeps.Add((name, data));
+                    }
+                    int _modSize = br.ReadInt32();
+                    byte[] modData = br.ReadBytes(_modSize);
+                    foreach(var dep in extDeps)
+                        File.WriteAllBytes(Path.Combine(ROOT, "Internal", "Common deps", dep.Item1), dep.Item2);
+                    File.WriteAllBytes(Path.Combine(ROOT, "Mods", Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[2]) + ".klm"), modData);
+                    MessageBox(IntPtr.Zero, "Mod " + Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[2]) + " installed succesfully", "[Loadson] Info", 0x00000040);
+                    Process.GetCurrentProcess().Kill();
+                    return;
+                }
+            }
+
             if (Environment.GetCommandLineArgs().Length > 2 && Environment.GetCommandLineArgs()[1] == "-disable")
             {
-                Thread.Sleep(200); // wait for karlson exit
+                // wait for karlson exit
                 while (Process.GetProcessesByName("Karlson.exe").Length > 0) Thread.Sleep(0);
                 Thread.Sleep(50); // wait for karlson exit
                 if (!Directory.Exists(Path.Combine(ROOT, "Mods", "Disabled")))
@@ -93,7 +138,7 @@ namespace Launcher
                 Process.GetCurrentProcess().Kill();
                 return;
             }
-#if true // set to false to be able to launch without bootstrapper
+#if false // set to false to be able to launch without bootstrapper
             if(Environment.GetEnvironmentVariable("Loadson") == null)
             {
                 MessageBox(IntPtr.Zero, "Please launch Loadson with Loadson.exe (Bootstrapper).", "[Loadson Launcher] Error", 0x00040010);
@@ -107,7 +152,48 @@ namespace Launcher
                 Process.GetCurrentProcess().Kill();
                 return;
             }
+
+            // add .klmi handler
+            if(!Registry.ClassesRoot.GetSubKeyNames().Contains(".klmi"))
+            {
+                if(!IsAdministrator())
+                {
+                    if (MessageBox(IntPtr.Zero, "Loadson Mod Install files (.klmi) are not associated.\nDo you want to associate them now?\n(Requieres restart with Administrator)", "Loadson", (uint)(0x00000004L | 0x00000040L)) == 6)
+                    { // yes
+                        Process proc = new Process();
+                        proc.StartInfo.FileName = Path.Combine(ROOT, "Launcher", "Launcher.exe");
+                        proc.StartInfo.UseShellExecute = true;
+                        proc.StartInfo.Verb = "runas";
+                        proc.Start();
+                        Process.GetCurrentProcess().Kill();
+                        return;
+                    }
+                }
+                else
+                {
+                    RegistryKey filetype = Registry.ClassesRoot.CreateSubKey(".klmi");
+                    filetype.SetValue("", "LoadsonModInstaller");
+                    filetype.Close();
+                    RegistryKey app = Registry.ClassesRoot.CreateSubKey("LoadsonModInstaller");
+                    app.SetValue("", "Loadson Mod Install");
+                    app.CreateSubKey("DefaultIcon").SetValue("", $"\"{Path.Combine(ROOT, "Launcher", "Launcher.exe")}\",0");
+                    RegistryKey shell = app.CreateSubKey("shell");
+                    RegistryKey open = shell.CreateSubKey("open");
+                    open.SetValue("", "Install mod");
+                    open.CreateSubKey("command").SetValue("", $"\"{Path.Combine(ROOT, "Launcher", "Launcher.exe")}\" -install \"%1\"");
+                    app.Close();
+                }
+            }
+            
+
             new MainWindow().Show();
+        }
+
+        public static bool IsAdministrator()
+        {
+            var identity = WindowsIdentity.GetCurrent();
+            var principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
     }
 }

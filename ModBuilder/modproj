@@ -231,6 +231,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"$(SolutionDir)ModBuilder.exe LoadsonMDK"</PostBuildEvent>
+    <PostBuildEvent>echo Cleaning bin folder..
+del Assembly-CSharp.dll
+del LoadsonAPI.*
+del Unity*
+"$(SolutionDir)ModBuilder.exe"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>del "$(TargetDir)" /Q</PreBuildEvent>
   </PropertyGroup>
 </Project>

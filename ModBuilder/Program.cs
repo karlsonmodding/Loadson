@@ -128,8 +128,10 @@ namespace ModBuilder
             Console.WriteLine("Building mod..");
             if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klm")))
                 File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klm"));
-            using(FileStream fs = File.OpenWrite(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klm")))
-            using(BinaryWriter bw = new BinaryWriter(fs))
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klmi")))
+                File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klmi"));
+            using (FileStream fs = File.OpenWrite(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klm")))
+            using (BinaryWriter bw = new BinaryWriter(fs))
             {
                 bw.Write(m_name);
                 bw.Write(m_author);
@@ -144,13 +146,6 @@ namespace ModBuilder
                 bw.Write(img_data);
                 if (assetbundle == null) bw.Write(0);
                 else { bw.Write(assetbundle.Length); bw.Write(assetbundle); }
-                /*bw.Write(external_deps.Count);
-                foreach ((string, byte[]) entry in external_deps)
-                {
-                    bw.Write(entry.Item1);
-                    bw.Write(entry.Item2.Length);
-                    bw.Write(entry.Item2);
-                }*/
                 while (bw.BaseStream.Length % 16 != 15)
                     bw.Write(false);
                 bw.Write(">> LoadsonMDK   " +
@@ -159,8 +154,18 @@ namespace ModBuilder
                          "> karlsonmodding");
                 bw.Close();
             }
+            using (FileStream fs = File.OpenWrite(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klmi")))
+            using (BinaryWriter bw = new BinaryWriter(fs))
+            {
+                bw.Write(0); // external deps
+                byte[] mod = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klm"));
+                bw.Write(mod.Length);
+                bw.Write(mod);
+                bw.Close();
+            }
             Console.WriteLine("\nBuild succesfully in (" + Math.Ceiling((DateTime.Now - start).TotalMilliseconds) + "ms).");
             Console.WriteLine("Mod size: " + File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klm")).Length + " B");
+            Console.WriteLine("Install size: " + File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klmi")).Length + " B");
         }
 
         public static void RawCopy(Stream input, string outputFilePath)
