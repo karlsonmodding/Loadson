@@ -345,13 +345,17 @@ namespace Launcher
             Left = (screenWidth / 2) - (windowWidth / 2);
             Top = (screenHeight / 2) - (windowHeight / 2);
 
+
+            if (!Directory.Exists(Path.Combine(App.ROOT, "Mods")))
+                Directory.CreateDirectory(Path.Combine(App.ROOT, "Mods"));
+            if (!Directory.Exists(Path.Combine(App.ROOT, "Mods", "Disabled")))
+                Directory.CreateDirectory(Path.Combine(App.ROOT, "Mods", "Disabled"));
+
             //render mods
             ModContainer.Children.Clear();
             List<string> modList = new List<string>();
             foreach (var file in Directory.GetFiles(Path.Combine(App.ROOT, "Mods")))
                 if (file.EndsWith(".klm")) modList.Add(file);
-            if (!Directory.Exists(Path.Combine(App.ROOT, "Mods", "Disabled")))
-                Directory.CreateDirectory(Path.Combine(App.ROOT, "Mods", "Disabled"));
             foreach (var file in Directory.GetFiles(Path.Combine(App.ROOT, "Mods", "Disabled")))
                 if (file.EndsWith(".klm")) modList.Add(file);
             modList.Sort(new FileComparer());
