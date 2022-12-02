@@ -139,7 +139,7 @@ namespace Launcher
                 return;
             }
 #if true // set to false to be able to launch without bootstrapper
-            if(Environment.GetEnvironmentVariable("Loadson") == null)
+            if(Environment.GetEnvironmentVariable("Loadson") == null && !IsAdministrator())
             {
                 MessageBox(IntPtr.Zero, "Please launch Loadson with Loadson.exe (Bootstrapper).", "[Loadson Launcher] Error", 0x00040010);
                 Process.GetCurrentProcess().Kill();
@@ -164,7 +164,6 @@ namespace Launcher
                         proc.StartInfo.FileName = Path.Combine(ROOT, "Launcher", "Launcher.exe");
                         proc.StartInfo.UseShellExecute = true;
                         proc.StartInfo.Verb = "runas";
-                        proc.StartInfo.EnvironmentVariables.Add("Loadson", "true");
                         proc.Start();
                         Process.GetCurrentProcess().Kill();
                         return;
