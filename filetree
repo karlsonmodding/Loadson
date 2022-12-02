@@ -2,6 +2,8 @@ Internal/
 Internal/Common deps/
 Internal/Loadson deps/
 Launcher/
+Mods/
+Mods/Disabled/
 Internal/Kernel.dll
 Internal/Loadson.dll
 Internal/Loadson deps/0Harmony.dll
