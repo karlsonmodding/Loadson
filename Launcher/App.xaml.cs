@@ -32,7 +32,7 @@ namespace Launcher
         public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
         #endregion
 
-        public const string VERSION = "1.1";
+        public const string VERSION = "1.2";
         public const int TIMEOUT = 50;
         public static string ROOT;
 
@@ -164,6 +164,7 @@ namespace Launcher
                         proc.StartInfo.FileName = Path.Combine(ROOT, "Launcher", "Launcher.exe");
                         proc.StartInfo.UseShellExecute = true;
                         proc.StartInfo.Verb = "runas";
+                        proc.StartInfo.EnvironmentVariables.Add("Loadson", "true");
                         proc.Start();
                         Process.GetCurrentProcess().Kill();
                         return;
