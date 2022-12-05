@@ -1,7 +1,7 @@
 # Loadson
 Loadson is an external mod loader made for Karlson (itch.io version)
 
-# Building Solution
+# Building Solution (and running off-grid)
 - Run the `DevKit.exe` found in the root of the solution.
 - Open the `Loadson.sln` solution in Visual Studio 2022 (earlier version should also work)
 - Build Solution and the output is found in the `build` folder in solution root
@@ -11,4 +11,4 @@ Loadson is an external mod loader made for Karlson (itch.io version)
 
 # Used dependencies
 - MInject: https://github.com/devilExE3/MInject
-- Harmony: https://github.com/BepInEx/BepInEx (stole it a long time ago from here)
+- Harmony: https://github.com/pardeike/Harmony
