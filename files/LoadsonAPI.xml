@@ -4,17 +4,19 @@
         <name>Loadson</name>
     </assembly>
     <members>
-        <member name="M:LoadsonAPI.MenuEntry.AddMenuEntry(System.Collections.Generic.List{System.ValueTuple{System.String,System.Action}})">
+        <member name="M:LoadsonAPI.MenuEntry.AddMenuEntry(System.Collections.Generic.List{System.ValueTuple{System.String,System.Action}},System.String)">
             <summary>
             Create a custom menu category for your mod
             </summary>
             <param name="list">List containing of sub-menu entries: (name - to be displayed, action - on click)</param>
+            <param name="display">[OPTIONAL] Display name of category</param>
         </member>
-        <member name="M:LoadsonAPI.MenuEntry.UpdateMenuEntry(System.Collections.Generic.List{System.ValueTuple{System.String,System.Action}})">
+        <member name="M:LoadsonAPI.MenuEntry.UpdateMenuEntry(System.Collections.Generic.List{System.ValueTuple{System.String,System.Action}},System.String)">
             <summary>
             Change sub-menu entries
             </summary>
             <param name="list">List containing of sub-menu entries: (name - to be displayed, action - on click)</param>
+            <param name="display">[OPTIONAL] Display name of category</param>
         </member>
         <member name="M:LoadsonAPI.MenuEntry.RemoveMenuEntry">
             <summary>
