@@ -26,6 +26,7 @@ namespace LoadsonInternal
 
         public Assembly assembly;
         public Loadson.Mod instance = null;
+        public bool enabled = false;
 
         public ModEntry(string _ModGUID, string _ModName, string _ModAuthor, string _ModDescription, List<string> _ModDeps, int _ModWorkshopID, byte[] _AsmData, byte[] icon, byte[] assetbundle)
         {

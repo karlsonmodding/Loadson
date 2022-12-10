@@ -48,6 +48,12 @@ namespace Loadson
                 LoadsonInternal.Console.OpenConsole();
                 return default;
             }
+            if(e.enabled)
+            {
+                LoadsonInternal.Console.Log("<color=red>[" + e.ModGUID + "] Tried loading asset outside of OnEnable</color>");
+                LoadsonInternal.Console.OpenConsole();
+                return default;
+            }
             return e.AssetBundle.LoadAsset<T>(name);
         }
 

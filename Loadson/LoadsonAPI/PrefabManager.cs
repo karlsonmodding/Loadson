@@ -142,7 +142,6 @@ namespace LoadsonAPI
                         animator.SetBool("Running", false);
                         animator.SetBool("Aiming", false);
                         o.GetComponent<NavMeshAgent>().enabled = false;
-                        o.transform.localScale = new Vector3(0.399f, 0.399f, 0.399f);
                         GameObject _enemy = UnityEngine.Object.Instantiate(o);
                         _enemy.name = "Loadson-Instance Enemy";
                         UnityEngine.Object.DontDestroyOnLoad(_enemy);

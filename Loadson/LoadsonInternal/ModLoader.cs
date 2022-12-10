@@ -73,6 +73,7 @@ namespace LoadsonInternal
                         continue;
                     }
                     mod.instance.OnEnable();
+                    mod.enabled = true;
                     Console.Log("<i> </i>Loaded succesfully");
 
                     foreach (ModEntry clear in from x in ModEntry.List where x.Deps.Contains(mod.ModGUID) select x) clear.Deps.Remove(mod.ModGUID);
