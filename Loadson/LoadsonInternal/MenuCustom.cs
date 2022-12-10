@@ -39,32 +39,32 @@ namespace LoadsonInternal
             RenderButtons();
         }
 
-        private static List<(string, List<(string, Action)>)> mainmenu = new List<(string, List<(string, Action)>)>();
+        private static List<(string, string, List<(string, Action)>)> mainmenu = new List<(string, string, List<(string, Action)>)>();
         private static int selected = -1;
 
-        public static void AddCategory(string category, List<(string, Action)> children)
+        public static void AddCategory(string id, string display, List<(string, Action)> children)
         {
             children.Insert(0, ("back", () =>
             {
                 selected = -1;
                 RenderButtons();
             }));
-            mainmenu.Add((category, children));
+            mainmenu.Add((id, display, children));
         }
         public static void RemoveCategory(string category)
         {
             mainmenu.Remove((from x in mainmenu where x.Item1 == category select x).FirstOrDefault());
         }
-        public static void UpdateCategory(string category, List<(string, Action)> newChildren)
+        public static void UpdateCategory(string id, string display, List<(string, Action)> newChildren)
         {
-            mainmenu.Remove((from x in mainmenu where x.Item1 == category select x).FirstOrDefault());
+            mainmenu.Remove((from x in mainmenu where x.Item1 == id select x).FirstOrDefault());
             newChildren.Insert(0, ("back", () =>
             {
                 selected = -1;
                 RenderButtons();
             }
             ));
-            mainmenu.Add((category, newChildren));
+            mainmenu.Add((id, display, newChildren));
         }
 
         private static void RenderButtons()
@@ -81,35 +81,30 @@ namespace LoadsonInternal
                     btn.transform.rotation = Quaternion.Euler(0, 0, 0);
                     btn.transform.localScale = new Vector3(5.6f, 2.1f, 2.1f);
                     ((TextMeshProUGUI)btn.GetComponent<Button>().targetGraphic).enableWordWrapping = false;
-                    ((TextMeshProUGUI)btn.GetComponent<Button>().targetGraphic).text = mainmenu[i].Item1;
+                    ((TextMeshProUGUI)btn.GetComponent<Button>().targetGraphic).text = mainmenu[i].Item2;
 
                     var remi = i;
-                    InterceptButton(btn.GetComponent<Button>(), () => { selected = remi; RenderButtons(); });
+                    _UIHelper.InterceptButton(btn.GetComponent<Button>(), () => { selected = remi; RenderButtons(); });
                 }
                 GameObject.Find("/UI/Menu/ScrollView").GetComponent<ScrollRect>().content.sizeDelta = new Vector2(1000, 100 + 100 * mainmenu.Count);
                 return;
             }
-            for (int i = 0; i < mainmenu[selected].Item2.Count; i++)
+            for (int i = 0; i < mainmenu[selected].Item3.Count; i++)
             {
                 GameObject btn = UnityEngine.Object.Instantiate(GameObject.Find("/UI/Menu/Options"));
                 btn.transform.parent = GameObject.Find("/UI/Menu/ScrollView/ScrollContainer").transform;
-                btn.transform.localPosition = new Vector3(-170, 50f * mainmenu[selected].Item2.Count - 100f * i, 0f);
+                btn.transform.localPosition = new Vector3(-170, 50f * mainmenu[selected].Item3.Count - 100f * i, 0f);
                 btn.transform.rotation = Quaternion.Euler(0, 0, 0);
                 btn.transform.localScale = new Vector3(5.6f, 2.1f, 2.1f);
                 ((TextMeshProUGUI)btn.GetComponent<Button>().targetGraphic).enableWordWrapping = false;
-                ((TextMeshProUGUI)btn.GetComponent<Button>().targetGraphic).text = mainmenu[selected].Item2[i].Item1;
+                ((TextMeshProUGUI)btn.GetComponent<Button>().targetGraphic).text = mainmenu[selected].Item3[i].Item1;
 
                 var remi = i;
-                InterceptButton(btn.GetComponent<Button>(), () => { mainmenu[selected].Item2[remi].Item2(); RenderButtons(); });
+                _UIHelper.InterceptButton(btn.GetComponent<Button>(), () => { mainmenu[selected].Item3[remi].Item2(); RenderButtons(); });
             }
-            GameObject.Find("/UI/Menu/ScrollView").GetComponent<ScrollRect>().content.sizeDelta = new Vector2(1000, 100 + 100 * mainmenu[selected].Item2.Count);
+            GameObject.Find("/UI/Menu/ScrollView").GetComponent<ScrollRect>().content.sizeDelta = new Vector2(1000, 100 + 100 * mainmenu[selected].Item3.Count);
         }
 
-        private static void InterceptButton(Button b, UnityAction onClick)
-        {
-            for (int i = 0; i < b.onClick.GetPersistentEventCount(); i++)
-                b.onClick.SetPersistentListenerState(i, UnityEventCallState.Off);
-            b.onClick.AddListener(onClick);
-        }
+        
     }
 }

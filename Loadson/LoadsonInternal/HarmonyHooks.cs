@@ -44,6 +44,7 @@ namespace LoadsonInternal
                     .text = "LOADSON\n<size=15><cspace=-0.1em>Version <cspace=-0.2em>" + Version.ver + "</cspace></cspace></size>";
                 ModMenu._scene();
                 MenuCustom._scene();
+                PreferencesCustom._scene();
             }
             if (done) return;
             if (scene.name == "0Tutorial")
@@ -76,6 +77,19 @@ namespace LoadsonInternal
                     ga.SetActive(false);
                     break;
                 }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(Debug), "Start")]
+    public class Hook_Debug_Start
+    {
+        public static void Postfix(ref bool ___fpsOn, ref bool ___speedOn)
+        {
+            if(Preferences.instance.forceFpsAndSpeed)
+            {
+                ___fpsOn = true;
+                ___speedOn = true;
             }
         }
     }

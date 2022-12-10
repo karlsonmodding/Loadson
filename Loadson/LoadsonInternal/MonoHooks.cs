@@ -50,6 +50,7 @@ namespace LoadsonInternal
                     mod.instance.OnDisable();
             }
             catch { }
+            Preferences.Save();
             Process.GetCurrentProcess().Kill();
         }
     }

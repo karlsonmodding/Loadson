@@ -97,8 +97,8 @@ namespace LoadsonInternal
                 btn2.name = "Disable";
 
                 int remi = i;
-                InterceptButton(btn1.GetComponent<Button>(), () => { });
-                InterceptButton(btn2.GetComponent<Button>(), () => {
+                _UIHelper.InterceptButton(btn1.GetComponent<Button>(), () => { });
+                _UIHelper.InterceptButton(btn2.GetComponent<Button>(), () => {
                     Process.Start(Path.Combine(Loader.LOADSON_ROOT, "Launcher", "Launcher.exe"), "-disable " + ModEntry.List[remi].ModGUID + ".klm");
                     Application.Quit(); // handle quitting properly
                 });
@@ -111,7 +111,7 @@ namespace LoadsonInternal
             sr.scrollSensitivity = 20f;
             ScrollView.AddComponent<Mask>();
 
-            InterceptButton(GO_Mods.GetComponent<Button>(), () =>
+            _UIHelper.InterceptButton(GO_Mods.GetComponent<Button>(), () =>
             {
                 MenuCamera cam = UnityEngine.Object.FindObjectOfType<MenuCamera>();
                 typeof(MenuCamera).GetField("desiredPos", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).SetValue(cam, new Vector3(-1f, 15.1f, 184.06f));
@@ -120,13 +120,6 @@ namespace LoadsonInternal
                 GameObject.Find("/UI/Menu").SetActive(false);
                 GO_ModsUI.SetActive(true);
             });
-        }
-
-        private static void InterceptButton(Button b, UnityAction onClick)
-        {
-            for (int i = 0; i < b.onClick.GetPersistentEventCount(); i++)
-                b.onClick.SetPersistentListenerState(i, UnityEventCallState.Off);
-            b.onClick.AddListener(onClick);
         }
     }
 }

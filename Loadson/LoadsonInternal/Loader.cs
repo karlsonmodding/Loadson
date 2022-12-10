@@ -26,7 +26,11 @@ namespace LoadsonInternal
 
         public static void Start()
         {
-            Application.logMessageReceived += (condition, stackTrace, _) => Console.Log(condition + " " + stackTrace);
+            Console.PrintDate();
+            Application.logMessageReceived += (condition, stackTrace, _) =>
+            {
+                if(Preferences.instance.unityLog) Console.Log(condition + " " + stackTrace);
+            };
 
             IntPtr hWnd = FindWindow(null, Application.productName);
             SetWindowText(hWnd, "Loadson");
@@ -36,6 +40,8 @@ namespace LoadsonInternal
             GameObject go = new GameObject("Loadson_MonoHooks");
             MonoHooks = go.AddComponent<MonoHooks>();
             UnityEngine.Object.DontDestroyOnLoad(go);
+
+            Preferences.Load();
 
             Harmony = new Harmony("loadson");
             try

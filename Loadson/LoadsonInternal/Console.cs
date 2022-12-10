@@ -11,8 +11,13 @@ namespace LoadsonInternal
         private static string content = "Loadson\n  made by devilExE\n  licensed under MIT license\n\n";
         public static void Log(string s)
         {
-            File.AppendAllText(Path.Combine(Directory.GetCurrentDirectory(), "log"), s + "\n");
+            if(Preferences.instance.fileLog) File.AppendAllText(Path.Combine(Directory.GetCurrentDirectory(), "log"), s + "\n");
             content += s + '\n';
+        }
+
+        public static void PrintDate()
+        {
+            File.AppendAllText(Path.Combine(Directory.GetCurrentDirectory(), "log"), $"\n\n[{DateTime.Now}]\n");
         }
 
         private static bool consoleOpen = false;
