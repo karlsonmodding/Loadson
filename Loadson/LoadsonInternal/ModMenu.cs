@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoadsonAPI;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace LoadsonInternal
@@ -97,7 +99,10 @@ namespace LoadsonInternal
                 btn2.name = "Disable";
 
                 int remi = i;
-                _UIHelper.InterceptButton(btn1.GetComponent<Button>(), () => { });
+                _UIHelper.InterceptButton(btn1.GetComponent<Button>(), () => {
+                    viewModIdx = remi;
+                    GO_ModsUI.SetActive(false);
+                });
                 _UIHelper.InterceptButton(btn2.GetComponent<Button>(), () => {
                     Process.Start(Path.Combine(Loader.LOADSON_ROOT, "Launcher", "Launcher.exe"), "-disable " + ModEntry.List[remi].ModGUID + ".klm");
                     Application.Quit(); // handle quitting properly
@@ -121,5 +126,41 @@ namespace LoadsonInternal
                 GO_ModsUI.SetActive(true);
             });
         }
+
+        private static int viewModIdx = -1;
+
+        private static Rect window = new Rect((Screen.width - 400) / 2, (Screen.height - 450) / 2, 400, 450);
+
+        public static void _ongui()
+        {
+            if (viewModIdx == -1) return;
+            window = GUI.Window(windowId, window, (_) =>
+            {
+                GUI.DragWindow(new Rect(0, 0, 350, 20));
+                if(GUI.Button(new Rect(350, 0, 50, 20), "Close"))
+                {
+                    viewModIdx = -1;
+                    GameObject.Find("/UI").transform.Find("Mods").gameObject.SetActive(true);
+                }
+                ModEntry mod = ModEntry.List[viewModIdx];
+                GUI.DrawTexture(new Rect(5, 25, 100, 100), mod.Icon);
+                GUI.Label(new Rect(110, 25, 280, 100),
+                    $"[File] {mod.ModGUID}.klm\n" +
+                    $"[Name] {mod.DisplayName}\n" +
+                    $"[Author] {mod.Author}\n" +
+                    $"[Deps] ({mod.DepsRef.Length}) {string.Join(", ", mod.DepsRef)}\n" +
+                    (mod.AssetBundle != null ? "This mod has an AssetBundle" : "This mod does not have an AssetBundle") +
+                    $"\nMod installed on {new FileInfo(Path.Combine(Loader.LOADSON_ROOT, "Mods", mod.ModGUID + ".klm")).CreationTime}");
+                GUI.Box(new Rect(5, 130, 390, 315), "");
+                GUI.Label(new Rect(10, 135, 380, 305), mod.Description);
+            }, "Mod Details");
+        }
+
+        private static int windowId = -1;
+        public static void _init()
+        {
+            windowId = ImGUI_WID.GetWindowId();
+        }
     }
+
 }

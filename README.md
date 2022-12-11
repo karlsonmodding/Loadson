@@ -16,4 +16,3 @@ Loadson is an external mod loader made for Karlson (itch.io version)
 # Used dependencies
 - MInject: https://github.com/devilExE3/MInject
 - Harmony: https://github.com/pardeike/Harmony
-- LZMA SDK: https://7-zip.org/sdk.html

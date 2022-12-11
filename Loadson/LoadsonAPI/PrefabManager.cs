@@ -184,7 +184,7 @@ namespace LoadsonAPI
                         boomer.name = "Loadson-Instance Boomer";
                         UnityEngine.Object.DontDestroyOnLoad(boomer);
                         boomer.SetActive(false);
-                        LoadsonInternal.Console.Log("[PREFABS] Instantiated Boomeer");
+                        LoadsonInternal.Console.Log("[PREFABS] Instantiated Boomer");
                         break;
                     }
                     case "Grappler":

@@ -18,6 +18,7 @@ namespace LoadsonInternal
         public string Author;
         public string Description;
         public List<string> Deps = new List<string>();
+        public string[] DepsRef;
         public int WorkshopId;
 
         public byte[] AsmData;
@@ -35,6 +36,7 @@ namespace LoadsonInternal
             Author = _ModAuthor;
             Description = _ModDescription;
             Deps = _ModDeps;
+            DepsRef = Deps.ToArray();
             WorkshopId = _ModWorkshopID;
             AsmData = _AsmData;
             Icon = new Texture2D(64, 64);

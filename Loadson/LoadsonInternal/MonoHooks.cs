@@ -19,6 +19,7 @@ namespace LoadsonInternal
                     mod.instance.OnGUI();
             } catch { }
             Console._ongui();
+            ModMenu._ongui();
         }
 
         public void Update()

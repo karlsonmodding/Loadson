@@ -26,7 +26,9 @@ namespace LoadsonInternal
 
         public static void Start()
         {
-            Console.PrintDate();
+            Preferences.Load();
+
+            if (Preferences.instance.unityLog) Console.Init();
             Application.logMessageReceived += (condition, stackTrace, _) =>
             {
                 if(Preferences.instance.unityLog) Console.Log(condition + " " + stackTrace);
@@ -41,7 +43,7 @@ namespace LoadsonInternal
             MonoHooks = go.AddComponent<MonoHooks>();
             UnityEngine.Object.DontDestroyOnLoad(go);
 
-            Preferences.Load();
+            ModMenu._init();
 
             Harmony = new Harmony("loadson");
             try
@@ -50,6 +52,7 @@ namespace LoadsonInternal
             } catch (Exception e)
             {
                 Console.Log(e.ToString());
+                Console.OpenConsole();
             }
             
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoadsonAPI;
+using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -15,10 +16,12 @@ namespace LoadsonInternal
             content += s + '\n';
         }
 
-        public static void PrintDate()
+        public static void Init()
         {
             File.AppendAllText(Path.Combine(Directory.GetCurrentDirectory(), "log"), $"\n\n[{DateTime.Now}]\n");
+            windowId = ImGUI_WID.GetWindowId();
         }
+        private static int windowId = -1;
 
         private static bool consoleOpen = false;
         public static void OpenConsole() { consoleOpen = true; }
@@ -33,7 +36,7 @@ namespace LoadsonInternal
         {
             if (consoleOpen)
             {
-                consoleWindow = GUI.Window(1000, consoleWindow, (windowId) =>
+                consoleWindow = GUI.Window(windowId, consoleWindow, (_) =>
                 {
                     GUI.DragWindow(new Rect(0, 0, 1000, 20));
                     Vector2 size = GUI.skin.label.CalcSize(new GUIContent(content));

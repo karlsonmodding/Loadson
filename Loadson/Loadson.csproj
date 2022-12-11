@@ -237,6 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoadsonAPI\Coroutines.cs" />
+    <Compile Include="LoadsonAPI\ImGUI_WID.cs" />
     <Compile Include="LoadsonAPI\MenuEntry.cs" />
     <Compile Include="LoadsonAPI\PrefabManager.cs" />
     <Compile Include="LoadsonInternal\Console.cs" />
