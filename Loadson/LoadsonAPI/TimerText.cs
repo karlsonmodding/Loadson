@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TMPro;
+using UnityEngine;
 
 namespace LoadsonAPI
 {
@@ -53,9 +54,9 @@ namespace LoadsonAPI
     [HarmonyPatch(typeof(Timer), "Update")]
     public class Hook_Timer_Update
     {
-        public static void Postfix(TextMeshProUGUI ___text, bool ___stop)
+        public static void Postfix(Timer __instance, TextMeshProUGUI ___text, float ___timer)
         {
-            if (!Game.Instance.playing || ___stop) return;
+            ___text.text = __instance.GetFormattedTime(___timer);
             foreach(var r in TimerText.strings)
             {
                 string res = r();
