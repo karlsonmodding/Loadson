@@ -4,6 +4,25 @@
         <name>Loadson</name>
     </assembly>
     <members>
+        <member name="M:LoadsonAPI.Coroutines.StartCoroutine(System.Collections.IEnumerator)">
+            <summary>
+            Start a coroutine. Equivalent of <see cref="M:UnityEngine.MonoBehaviour.StartCoroutine(System.Collections.IEnumerator)"/>
+            </summary>
+            <param name="coroutine">The coroutine</param>
+            <returns>The started coroutine object</returns>
+        </member>
+        <member name="M:LoadsonAPI.Coroutines.StopCoroutine(UnityEngine.Coroutine)">
+            <summary>
+            Stop a running coroutine. Equivalent of <see cref="M:UnityEngine.MonoBehaviour.StopCoroutine(UnityEngine.Coroutine)"/>
+            </summary>
+            <param name="coroutine">The started coroutine</param>
+        </member>
+        <member name="M:LoadsonAPI.ImGUI_WID.GetWindowId">
+            <summary>
+            Get next available Unity ImGUI window id
+            </summary>
+            <returns>The window id</returns>
+        </member>
         <member name="M:LoadsonAPI.MenuEntry.AddMenuEntry(System.Collections.Generic.List{System.ValueTuple{System.String,System.Action}},System.String)">
             <summary>
             Create a custom menu category for your mod
@@ -22,6 +41,18 @@
             <summary>
             Removes your mod category from the custom menu
             </summary>
+        </member>
+        <member name="M:LoadsonAPI.TimerText.AddText(LoadsonAPI.TimerText.resolver)">
+            <summary>
+            Add text below the in-game timer.
+            </summary>
+            <param name="text">Lambda function that returns a string. If result is empty string "", nothing is printed.</param>
+        </member>
+        <member name="M:Loadson.Console.Log(System.String)">
+            <summary>
+            Log a string to the console (and file)
+            </summary>
+            <param name="str">The string to be logged</param>
         </member>
         <member name="M:Loadson.Mod.LoadAsset``1(System.String)">
             <summary>
@@ -45,6 +76,12 @@
             <param name="name">Name of the function.</param>
             <param name="args">Function parameters as an object list</param>
             <returns>API function return value</returns>
+        </member>
+        <member name="M:Loadson.Preferences.GetPreferences">
+            <summary>
+            Get your set preferences. All modifications to the dictionary are automatically saved.
+            </summary>
+            <returns>Your dictionary. Empty dictionary if it doesn't exist (first load)</returns>
         </member>
     </members>
 </doc>
