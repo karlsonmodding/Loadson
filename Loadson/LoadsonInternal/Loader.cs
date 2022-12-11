@@ -28,7 +28,7 @@ namespace LoadsonInternal
         {
             Preferences.Load();
 
-            if (Preferences.instance.unityLog) Console.Init();
+            Console.Init();
             Application.logMessageReceived += (condition, stackTrace, _) =>
             {
                 if(Preferences.instance.unityLog) Console.Log(condition + " " + stackTrace);

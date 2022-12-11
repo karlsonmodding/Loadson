@@ -18,8 +18,8 @@ namespace LoadsonInternal
 
         public static void Init()
         {
-            File.AppendAllText(Path.Combine(Directory.GetCurrentDirectory(), "log"), $"\n\n[{DateTime.Now}]\n");
             windowId = ImGUI_WID.GetWindowId();
+            if (Preferences.instance.fileLog) File.AppendAllText(Path.Combine(Directory.GetCurrentDirectory(), "log"), $"\n\n[{DateTime.Now}]\n");
         }
         private static int windowId = -1;
 
