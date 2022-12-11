@@ -44,6 +44,7 @@ namespace LoadsonInternal
             UnityEngine.Object.DontDestroyOnLoad(go);
 
             ModMenu._init();
+            Loadson.Preferences._load();
 
             Harmony = new Harmony("loadson");
             try

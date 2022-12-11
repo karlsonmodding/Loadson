@@ -51,6 +51,7 @@ namespace LoadsonInternal
                     mod.instance.OnDisable();
             }
             catch { }
+            Loadson.Preferences._save();
             Preferences.Save();
             Process.GetCurrentProcess().Kill();
         }

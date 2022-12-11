@@ -35,18 +35,18 @@ namespace LoadsonInternal
         public static _Save instance;
 
         // ripped straight from karlson
-        private static string Serialize<T>(T toSerialize)
+        public static string Serialize<T>(T toSerialize)
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
             StringWriter stringWriter = new StringWriter();
             xmlSerializer.Serialize(stringWriter, toSerialize);
             return stringWriter.ToString();
         }
-        private static T Deserialize<T>(string toDeserialize)
+        public static T Deserialize<T>(string toDeserialize)
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
             StringReader textReader = new StringReader(toDeserialize);
-            return (T)((object)xmlSerializer.Deserialize(textReader));
+            return (T)xmlSerializer.Deserialize(textReader);
         }
     }
 }

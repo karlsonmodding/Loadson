@@ -35,7 +35,7 @@ namespace Loadson
             // selector doesn't work, don't ask me why, i'm going insane
             foreach(var a in ModEntry.List)
             {
-                LoadsonInternal.Console.Log(a.assembly.GetName().Name);
+
                 if(a.assembly.GetName().Name == Assembly.GetCallingAssembly().GetName().Name)
                 {
                     e = a;
