@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -35,7 +36,6 @@ namespace Loadson
             // selector doesn't work, don't ask me why, i'm going insane
             foreach(var a in ModEntry.List)
             {
-
                 if(a.assembly.GetName().Name == Assembly.GetCallingAssembly().GetName().Name)
                 {
                     e = a;
@@ -76,6 +76,37 @@ namespace Loadson
         protected object CallAPIFunction(string name, object[] args)
         {
             return CrossModAPI.CallMethod(name, args);
+        }
+
+        /// <summary>
+        /// Get User Files directory where you can store any files.
+        /// </summary>
+        /// <returns>The directory. Please don't escape with '/..'</returns>
+        protected string GetUserFilesFolder()
+        {
+            // get mod instance
+            ModEntry e = null;
+            // selector doesn't work, don't ask me why, i'm going insane
+            foreach (var a in ModEntry.List)
+            {
+                if (a.assembly.GetName().Name == Assembly.GetCallingAssembly().GetName().Name)
+                {
+                    e = a;
+                    break;
+                }
+            }
+            if (e == null)
+            {
+                LoadsonInternal.Console.Log("<color=red>Couldn't find matching mod for " + Assembly.GetCallingAssembly().GetName() + "</color>");
+                LoadsonInternal.Console.OpenConsole();
+                return default;
+            }
+            if (!Directory.Exists(Path.Combine(Loader.LOADSON_ROOT, "UserFiles")))
+                Directory.CreateDirectory(Path.Combine(Loader.LOADSON_ROOT, "UserFiles"));
+            string dir = Path.Combine(Loader.LOADSON_ROOT, "UserFiles", e.ModGUID);
+            if(!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            return dir;
         }
     }
 }

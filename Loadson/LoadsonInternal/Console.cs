@@ -14,6 +14,7 @@ namespace LoadsonInternal
         {
             if(Preferences.instance.fileLog) File.AppendAllText(Path.Combine(Directory.GetCurrentDirectory(), "log"), s + "\n");
             content += s + '\n';
+            if(content.Split('\n').Length > 500) content = content.Substring(content.IndexOf("\n") + 1);
         }
 
         public static void Init()
