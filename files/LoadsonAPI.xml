@@ -77,6 +77,12 @@
             <param name="args">Function parameters as an object list</param>
             <returns>API function return value</returns>
         </member>
+        <member name="M:Loadson.Mod.GetUserFilesFolder">
+            <summary>
+            Get User Files directory where you can store any files.
+            </summary>
+            <returns>The directory. Please don't escape with '/..'</returns>
+        </member>
         <member name="M:Loadson.Preferences.GetPreferences">
             <summary>
             Get your set preferences. All modifications to the dictionary are automatically saved.
