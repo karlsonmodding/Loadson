@@ -1,0 +1,212 @@
+////////////////////////////// TimerText
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using LoadsonInternal;
+
+namespace LoadsonAPI
+{
+	// Token: 0x02000017 RID: 23
+	public class TimerText
+	{
+		// Token: 0x06000062 RID: 98 RVA: 0x00005714 File Offset: 0x00003914
+		public static void AddText(TimerText.resolver text)
+		{
+		}
+
+		// Token: 0x06000063 RID: 99 RVA: 0x000057F4 File Offset: 0x000039F4
+		public TimerText()
+		{
+		}
+
+		// Token: 0x0200002F RID: 47
+		// (Invoke) Token: 0x060000AE RID: 174
+		public delegate string resolver();
+	}
+}
+
+////////////////////////////// PrefabManager
+using System;
+using LoadsonInternal;
+using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.SceneManagement;
+
+namespace LoadsonAPI
+{
+	// Token: 0x02000016 RID: 22
+	public class PrefabManager
+	{
+		// Token: 0x06000054 RID: 84 RVA: 0x00004EBC File Offset: 0x000030BC
+		public static GameObject NewPistol()
+		{
+			return null;
+		}
+
+		// Token: 0x06000055 RID: 85 RVA: 0x00004F00 File Offset: 0x00003100
+		public static GameObject NewAk47()
+		{
+			return null;
+		}
+
+		// Token: 0x06000056 RID: 86 RVA: 0x00004F44 File Offset: 0x00003144
+		public static GameObject NewShotgun()
+		{
+			return null;
+		}
+
+		// Token: 0x06000057 RID: 87 RVA: 0x00004F88 File Offset: 0x00003188
+		public static GameObject NewBoomer()
+		{
+			return null;
+		}
+
+		// Token: 0x06000058 RID: 88 RVA: 0x00004FCC File Offset: 0x000031CC
+		public static GameObject NewGrappler()
+		{
+			return null;
+		}
+
+		// Token: 0x06000059 RID: 89 RVA: 0x00005024 File Offset: 0x00003224
+		public static GameObject NewDummyGrappler()
+		{
+			return null;
+		}
+
+		// Token: 0x0600005A RID: 90 RVA: 0x00005068 File Offset: 0x00003268
+		public static GameObject NewTable()
+		{
+			return null;
+		}
+
+		// Token: 0x0600005B RID: 91 RVA: 0x000050AC File Offset: 0x000032AC
+		public static GameObject NewBarrel()
+		{
+			return null;
+		}
+
+		// Token: 0x0600005C RID: 92 RVA: 0x000050F0 File Offset: 0x000032F0
+		public static GameObject NewLocker()
+		{
+			return null;
+		}
+
+		// Token: 0x0600005D RID: 93 RVA: 0x00005134 File Offset: 0x00003334
+		public static GameObject NewScreen()
+		{
+			return null;
+		}
+
+		// Token: 0x0600005E RID: 94 RVA: 0x00005178 File Offset: 0x00003378
+		public static GameObject NewEnemy()
+		{
+			return null;
+		}
+
+		// Token: 0x0600005F RID: 95 RVA: 0x000051C8 File Offset: 0x000033C8
+		public static GameObject NewMilk()
+		{
+			return null;
+		}
+
+		// Token: 0x06000061 RID: 97 RVA: 0x0000570C File Offset: 0x0000390C
+		public PrefabManager()
+		{
+		}
+	}
+}
+
+////////////////////////////// Preferences
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using LoadsonInternal;
+using UnityEngine;
+
+namespace Loadson
+{
+	// Token: 0x02000005 RID: 5
+	public class Preferences
+	{
+		// Token: 0x0600000D RID: 13 RVA: 0x00002290 File Offset: 0x00000490
+		public static Dictionary<string, string> GetPreferences()
+		{
+			return null;
+		}
+
+		// Token: 0x06000012 RID: 18 RVA: 0x0000263C File Offset: 0x0000083C
+		public Preferences()
+		{
+		}
+	}
+}
+
+////////////////////////////// Mod
+using System;
+using System.IO;
+using System.Reflection;
+using LoadsonInternal;
+using UnityEngine;
+
+namespace Loadson
+{
+	// Token: 0x02000004 RID: 4
+	public abstract class Mod
+	{
+		// Token: 0x06000003 RID: 3 RVA: 0x0000207E File Offset: 0x0000027E
+		public virtual void OnEnable()
+		{
+		}
+
+		// Token: 0x06000004 RID: 4 RVA: 0x00002080 File Offset: 0x00000280
+		public virtual void OnDisable()
+		{
+		}
+
+		// Token: 0x06000005 RID: 5 RVA: 0x00002082 File Offset: 0x00000282
+		public virtual void OnGUI()
+		{
+		}
+
+		// Token: 0x06000006 RID: 6 RVA: 0x00002084 File Offset: 0x00000284
+		public virtual void Update(float deltaTime)
+		{
+		}
+
+		// Token: 0x06000007 RID: 7 RVA: 0x00002086 File Offset: 0x00000286
+		public virtual void FixedUpdate(float fixedDeltaTime)
+		{
+		}
+
+		// Token: 0x06000008 RID: 8 RVA: 0x00002088 File Offset: 0x00000288
+		protected T LoadAsset<T>(string name) where T : UnityEngine.Object
+		{
+			
+			return default(T);
+		}
+
+		// Token: 0x06000009 RID: 9 RVA: 0x00002178 File Offset: 0x00000378
+		protected void AddAPIFunction(string name, CrossModAPI.cmm execute)
+		{
+		}
+
+		// Token: 0x0600000A RID: 10 RVA: 0x00002181 File Offset: 0x00000381
+		protected object CallAPIFunction(string name, object[] args)
+		{
+			return null;
+		}
+
+		// Token: 0x0600000B RID: 11 RVA: 0x0000218C File Offset: 0x0000038C
+		protected string GetUserFilesFolder()
+		{
+			return "";
+		}
+
+		// Token: 0x0600000C RID: 12 RVA: 0x00002288 File Offset: 0x00000488
+		protected Mod()
+		{
+		}
+	}
+}
