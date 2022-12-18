@@ -109,12 +109,19 @@ namespace LoadsonAPI
 			return null;
 		}
 
-		// Token: 0x06000061 RID: 97 RVA: 0x0000570C File Offset: 0x0000390C
+		// Token: 0x06000060 RID: 96 RVA: 0x0000520C File Offset: 0x0000340C
+		public static GameObject NewCube()
+		{
+			return null;
+		}
+
+		// Token: 0x06000062 RID: 98 RVA: 0x000057B0 File Offset: 0x000039B0
 		public PrefabManager()
 		{
 		}
 	}
 }
+
 
 ////////////////////////////// Preferences
 using System;
