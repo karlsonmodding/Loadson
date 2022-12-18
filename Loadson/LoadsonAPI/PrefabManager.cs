@@ -127,6 +127,15 @@ namespace LoadsonAPI
             return _milk;
         }
 
+        private static GameObject cube;
+        public static GameObject NewCube()
+        {
+            GameObject _cube = UnityEngine.Object.Instantiate(cube);
+            _cube.name = "Cube #" + UnityEngine.Random.Range(0, 32767);
+            _cube.SetActive(true);
+            return _cube;
+        }
+
         private static bool _init = false;
         public static void Init()
         {
@@ -241,6 +250,15 @@ namespace LoadsonAPI
                         UnityEngine.Object.DontDestroyOnLoad(milk);
                         milk.SetActive(false);
                         LoadsonInternal.Console.Log("[PREFABS] Instantiated Milk");
+                        break;
+                    }
+                    case "Cube":
+                    {
+                        cube = UnityEngine.Object.Instantiate(o);
+                        cube.name = "Loadson-Instance Cube";
+                        UnityEngine.Object.DontDestroyOnLoad(cube);
+                        cube.SetActive(false);
+                        LoadsonInternal.Console.Log("[PREFABS] Instantiated Cube");
                         break;
                     }
                 }
