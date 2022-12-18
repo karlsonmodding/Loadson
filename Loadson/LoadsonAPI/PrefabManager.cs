@@ -252,7 +252,7 @@ namespace LoadsonAPI
                         LoadsonInternal.Console.Log("[PREFABS] Instantiated Milk");
                         break;
                     }
-                    case "Cube":
+                    case "Cube (5)":
                     {
                         cube = UnityEngine.Object.Instantiate(o);
                         cube.name = "Loadson-Instance Cube";
