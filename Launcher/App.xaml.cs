@@ -32,7 +32,7 @@ namespace Launcher
         public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
         #endregion
 
-        public const string VERSION = "1.2";
+        public const string VERSION = "1.3";
         public const int TIMEOUT = 50;
         public static string ROOT;
 
@@ -99,42 +99,7 @@ namespace Launcher
             }
             if(Environment.GetCommandLineArgs().Length > 1 && Environment.GetCommandLineArgs()[1] == "-silent")
             {
-                string krlPath = File.ReadAllText(Path.Combine(ROOT, "Internal", "karlsonpath")).Trim();
-                Process karlson = new Process
-                {
-                    StartInfo = new ProcessStartInfo(Path.Combine(krlPath, "Karlson.exe"))
-                };
-                karlson.Start();
-                while (karlson.MainWindowHandle == IntPtr.Zero) Thread.Sleep(0);
-                PostMessage(karlson.MainWindowHandle, WM_KEYDOWN, 0xD, 0); // enter key
-                Thread.Sleep(TIMEOUT);
-
-                // run MInject
-                // Method: Kernel.Kernel.Start()
-                if (MonoProcess.Attach(karlson, out MonoProcess m_karlson))
-                {
-                    byte[] assemblyBytes = File.ReadAllBytes(Path.Combine(ROOT, "Internal", "Kernel.dll"));
-                    IntPtr monoDomain = m_karlson.GetRootDomain();
-                    m_karlson.ThreadAttach(monoDomain);
-                    m_karlson.SecuritySetMode(0);
-                    m_karlson.DisableAssemblyLoadCallback();
-
-                    IntPtr rawAssemblyImage = m_karlson.ImageOpenFromDataFull(assemblyBytes);
-                    IntPtr assemblyPointer = m_karlson.AssemblyLoadFromFull(rawAssemblyImage);
-                    IntPtr assemblyImage = m_karlson.AssemblyGetImage(assemblyPointer);
-                    IntPtr classPointer = m_karlson.ClassFromName(assemblyImage, "Kernel", "Kernel");
-                    IntPtr methodPointer = m_karlson.ClassGetMethodFromName(classPointer, "Inject");
-
-                    m_karlson.RuntimeInvoke(methodPointer);
-                    m_karlson.EnableAssemblyLoadCallback();
-                    m_karlson.Dispose();
-                }
-                else
-                {
-                    karlson.Kill();
-                    MessageBox(IntPtr.Zero, "Couldn't execute MInject.\nPlease retry", "[Loadson Injector] Error", 0x00040010);
-                    return;
-                }
+                MInject();
                 Process.GetCurrentProcess().Kill();
                 return;
             }
@@ -194,6 +159,58 @@ namespace Launcher
             var identity = WindowsIdentity.GetCurrent();
             var principal = new WindowsPrincipal(identity);
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        public static bool MInject()
+        {
+            string krlPath = File.ReadAllText(Path.Combine(ROOT, "Internal", "karlsonpath")).Trim();
+
+            if (!File.Exists(Path.Combine(krlPath, "UnityCrashHandler64.exe")) || File.Exists(Path.Combine(krlPath, "UnityCrashHandler32.exe")))
+            {
+                MessageBox(IntPtr.Zero, "Karlson install might be 32-bit or incomplete.\nPlease re-download the 64bit Karlson version from itch.io", "[Loadson Injector] Error", 0x00040010);
+                return false;
+            }
+
+            Process karlson = new Process
+            {
+                StartInfo = new ProcessStartInfo(Path.Combine(krlPath, "Karlson.exe"))
+            };
+            if(!karlson.Start())
+            {
+                MessageBox(IntPtr.Zero, "Couldn't run Karlson.\nPlease retry", "[Loadson Injector] Error", 0x00040010);
+                return false;
+            }
+            while (karlson.MainWindowHandle == IntPtr.Zero) Thread.Sleep(0);
+            PostMessage(karlson.MainWindowHandle, WM_KEYDOWN, 0xD, 0); // enter key
+            Thread.Sleep(TIMEOUT);
+
+            // run MInject
+            // Method: Kernel.Kernel.Start()
+            if (MonoProcess.Attach(karlson, out MonoProcess m_karlson))
+            {
+                byte[] assemblyBytes = File.ReadAllBytes(Path.Combine(ROOT, "Internal", "Kernel.dll"));
+                IntPtr monoDomain = m_karlson.GetRootDomain();
+                m_karlson.ThreadAttach(monoDomain);
+                m_karlson.SecuritySetMode(0);
+                m_karlson.DisableAssemblyLoadCallback();
+
+                IntPtr rawAssemblyImage = m_karlson.ImageOpenFromDataFull(assemblyBytes);
+                IntPtr assemblyPointer = m_karlson.AssemblyLoadFromFull(rawAssemblyImage);
+                IntPtr assemblyImage = m_karlson.AssemblyGetImage(assemblyPointer);
+                IntPtr classPointer = m_karlson.ClassFromName(assemblyImage, "Kernel", "Kernel");
+                IntPtr methodPointer = m_karlson.ClassGetMethodFromName(classPointer, "Inject");
+
+                m_karlson.RuntimeInvoke(methodPointer);
+                m_karlson.EnableAssemblyLoadCallback();
+                m_karlson.Dispose();
+            }
+            else
+            {
+                karlson.Kill();
+                MessageBox(IntPtr.Zero, "Couldn't execute MInject.\nPlease retry", "[Loadson Injector] Error", 0x00040010);
+                return false;
+            }
+            return true;
         }
     }
 }

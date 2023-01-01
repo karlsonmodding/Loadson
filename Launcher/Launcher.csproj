@@ -58,8 +58,9 @@
     <ApplicationIcon>Loadson.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MInject">
-      <HintPath>..\lib\MInject.dll</HintPath>
+    <Reference Include="MInject, Version=1.0.8374.36291, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\KarlsonMP rev3\lib\MInject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

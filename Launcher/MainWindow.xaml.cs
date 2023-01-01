@@ -193,7 +193,6 @@ namespace Launcher
         {
             Close();
         }
-        private string karlsonFolder;
         private void Start()
         {
             if (!File.Exists(Path.Combine(App.ROOT, "Internal", "karlsonpath")))
@@ -209,8 +208,7 @@ namespace Launcher
                 else
                     Environment.Exit(0);
             }
-            karlsonFolder = File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath"));
-            if (!File.Exists(Path.Combine(karlsonFolder, "Karlson.exe")))
+            if (!File.Exists(Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "Karlson.exe")))
             {
                 OpenFileDialog ofd = new OpenFileDialog
                 {
@@ -234,45 +232,7 @@ namespace Launcher
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            Process karlson = new Process
-            {
-                StartInfo = new ProcessStartInfo(Path.Combine(karlsonFolder, "Karlson.exe"))
-            };
-            if (!karlson.Start())
-            {
-                MessageBox(IntPtr.Zero, "Couldn't start Karlson, please try again.", "[Loadson Injector] Error", 0x00040010);
-                return;
-            }
-            while (karlson.MainWindowHandle == IntPtr.Zero) Thread.Sleep(0);
-            PostMessage(karlson.MainWindowHandle, WM_KEYDOWN, 0xD, 0); // enter key
-            Thread.Sleep(App.TIMEOUT);
-
-            // run MInject
-            // Method: Kernel.Kernel.Start()
-            if (MonoProcess.Attach(karlson, out MonoProcess m_karlson))
-            {
-                byte[] assemblyBytes = File.ReadAllBytes(Path.Combine(App.ROOT, "Internal", "Kernel.dll"));
-                IntPtr monoDomain = m_karlson.GetRootDomain();
-                m_karlson.ThreadAttach(monoDomain);
-                m_karlson.SecuritySetMode(0);
-                m_karlson.DisableAssemblyLoadCallback();
-
-                IntPtr rawAssemblyImage = m_karlson.ImageOpenFromDataFull(assemblyBytes);
-                IntPtr assemblyPointer = m_karlson.AssemblyLoadFromFull(rawAssemblyImage);
-                IntPtr assemblyImage = m_karlson.AssemblyGetImage(assemblyPointer);
-                IntPtr classPointer = m_karlson.ClassFromName(assemblyImage, "Kernel", "Kernel");
-                IntPtr methodPointer = m_karlson.ClassGetMethodFromName(classPointer, "Inject");
-
-                m_karlson.RuntimeInvoke(methodPointer);
-                m_karlson.EnableAssemblyLoadCallback();
-                m_karlson.Dispose();
-            }
-            else
-            {
-                karlson.Kill();
-                MessageBox(IntPtr.Zero, "Couldn't execute MInject.\nPlease retry", "[Loadson Injector] Error", 0x00040010);
-                return;
-            }
+            App.MInject();
             Close();
         }
 
@@ -280,7 +240,7 @@ namespace Launcher
         {
             Process p = new Process
             {
-                StartInfo = new ProcessStartInfo(Path.Combine(karlsonFolder, "Karlson"))
+                StartInfo = new ProcessStartInfo(Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "Karlson"))
                 {
                     UseShellExecute = false
                 }
@@ -328,7 +288,6 @@ namespace Launcher
             if ((bool)ofd.ShowDialog())
             {
                 File.WriteAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath"), Path.GetDirectoryName(ofd.FileName));
-                karlsonFolder = Path.GetDirectoryName(ofd.FileName);
             }
         }
 
@@ -443,6 +402,7 @@ namespace Launcher
                         { // yes
                             File.Delete(m);
                             ModContainer.Children.Remove(g);
+                            Button_Click_1(sender, e);
                         }
                     };
                 }
