@@ -143,6 +143,15 @@ namespace LoadsonAPI
             return _bounce;
         }
 
+        private static GameObject glass;
+        public static GameObject NewGlass()
+        {
+            GameObject _glass = UnityEngine.Object.Instantiate(glass);
+            _glass.name = "Glass #" + UnityEngine.Random.Range(0, 32767);
+            _glass.SetActive(true);
+            return _glass;
+        }
+
         private static bool _init = false;
         public static void Init()
         {
@@ -272,6 +281,25 @@ namespace LoadsonAPI
                     {
                         bounce = UnityEngine.Object.Instantiate(o.GetComponent<BoxCollider>().material);
                         LoadsonInternal.Console.Log("[PREFABS] Instantiated Bounce Material");
+                        break;
+                    }
+                }
+            }
+        }
+        public static void Init2()
+        {
+            if (SceneManager.GetActiveScene().name != "4Escape0") return;
+            foreach (var o in UnityEngine.Object.FindObjectsOfType<GameObject>())
+            {
+                switch (o.name)
+                {
+                    case "Glass":
+                    {
+                        glass = UnityEngine.Object.Instantiate(o);
+                        glass.name = "Loadson-Instance Pistol";
+                        UnityEngine.Object.DontDestroyOnLoad(glass);
+                        glass.SetActive(false);
+                        LoadsonInternal.Console.Log("[PREFABS] Instantiated Glass");
                         break;
                     }
                 }

@@ -50,8 +50,14 @@ namespace LoadsonInternal
             if (done) return;
             if (scene.name == "0Tutorial")
             {
-                Console.Log("Initializing prefabs..");
+                Console.Log("Initializing prefabs.. Tutorial (1/2)");
                 LoadsonAPI.PrefabManager.Init();
+                SceneManager.LoadScene("4Escape0", LoadSceneMode.Single);
+            }
+            if (scene.name == "4Escape0")
+            {
+                Console.Log("Initializing prefabs.. Escape 0 (2/2)");
+                LoadsonAPI.PrefabManager.Init2();
                 SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
                 Console.Log("Building mod list..");
                 ModLoader.BuildList();
