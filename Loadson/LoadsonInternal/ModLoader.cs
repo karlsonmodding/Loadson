@@ -95,15 +95,8 @@ namespace LoadsonInternal
             }
             Console.Log("Loaded " + countall + " mods");
             LoadedMods = countall;
-            /* // UnityExplorer Standalone
-            Console.Log("Loading obe..");
-            foreach (var f in Directory.GetFiles(Path.Combine(Loader.LOADSON_ROOT, "Internal", "obe")))
-                Console.Log(" " + f);
-            AppDomain.CurrentDomain.Load(File.ReadAllBytes(Path.Combine(Loader.LOADSON_ROOT, "Internal", "obe", "a.dll")));
-            Assembly asm = AppDomain.CurrentDomain.Load(File.ReadAllBytes(Path.Combine(Loader.LOADSON_ROOT, "Internal", "obe", "b.dll")));
-            Console.Log(asm.FullName);
-            asm.GetType("UnityExplorer.ExplorerStandalone").GetMethod("CreateInstance", Array.Empty<Type>()).Invoke(null, Array.Empty<object>());
-            // */
+            Loader.activity.Details = "Playing with " + countall + " mods";
+            Loader.discord.GetActivityManager().UpdateActivity(Loader.activity, (_) => { });
         }
 
         private static Assembly GenericAssemblyResolve(object sender, ResolveEventArgs args)

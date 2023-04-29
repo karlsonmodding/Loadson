@@ -235,7 +235,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Discord\ActivityManager.cs" />
+    <Compile Include="Discord\Constants.cs" />
+    <Compile Include="Discord\Core.cs" />
     <Compile Include="LoadsonAPI\Coroutines.cs" />
+    <Compile Include="LoadsonAPI\DiscordAPI.cs" />
     <Compile Include="LoadsonAPI\ImGUI_WID.cs" />
     <Compile Include="LoadsonAPI\MenuEntry.cs" />
     <Compile Include="LoadsonAPI\PrefabManager.cs" />

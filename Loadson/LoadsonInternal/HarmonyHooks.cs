@@ -15,6 +15,7 @@ namespace LoadsonInternal
         public static bool Prefix(Managers __instance)
         {
             Console.Log("Detoured Managers.Start");
+            Loader.InitDiscord();
             UnityEngine.Object.DontDestroyOnLoad(__instance.gameObject);
             Time.timeScale = 1f;
             Application.targetFrameRate = 240;

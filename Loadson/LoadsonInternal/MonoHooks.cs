@@ -31,6 +31,7 @@ namespace LoadsonInternal
             }
             catch { }
             Console._update();
+            Loader.discord.RunCallbacks();
         }
 
         public void FixedUpdate()

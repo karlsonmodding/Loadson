@@ -136,6 +136,13 @@ namespace LoadsonAPI
             return _cube;
         }
 
+        private static PhysicMaterial bounce;
+        public static PhysicMaterial BounceMaterial()
+        {
+            PhysicMaterial _bounce = UnityEngine.Object.Instantiate(bounce);
+            return _bounce;
+        }
+
         private static bool _init = false;
         public static void Init()
         {
@@ -259,6 +266,12 @@ namespace LoadsonAPI
                         UnityEngine.Object.DontDestroyOnLoad(cube);
                         cube.SetActive(false);
                         LoadsonInternal.Console.Log("[PREFABS] Instantiated Cube");
+                        break;
+                    }
+                    case "Cube (11)":
+                    {
+                        bounce = UnityEngine.Object.Instantiate(o.GetComponent<BoxCollider>().material);
+                        LoadsonInternal.Console.Log("[PREFABS] Instantiated Bounce Material");
                         break;
                     }
                 }

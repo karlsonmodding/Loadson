@@ -232,6 +232,17 @@ namespace Launcher
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
+            // check and install discord gamesdk
+            string krlPath = File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")).Trim();
+            if (!Directory.Exists(Path.Combine(krlPath, "Karlson_Data", "Plugins")))
+                Directory.CreateDirectory(Path.Combine(krlPath, "Karlson_Data", "Plugins"));
+            if (!Directory.Exists(Path.Combine(krlPath, "Karlson_Data", "Plugins", "x86_64")))
+                Directory.CreateDirectory(Path.Combine(krlPath, "Karlson_Data", "Plugins", "x86_64"));
+            if (!File.Exists(Path.Combine(krlPath, "Karlson_Data", "Plugins", "x86_64", "discord_game_sdk.dll")))
+            {
+                HttpClient hc = new HttpClient();
+                File.WriteAllBytes(Path.Combine(krlPath, "Karlson_Data", "Plugins", "x86_64", "discord_game_sdk.dll"), hc.GetByteArrayAsync("https://github.com/karlsonmodding/Loadson/raw/deployment/files/discord_game_sdk.dll").GetAwaiter().GetResult());
+            }
             App.MInject();
             Close();
         }
