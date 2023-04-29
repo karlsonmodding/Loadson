@@ -114,6 +114,10 @@ namespace LoadsonAPI
 		{
 			return null;
 		}
+		public static PhysicMaterial BounceMaterial()
+		{
+			return null;
+		}
 
 		// Token: 0x06000062 RID: 98 RVA: 0x000057B0 File Offset: 0x000039B0
 		public PrefabManager()
