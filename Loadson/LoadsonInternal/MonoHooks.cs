@@ -31,7 +31,8 @@ namespace LoadsonInternal
             }
             catch { }
             Console._update();
-            Loader.discord.RunCallbacks();
+            if(Loader.discord_exists)
+                Loader.discord.RunCallbacks();
         }
 
         public void FixedUpdate()
