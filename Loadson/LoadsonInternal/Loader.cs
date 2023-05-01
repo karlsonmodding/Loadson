@@ -29,8 +29,8 @@ namespace LoadsonInternal
         public static MonoHooks MonoHooks;
         public static Discord.Discord discord;
         public static Activity activity;
-        public static string discord_token;
-        public static User discord_user;
+        public static string discord_token = "";
+        public static User discord_user = new User { Id = 0 };
         public static bool discord_exists;
         public static long DISCORD_CLIENTID = 1101662131868409947;
 
