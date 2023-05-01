@@ -102,7 +102,9 @@ namespace LoadsonInternal
                 Assets = new ActivityAssets
                 {
                     LargeImage = "loadson",
-                    LargeText = "Loadson v" + Version.ver
+                    LargeText = "Loadson v" + Version.ver,
+                    SmallImage = "karlson",
+                    SmallText = "Karlson (itch.io) made by Dani"
                 },
                 Details = "Loading mods..",
                 State = "github.com/karlsonmodding",
