@@ -48,6 +48,6 @@
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(SolutionDir)build"
 mkdir "$(SolutionDir)build\internal"
-copy "$(TargetPath)" "$(SolutionDir)build\internal\Kernel.dll" /Y</PostBuildEvent>
+copy "$(TargetPath)" "$(SolutionDir)build\_Loadson.dll" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

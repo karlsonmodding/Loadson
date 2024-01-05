@@ -12,7 +12,7 @@ namespace LoadsonInternal
         private static string content = "Loadson\n  made by devilExE\n  licensed under MIT license\n\n";
         public static void Log(string s)
         {
-            if(Preferences.instance.fileLog) File.AppendAllText(Path.Combine(Directory.GetCurrentDirectory(), "log"), s + "\n");
+            if(Preferences.instance.fileLog) File.AppendAllText(Path.Combine(Loader.LOADSON_ROOT, "log"), s + "\n");
             content += s + '\n';
             if(content.Split('\n').Length > 500) content = content.Substring(content.IndexOf("\n") + 1);
         }
@@ -20,7 +20,7 @@ namespace LoadsonInternal
         public static void Init()
         {
             windowId = ImGUI_WID.GetWindowId();
-            if (Preferences.instance.fileLog) File.AppendAllText(Path.Combine(Directory.GetCurrentDirectory(), "log"), $"\n\n[{DateTime.Now}]\n");
+            if (Preferences.instance.fileLog) File.AppendAllText(Path.Combine(Loader.LOADSON_ROOT, "log"), $"\n\n[{DateTime.Now}]\n");
         }
         private static int windowId = -1;
 

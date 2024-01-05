@@ -2,11 +2,13 @@
 using MInject;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Remoting.Contexts;
@@ -32,7 +34,7 @@ namespace Launcher
         public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
         #endregion
 
-        public const string VERSION = "1.4";
+        public const string VERSION = "2.0";
         public const int TIMEOUT = 50;
         public static string ROOT;
 
@@ -40,7 +42,34 @@ namespace Launcher
         {
             ROOT = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Loadson");
 
-            if(Environment.GetCommandLineArgs().Length > 2 && Environment.GetCommandLineArgs()[1] == "-install")
+            if (!File.Exists(Path.Combine(App.ROOT, "Internal", "karlsonpath")))
+            {
+                OpenFileDialog ofd = new OpenFileDialog
+                {
+                    Title = "Select your karlson install (make sure it's a clean install)",
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    Filter = "Karlson Executable|karlson.exe"
+                };
+                if ((bool)ofd.ShowDialog())
+                    File.WriteAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath"), Path.GetDirectoryName(ofd.FileName));
+                else
+                    Environment.Exit(0);
+            }
+            if (!File.Exists(Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "Karlson.exe")))
+            {
+                OpenFileDialog ofd = new OpenFileDialog
+                {
+                    Title = "Update your karlson install (make sure it's a clean install)",
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                    Filter = "Karlson Executable|karlson.exe"
+                };
+                if ((bool)ofd.ShowDialog())
+                    File.WriteAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath"), Path.GetDirectoryName(ofd.FileName));
+                else
+                    Environment.Exit(0);
+            }
+
+            if (Environment.GetCommandLineArgs().Length > 2 && Environment.GetCommandLineArgs()[1] == "-install")
             { // install a klmi mod
                 if(!File.Exists(Environment.GetCommandLineArgs()[2]))
                 {
@@ -56,7 +85,7 @@ namespace Launcher
                 }
                 if(File.Exists(Path.Combine(ROOT, "Mods", Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[2]) + ".klm")))
                 {
-                    MessageBox(IntPtr.Zero, "You already installed this mod.", "[Loadson] Error", 0x00040010);
+                    MessageBox(IntPtr.Zero, "You already installed this mod.\nYou need to delete the old mod to update it.\n(open Karlson, Manage Installed Mods -> Delete)", "[Loadson] Error", 0x00040010);
                     Process.GetCurrentProcess().Kill();
                     return;
                 }
@@ -82,6 +111,7 @@ namespace Launcher
                 }
             }
 
+            // TODO: make in-game mod disable button work, or remove it
             if (Environment.GetCommandLineArgs().Length > 2 && Environment.GetCommandLineArgs()[1] == "-disable")
             {
                 // wait for karlson exit
@@ -97,20 +127,14 @@ namespace Launcher
                 Process.GetCurrentProcess().Kill();
                 return;
             }
-            if(Environment.GetCommandLineArgs().Length > 1 && Environment.GetCommandLineArgs()[1] == "-silent")
-            {
-                MInject();
-                Process.GetCurrentProcess().Kill();
-                return;
-            }
-#if true // set to false to be able to launch without bootstrapper
+
             if(Environment.GetEnvironmentVariable("Loadson") == null && !IsAdministrator())
             {
-                MessageBox(IntPtr.Zero, "Please launch Loadson with Loadson.exe (Bootstrapper).", "[Loadson Launcher] Error", 0x00040010);
+                MessageBox(IntPtr.Zero, "Loadson now automatically starts with Karlson.\nPlease run Karlson.exe", "[Loadson Launcher] Error", 0x00040010);
                 Process.GetCurrentProcess().Kill();
                 return;
             }
-#endif
+
             if (!Directory.Exists(ROOT))
             {
                 MessageBox(IntPtr.Zero, "Couldn't find Loadson directory. Try running Loadson.exe", "[Loadson Launcher] Error", 0x00040010);
@@ -150,6 +174,47 @@ namespace Launcher
                 }
             }
             
+            // check if we are on the old architecture
+            // check for administrator if we associated .klmi
+            if(IsAdministrator() || Environment.GetEnvironmentVariable("Loadson") != "v2" || !File.Exists(Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "_Loadson.dll")))
+            {
+                // check if v2 is installed in current karlson directory
+                if(File.Exists(Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "_Loadson.dll")))
+                {
+                    // start Karlson.exe because we need to go through doorstop
+                    new Process
+                    {
+                        StartInfo = new ProcessStartInfo
+                        {
+                            FileName = Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "Karlson.exe")
+                        }
+                    }.Start();
+                    Process.GetCurrentProcess().Kill();
+                }
+                // update to new version
+                if (MessageBox(IntPtr.Zero, "Loadson has updated to v2 which brings an architecture change.\nThis requieres installing aditional files to your Karlson directory.\nDo you want to download them now?", "Loadson", (uint)(0x00000004L | 0x00000040L)) == 6)
+                { // yes
+                    // download all architecture
+                    HttpClient hc = new HttpClient();
+                    var karlsonpath = File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath"));
+                    var API_ENDPOINT = "https://raw.githubusercontent.com/karlsonmodding/Loadson/deployment";
+                    var files = new string[] { "_Loadson.dll", "doorstop_config.ini", "winhttp.dll" };
+                    foreach(var file in files)
+                        File.WriteAllBytes(Path.Combine(karlsonpath, file), hc.GetByteArrayAsync(API_ENDPOINT + "/Karlson/" + file).GetAwaiter().GetResult());
+
+                    // start Karlson.exe because we need to go through doorstop
+                    new Process
+                    {
+                        StartInfo = new ProcessStartInfo
+                        {
+                            FileName = Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "Karlson.exe")
+                        }
+                    }.Start();
+                    Process.GetCurrentProcess().Kill();
+                }
+                // we don't run this current instance of the Launcher
+                Process.GetCurrentProcess().Kill();
+            }
 
             new MainWindow().Show();
         }
@@ -161,6 +226,7 @@ namespace Launcher
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
+        /* v2 architecture change, inject process is moved to new Kernel (_Loadson.dll)
         public static bool MInject()
         {
             string krlPath = File.ReadAllText(Path.Combine(ROOT, "Internal", "karlsonpath")).Trim();
@@ -212,5 +278,6 @@ namespace Launcher
             }
             return true;
         }
+        */
     }
 }

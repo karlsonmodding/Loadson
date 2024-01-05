@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:Launcher"
         mc:Ignorable="d" WindowStyle="None" AllowsTransparency="True"
         Background="#0000" ResizeMode="NoResize"
-        Title="Loadson" Height="173" Width="190" WindowStartupLocation="CenterScreen" Icon="/Loadson.ico">
+        Title="Loadson" Height="166" Width="190" WindowStartupLocation="CenterScreen" Icon="/Loadson.ico">
     <Border BorderBrush="Black" BorderThickness="1">
-        <Grid Background="#555">
+        <Grid Background="#555" Margin="0,0,0,-1">
             <Grid
                 Background="#222"
                 Height="20" MouseDown="Grid_MouseDown" VerticalAlignment="Top" >
@@ -85,51 +85,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Content="Change Karlson Install Path" HorizontalAlignment="Center" Margin="0,108,0,0" VerticalAlignment="Top" Width="180" BorderBrush="#00000000" Click="Button_Click_6">
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Background" Value="#333"/>
-                        <Setter Property="Foreground" Value="#FFF"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border Background="{TemplateBinding Background}">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#222"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-            <Button Content="Change Karlson Settings" HorizontalAlignment="Center" Margin="0,129,0,0" VerticalAlignment="Top" Width="180" BorderBrush="#00000000" Click="Button_Click_4">
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Background" Value="#333"/>
-                        <Setter Property="Foreground" Value="#FFF"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border Background="{TemplateBinding Background}">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#222"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-            <Button Content="Start Loadson" HorizontalAlignment="Center" Margin="0,150,0,0" Width="180" BorderBrush="#00000000" Height="16" VerticalAlignment="Top" Click="Button_Click_3">
+            <Button Content="Start Loadson" HorizontalAlignment="Center" Margin="0,108,0,0" Width="180" BorderBrush="#00000000" Height="16" VerticalAlignment="Top" Click="Button_Click_3">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
                         <Setter Property="Background" Value="#333"/>
@@ -180,6 +136,28 @@
                     <Grid x:Name="ModContainer"/>
                 </ScrollViewer>
             </Grid>
+            <Button Content="Run Karlson Vanilla" HorizontalAlignment="Center" Margin="0,145,0,0" Width="180" BorderBrush="#00000000" Height="16" VerticalAlignment="Top" Click="Button_Click_4">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="#333"/>
+                        <Setter Property="Foreground" Value="#FFF"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#222"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Grid>
     </Border>
 </Window>

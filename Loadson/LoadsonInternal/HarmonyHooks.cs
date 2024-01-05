@@ -14,7 +14,12 @@ namespace LoadsonInternal
         public static bool done { get; private set; } = false;
         public static bool Prefix(Managers __instance)
         {
+            Console.Init();
             Console.Log("Detoured Managers.Start");
+
+            ModMenu._init();
+            Loadson.Preferences._load();
+
             Loader.InitDiscord();
             UnityEngine.Object.DontDestroyOnLoad(__instance.gameObject);
             Time.timeScale = 1f;

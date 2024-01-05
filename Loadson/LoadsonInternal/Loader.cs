@@ -1,5 +1,6 @@
 ﻿using Discord;
 using HarmonyLib;
+using LoadsonAPI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,9 +37,9 @@ namespace LoadsonInternal
 
         public static void Start()
         {
+            UnityEngine.Debug.Log("Hello from LoadsonInternal");
             Preferences.Load();
 
-            Console.Init();
             Application.logMessageReceived += (condition, stackTrace, _) =>
             {
                 if(Preferences.instance.unityLog) Console.Log(condition + " " + stackTrace);
@@ -52,9 +53,6 @@ namespace LoadsonInternal
             GameObject go = new GameObject("Loadson_MonoHooks");
             MonoHooks = go.AddComponent<MonoHooks>();
             UnityEngine.Object.DontDestroyOnLoad(go);
-
-            ModMenu._init();
-            Loadson.Preferences._load();
 
             Harmony = new Harmony("loadson");
             try

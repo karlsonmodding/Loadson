@@ -28,8 +28,6 @@ namespace Launcher
     public partial class MainWindow : Window
     {
         #region >>> PInvoke
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern bool SetWindowText(IntPtr hwnd, String lpString);
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
@@ -195,33 +193,6 @@ namespace Launcher
         }
         private void Start()
         {
-            if (!File.Exists(Path.Combine(App.ROOT, "Internal", "karlsonpath")))
-            {
-                OpenFileDialog ofd = new OpenFileDialog
-                {
-                    Title = "Select your karlson install",
-                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                    Filter = "Karlson Executable|karlson.exe"
-                };
-                if ((bool)ofd.ShowDialog())
-                    File.WriteAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath"), Path.GetDirectoryName(ofd.FileName));
-                else
-                    Environment.Exit(0);
-            }
-            if (!File.Exists(Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "Karlson.exe")))
-            {
-                OpenFileDialog ofd = new OpenFileDialog
-                {
-                    Title = "Update your karlson install",
-                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                    Filter = "Karlson Executable|karlson.exe"
-                };
-                if ((bool)ofd.ShowDialog())
-                    File.WriteAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath"), Path.GetDirectoryName(ofd.FileName));
-                else
-                    Environment.Exit(0);
-            }
-
             // get version of loadson internal
             Assembly asm = Assembly.LoadFile(Path.Combine(App.ROOT, "Internal", "loadson.dll"));
             string loadson_version = (string)asm.GetType("Version").GetField("ver").GetValue(null);
@@ -243,40 +214,7 @@ namespace Launcher
                 HttpClient hc = new HttpClient();
                 File.WriteAllBytes(Path.Combine(krlPath, "Karlson_Data", "Plugins", "x86_64", "discord_game_sdk.dll"), hc.GetByteArrayAsync("https://github.com/karlsonmodding/Loadson/raw/deployment/files/discord_game_sdk.dll").GetAwaiter().GetResult());
             }
-            App.MInject();
-            Close();
-        }
-
-        private void Button_Click_4(object sender, RoutedEventArgs e)
-        {
-            Process p = new Process
-            {
-                StartInfo = new ProcessStartInfo(Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "Karlson"))
-                {
-                    UseShellExecute = false
-                }
-            };
-            p.Start();
-            while (p.MainWindowHandle == (IntPtr)0)
-            {
-                Thread.Sleep(1);
-            }
-            InteropSetText(p.MainWindowHandle, 1, "Apply");
-            InteropSetText(p.MainWindowHandle, 2, "Cancel");
-            SetWindowText(p.MainWindowHandle, "Edit Karlson Configuration");
-            while (true)
-            {
-                if (p.MainWindowHandle != (IntPtr)0)
-                {
-                    WINDOWPLACEMENT wp = new WINDOWPLACEMENT();
-                    GetWindowPlacement(p.MainWindowHandle, ref wp);
-                    if (wp.ShowCmd == ShowState.SW_HIDE)
-                        break;
-                }
-                Thread.Sleep(0);
-            }
-            Thread.Sleep(5);
-            p.Kill();
+            Environment.Exit(2); // exit code 2 - start loadson
         }
 
         private void Button_Click_5(object sender, RoutedEventArgs e)
@@ -286,20 +224,6 @@ namespace Launcher
             if (!Directory.Exists(Path.Combine(App.ROOT, "Mods", "Disabled")))
                 Directory.CreateDirectory(Path.Combine(App.ROOT, "Mods", "Disabled"));
             Process.Start(Path.Combine(App.ROOT, "Mods"));
-        }
-
-        private void Button_Click_6(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog
-            {
-                Title = "Update your karlson install",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                Filter = "Karlson Executable|karlson.exe"
-            };
-            if ((bool)ofd.ShowDialog())
-            {
-                File.WriteAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath"), Path.GetDirectoryName(ofd.FileName));
-            }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -454,6 +378,11 @@ namespace Launcher
             bitmap.Freeze();
 
             return bitmap;
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(1); // vanilla
         }
     }
 }
