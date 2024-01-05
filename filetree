@@ -4,8 +4,7 @@ Internal/Loadson deps/
 Launcher/
 Mods/
 Mods/Disabled/
-Internal/Kernel.dll
 Internal/Loadson.dll
+Internal/UpdateChecker.exe
 Internal/Loadson deps/0Harmony.dll
 Launcher/Launcher.exe
-Launcher/MInject.dll
