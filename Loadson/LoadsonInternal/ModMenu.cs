@@ -55,21 +55,21 @@ namespace LoadsonInternal
 
             for(int i = 0; i < ModEntry.List.Count; i++)
             {
-                GameObject img = new GameObject("Image");
+                GameObject img = new GameObject("Image #" + i);
                 img.transform.parent = ScrollContainer.transform;
                 img.transform.localPosition = new Vector3(-515, -75 + 85 * ModEntry.List.Count - 170 * i, 0);
                 img.transform.rotation = Quaternion.Euler(0, -90, 0);
                 img.transform.localScale = new Vector3(1f, 1f, 1f);
                 img.AddComponent<Image>().sprite = Sprite.Create(ModEntry.List[i].Icon, new Rect(0, 0, ModEntry.List[0].Icon.width, ModEntry.List[0].Icon.height), new Vector2(0, 0));
-                GameObject text = new GameObject("Name");
+                GameObject text = new GameObject("Name #" + i);
                 text.transform.parent = ScrollContainer.transform;
-                text.transform.localPosition = new Vector3(-230, -75 + 85 * ModEntry.List.Count - 170 * i, 0);
+                text.transform.localPosition = new Vector3(-400, -75 + 85 * ModEntry.List.Count - 170 * i, 0);
                 text.transform.rotation = Quaternion.Euler(0, -90, 0);
                 text.transform.localScale = new Vector3(1f, 1f, 1f);
                 text.AddComponent<TextMeshProUGUI>().text = ModEntry.List[i].DisplayName;
-                GameObject desc = new GameObject("Author");
+                GameObject desc = new GameObject("Author #" + i);
                 desc.transform.parent = ScrollContainer.transform;
-                desc.transform.localPosition = new Vector3(-230, -75 + 85 * ModEntry.List.Count - 170 * i - 50, 0);
+                desc.transform.localPosition = new Vector3(-400, -75 + 85 * ModEntry.List.Count - 170 * i - 50, 0);
                 desc.transform.rotation = Quaternion.Euler(0, -90, 0);
                 desc.transform.localScale = new Vector3(1f, 1f, 1f);
                 desc.AddComponent<TextMeshProUGUI>().text = "by " + ModEntry.List[i].Author;
@@ -77,35 +77,19 @@ namespace LoadsonInternal
                 GameObject btn1 = UnityEngine.Object.Instantiate(GO_ModsUI.transform.Find("Back").gameObject);
                 btn1.transform.parent = ScrollContainer.transform;
                 ((TextMeshProUGUI)btn1.GetComponent<Button>().targetGraphic).text = "Details";
-                btn1.transform.localPosition = new Vector3(-377, 85 * ModEntry.List.Count - 170 * i - 50, 0);
+                btn1.transform.localPosition = new Vector3(-513, 85 * ModEntry.List.Count - 170 * i - 140, 0);
                 btn1.transform.rotation = Quaternion.Euler(0f, -90f, 0f);
                 // weird double scaling and resizing hitbox fix, idk how i even figured this out
-                btn1.transform.localScale = new Vector3(0.1932f, 1.1707f, 1.1707f);
+                btn1.transform.localScale = new Vector3(0.1352f, 0.8195f, 1.1707f);
                 ((TextMeshProUGUI)btn1.GetComponent<Button>().targetGraphic).rectTransform.localScale = new Vector3(5f, 0.8255f, 0.8255f);
                 ((TextMeshProUGUI)btn1.GetComponent<Button>().targetGraphic).rectTransform.sizeDelta = new Vector2(155, 25);
                 ((TextMeshProUGUI)btn1.GetComponent<Button>().targetGraphic).enableWordWrapping = false;
-                btn1.name = "Details";
-
-                GameObject btn2 = UnityEngine.Object.Instantiate(GO_ModsUI.transform.Find("Back").gameObject);
-                btn2.transform.parent = ScrollContainer.transform;
-                ((TextMeshProUGUI)btn2.GetComponent<Button>().targetGraphic).text = "Disable";
-                btn2.transform.localPosition = new Vector3(-377, -50 + 85 * ModEntry.List.Count - 170 * i - 50, 0);
-                btn2.transform.rotation = Quaternion.Euler(0f, -90f, 0f);
-                // weird double scaling and resizing hitbox fix, idk how i even figured this out
-                btn2.transform.localScale = new Vector3(0.1932f, 1.1707f, 1.1707f);
-                ((TextMeshProUGUI)btn2.GetComponent<Button>().targetGraphic).rectTransform.localScale = new Vector3(5f, 0.8255f, 0.8255f);
-                ((TextMeshProUGUI)btn2.GetComponent<Button>().targetGraphic).rectTransform.sizeDelta = new Vector2(155, 25);
-                ((TextMeshProUGUI)btn2.GetComponent<Button>().targetGraphic).enableWordWrapping = false;
-                btn2.name = "Disable";
+                btn1.name = "Details #" + i;
 
                 int remi = i;
                 _UIHelper.InterceptButton(btn1.GetComponent<Button>(), () => {
                     viewModIdx = remi;
                     GO_ModsUI.SetActive(false);
-                });
-                _UIHelper.InterceptButton(btn2.GetComponent<Button>(), () => {
-                    Process.Start(Path.Combine(Loader.LOADSON_ROOT, "Launcher", "Launcher.exe"), "-disable " + ModEntry.List[remi].ModGUID + ".klm");
-                    Application.Quit(); // handle quitting properly
                 });
             }
 

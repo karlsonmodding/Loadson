@@ -20,6 +20,7 @@ namespace LoadsonInternal
             } catch { }
             Console._ongui();
             ModMenu._ongui();
+            KernelUpdater._ongui();
         }
 
         public void Update()

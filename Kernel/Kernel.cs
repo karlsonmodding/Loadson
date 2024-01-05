@@ -30,7 +30,7 @@ namespace Doorstop
 
         public static string LOADSON_ROOT;
         private static Assembly loadson;
-        private static MethodInfo unityLog;
+        private static string kernel_ver = "v2.0.1";
 
         public static void Start()
         {
@@ -38,46 +38,48 @@ namespace Doorstop
             LOADSON_ROOT = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Loadson");
 
             // run update checker
-#if true // change this to false to run off-grid
-            Process.Start(Path.Combine(LOADSON_ROOT, "Internal", "UpdateChecker.exe")).WaitForExit();
-#endif
+            if(!Environment.GetCommandLineArgs().Contains("-debug"))
+                Process.Start(Path.Combine(LOADSON_ROOT, "Internal", "UpdateChecker.exe")).WaitForExit();
 
-            // start loadson window
-            Process p = new Process
+            if(!Environment.GetCommandLineArgs().Contains("-silent"))
             {
-                StartInfo = {
+                // start loadson window
+                Process p = new Process
+                {
+                    StartInfo = {
                     FileName = Path.Combine(LOADSON_ROOT, "Launcher", "Launcher.exe"),
                     WorkingDirectory = Path.Combine(LOADSON_ROOT, "Launcher"),
                     UseShellExecute = false
                 }
-            };
-            p.StartInfo.EnvironmentVariables.Add("Loadson", "v2");
-            p.Start();
-            p.WaitForExit();
-            if(p.ExitCode == 0)
-            { // exit
-                Process.GetCurrentProcess().Kill();
-                return;
+                };
+                p.StartInfo.EnvironmentVariables.Add("Loadson", "v2");
+                p.Start();
+                p.WaitForExit();
+                if (p.ExitCode == 0)
+                { // exit
+                    Process.GetCurrentProcess().Kill();
+                    return;
+                }
+                if (p.ExitCode == 1)
+                    // vanilla
+                    return;
             }
-            if (p.ExitCode == 1)
-                // vanilla
-                return;
             new Thread(new ThreadStart(() =>
             {
                 try
                 {
                     // wait for configuration screen
                     while (FindWindow(null, "Karlson Configuration") == IntPtr.Zero) Thread.Sleep(100);
-                    SetWindowText(FindWindow(null, "Karlson Configuration"), "[Loadson] Karlson Configuration");
+                    string wintitle = "[Loadson] Karlson Configuration (Kernel " + kernel_ver + ")";
+                    SetWindowText(FindWindow(null, "Karlson Configuration"), wintitle);
 
                     // wait for user to exit configuration screen
-                    while (FindWindow(null, "[Loadson] Karlson Configuration") != IntPtr.Zero) Thread.Sleep(100);
+                    while (FindWindow(null, wintitle) != IntPtr.Zero) Thread.Sleep(100);
 
                     // wait for assembly-csharp
                     while (AppDomain.CurrentDomain.GetAssemblies().Count(x => x.GetName().Name == "Assembly-CSharp") == 0) Thread.Sleep(100);
 
                     // load Loadson
-                    unityLog = AppDomain.CurrentDomain.GetAssemblies().First(x => x.GetName().Name == "UnityEngine.CoreModule").GetType("UnityEngine.Debug").GetMethod("Log", new Type[] { typeof(object) });
                     AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                     loadson = Assembly.LoadFrom(Path.Combine(LOADSON_ROOT, "Internal", "loadson.dll"));
                     loadson.GetType("LoadsonInternal.Loader").GetMethod("Start").Invoke(null, Array.Empty<object>());
@@ -91,13 +93,11 @@ namespace Doorstop
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            unityLog.Invoke(null, new object[] { args.Name });
             if (new AssemblyName(args.Name).Name == "Loadson")
                 return loadson;
             string resolved = Path.Combine(LOADSON_ROOT, "internal", "Loadson deps", new AssemblyName(args.Name).Name + ".dll");
             if (File.Exists(resolved))
                 return Assembly.LoadFile(resolved);
-            unityLog.Invoke(null, new object[] { "Couldn't resolve last" });
             return null;
         }
     }

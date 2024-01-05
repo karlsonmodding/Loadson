@@ -34,7 +34,7 @@ namespace Launcher
         public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
         #endregion
 
-        public const string VERSION = "2.0";
+        public const string VERSION = "2.0.1";
         public const int TIMEOUT = 50;
         public static string ROOT;
 
@@ -83,11 +83,19 @@ namespace Launcher
                     Process.GetCurrentProcess().Kill();
                     return;
                 }
-                if(File.Exists(Path.Combine(ROOT, "Mods", Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[2]) + ".klm")))
+                if(File.Exists(Path.Combine(ROOT, "Mods", Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[2]) + ".klm")) || File.Exists(Path.Combine(ROOT, "Mods", "Disabled", Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[2]) + ".klm")))
                 {
-                    MessageBox(IntPtr.Zero, "You already installed this mod.\nYou need to delete the old mod to update it.\n(open Karlson, Manage Installed Mods -> Delete)", "[Loadson] Error", 0x00040010);
-                    Process.GetCurrentProcess().Kill();
-                    return;
+                    if(MessageBox(IntPtr.Zero, "You already installed this mod.\nDo you want to update it?", "[Loadson] Error", (uint)(0x00000004L | 0x00000040L)) == 6)
+                    {
+                        if (File.Exists(Path.Combine(ROOT, "Mods", "Disabled", Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[2]) + ".klm")))
+                            File.Delete(Path.Combine(ROOT, "Mods", "Disabled", Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[2]) + ".klm"));
+                        // else file gets written anyway
+                    }
+                    else
+                    {
+                        Process.GetCurrentProcess().Kill();
+                        return;
+                    }
                 }
                 using(BinaryReader br = new BinaryReader(File.OpenRead(Environment.GetCommandLineArgs()[2])))
                 {
@@ -112,6 +120,8 @@ namespace Launcher
             }
 
             // TODO: make in-game mod disable button work, or remove it
+            // it's easier to remove the function (i don't think many people use it anyway)
+            /*
             if (Environment.GetCommandLineArgs().Length > 2 && Environment.GetCommandLineArgs()[1] == "-disable")
             {
                 // wait for karlson exit
@@ -123,10 +133,10 @@ namespace Launcher
                 for (int i = 3; i < Environment.GetCommandLineArgs().Length; i++)
                     modName += " " + Environment.GetCommandLineArgs()[i];
                 File.Move(Path.Combine(ROOT, "Mods", modName), Path.Combine(ROOT, "Mods", "Disabled", modName));
-                Process.Start(Path.Combine(ROOT, "Launcher", "Launcher.exe"), "-silent");
                 Process.GetCurrentProcess().Kill();
                 return;
             }
+            */
 
             if(Environment.GetEnvironmentVariable("Loadson") == null && !IsAdministrator())
             {
@@ -175,21 +185,20 @@ namespace Launcher
             }
             
             // check if we are on the old architecture
-            // check for administrator if we associated .klmi
+            // also check for administrator (if we just associated .klmi)
             if(IsAdministrator() || Environment.GetEnvironmentVariable("Loadson") != "v2" || !File.Exists(Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "_Loadson.dll")))
             {
                 // check if v2 is installed in current karlson directory
                 if(File.Exists(Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "_Loadson.dll")))
                 {
                     // start Karlson.exe because we need to go through doorstop
-                    new Process
+                    Process.Start(new ProcessStartInfo
                     {
-                        StartInfo = new ProcessStartInfo
-                        {
-                            FileName = Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "Karlson.exe")
-                        }
-                    }.Start();
+                        FileName = Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "Karlson.exe"),
+                        WorkingDirectory = File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath"))
+                    });
                     Process.GetCurrentProcess().Kill();
+                    return;
                 }
                 // update to new version
                 if (MessageBox(IntPtr.Zero, "Loadson has updated to v2 which brings an architecture change.\nThis requieres installing aditional files to your Karlson directory.\nDo you want to download them now?", "Loadson", (uint)(0x00000004L | 0x00000040L)) == 6)
@@ -203,17 +212,15 @@ namespace Launcher
                         File.WriteAllBytes(Path.Combine(karlsonpath, file), hc.GetByteArrayAsync(API_ENDPOINT + "/Karlson/" + file).GetAwaiter().GetResult());
 
                     // start Karlson.exe because we need to go through doorstop
-                    new Process
+                    Process.Start(new ProcessStartInfo
                     {
-                        StartInfo = new ProcessStartInfo
-                        {
-                            FileName = Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "Karlson.exe")
-                        }
-                    }.Start();
-                    Process.GetCurrentProcess().Kill();
+                        FileName = Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "Karlson.exe"),
+                        WorkingDirectory = File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath"))
+                    });
                 }
                 // we don't run this current instance of the Launcher
                 Process.GetCurrentProcess().Kill();
+                return;
             }
 
             new MainWindow().Show();

@@ -347,7 +347,7 @@ namespace Launcher
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             Width = 190;
-            Height = 173;
+            Height = 166;
             ModManager.Visibility = Visibility.Collapsed;
             // reset center screen
             double screenWidth = SystemParameters.PrimaryScreenWidth;

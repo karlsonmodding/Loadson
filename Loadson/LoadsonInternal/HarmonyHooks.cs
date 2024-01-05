@@ -1,8 +1,10 @@
 ﻿using HarmonyLib;
+using System;
 using System.Collections;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,6 +21,15 @@ namespace LoadsonInternal
 
             ModMenu._init();
             Loadson.Preferences._load();
+
+            KernelUpdater.CheckForUpdates();
+
+            // check for unity explorer
+            if(File.Exists(Path.Combine(Loader.LOADSON_ROOT, "UnityExplorer.STANDALONE.Mono.dll")))
+            {
+                Assembly obe = AppDomain.CurrentDomain.Load(File.ReadAllBytes(Path.Combine(Loader.LOADSON_ROOT, "UnityExplorer.STANDALONE.Mono.dll")));
+                obe.GetType("UnityExplorer.ExplorerStandalone").GetMethod("CreateInstance", Array.Empty<Type>()).Invoke(null, Array.Empty<object>());
+            }
 
             Loader.InitDiscord();
             UnityEngine.Object.DontDestroyOnLoad(__instance.gameObject);

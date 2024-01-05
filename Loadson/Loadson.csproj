@@ -247,6 +247,7 @@
     <Compile Include="LoadsonInternal\Console.cs" />
     <Compile Include="LoadsonInternal\CrossModAPI.cs" />
     <Compile Include="LoadsonInternal\HarmonyHooks.cs" />
+    <Compile Include="LoadsonInternal\KernelUpdater.cs" />
     <Compile Include="LoadsonInternal\Loader.cs" />
     <Compile Include="LoadsonInternal\MenuCustom.cs" />
     <Compile Include="LoadsonInternal\ModEntry.cs" />
