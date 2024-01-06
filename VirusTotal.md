@@ -14,7 +14,7 @@ Loadson.dll|0|[6e6adefe203b35d2fbd79666a5ae99f4dc3c94a9426e055039e93a9120edbef5]
 |||<u>**Other Files**</u>
 UpdateChecker.exe|6|[https://www.virustotal.com/gui/file/5bb034690cc76205ff04966ee55d7308f6147bc50413df150b33ab7126853f27](5bb034690cc76205ff04966ee55d7308f6147bc50413df150b33ab7126853f27)
 DevKit.exe|2|[17fb8d2ab804e7c3d0ce86f2d821a67b12ceb17ba0cf009a0e35050cb9fd6eea](https://www.virustotal.com/gui/file/17fb8d2ab804e7c3d0ce86f2d821a67b12ceb17ba0cf009a0e35050cb9fd6eea)
-ModBuilder.exe|1|[16eb4c7fc65cacc09f63527eeb0f85b1c7c815d2afa843778cec5263ca4b628b](https://www.virustotal.com/gui/file/16eb4c7fc65cacc09f63527eeb0f85b1c7c815d2afa843778cec5263ca4b628b)
+ModBuilder.exe|2|[5c7af607006d839c2cb1bbcf87de636e141394c9f63c71e415d463408283f8ac](https://www.virustotal.com/gui/file/5c7af607006d839c2cb1bbcf87de636e141394c9f63c71e415d463408283f8ac)
 
 The reason UpdateChecker.exe gets more flags than the other files is because it downloads a lot of files from the deployment branch.<br>
 (all hits are false positives. you can check the code yourself.)<br>
