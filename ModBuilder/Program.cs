@@ -12,7 +12,7 @@ namespace ModBuilder
     class Program
     {
         public const string API_ENDPOINT = "https://raw.githubusercontent.com/karlsonmodding/Loadson/deployment";
-        public const string VERSION = "v2";
+        public const string VERSION = "v3";
 
         [STAThread]
         static void Main()
@@ -48,10 +48,6 @@ namespace ModBuilder
                     else
                         return;
                 }
-                Console.WriteLine("Enter the name of the mod here (GUID, has to be unique to other mod). To set the Display Name edit the 'metadata.txt' file.");
-                Console.Write("Mod name: ");
-                string name = Console.ReadLine().Replace(" ", "_");
-                File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LoadsonMod.csproj"), new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream("ModBuilder.modproj")).ReadToEnd().Replace("%name%", name));
                 Console.WriteLine("Game root: " + gameRoot);
                 Console.WriteLine("Copying game files..");
                 foreach (string f in Directory.GetFiles(Path.Combine(gameRoot, "Karlson_Data", "Managed")))
@@ -67,7 +63,20 @@ namespace ModBuilder
                 HttpClient hc = new HttpClient();
                 File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "LoadsonAPI.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/LoadsonAPI.dll").GetAwaiter().GetResult());
                 File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "LoadsonAPI.xml"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/LoadsonAPI.xml").GetAwaiter().GetResult());
-                Console.WriteLine("ModBuilder installed succesfully the lib folder. Press any key to exit..");
+                Console.WriteLine("ModBuilder installed succesfully the lib folder.");
+                if(!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LoadsonMod.csproj")))
+                {
+                    Console.WriteLine("Enter the name of the mod here (GUID, has to be unique to other mod). To set the Display Name edit the 'metadata.txt' file.");
+                    Console.Write("Mod name: ");
+                    string name = Console.ReadLine().Replace(" ", "_");
+                    File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LoadsonMod.csproj"), new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream("ModBuilder.modproj")).ReadToEnd().Replace("%name%", name));
+                    Console.WriteLine("Mod initialized. Press any key to exit..");
+                }
+                else
+                {
+                    Console.WriteLine("Press any key to exit..");
+                }
+                
                 Console.ReadKey();
                 return;
             }
@@ -102,7 +111,7 @@ namespace ModBuilder
                 switch(key)
                 {
                     default:
-                        Console.WriteLine("Found unknown key " + key + " in metadata.");
+                        Console.WriteLine("WARNING: Found unknown key " + key + " in metadata.");
                         break;
                     case "displayname":
                         m_name = val;
@@ -166,23 +175,6 @@ namespace ModBuilder
             Console.WriteLine("\nBuild succesfully in (" + Math.Ceiling((DateTime.Now - start).TotalMilliseconds) + "ms).");
             Console.WriteLine("Mod size: " + File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klm")).Length + " B");
             Console.WriteLine("Install size: " + File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klmi")).Length + " B");
-        }
-
-        public static void RawCopy(Stream input, string outputFilePath)
-        {
-            int bufferSize = 1024 * 1024;
-
-            using (FileStream fileStream = new FileStream(outputFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
-            {
-                fileStream.SetLength(input.Length);
-                int bytesRead = -1;
-                byte[] bytes = new byte[bufferSize];
-
-                while ((bytesRead = input.Read(bytes, 0, bufferSize)) > 0)
-                {
-                    fileStream.Write(bytes, 0, bytesRead);
-                }
-            }
         }
     }
 }
