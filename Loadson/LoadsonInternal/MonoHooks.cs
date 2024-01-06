@@ -13,11 +13,8 @@ namespace LoadsonInternal
     {
         public void OnGUI()
         {
-            try
-            {
-                foreach(ModEntry mod in from x in ModEntry.List where x.instance != null select x)
-                    mod.instance.OnGUI();
-            } catch { }
+            foreach(ModEntry mod in from x in ModEntry.List where x.instance != null select x)
+                ModLoader.SafeCall(mod.instance.OnGUI);
             Console._ongui();
             ModMenu._ongui();
             KernelUpdater._ongui();
@@ -25,12 +22,8 @@ namespace LoadsonInternal
 
         public void Update()
         {
-            try
-            {
-                foreach (ModEntry mod in from x in ModEntry.List where x.instance != null select x)
-                    mod.instance.Update(Time.deltaTime);
-            }
-            catch { }
+            foreach (ModEntry mod in from x in ModEntry.List where x.instance != null select x)
+                ModLoader.SafeCall(() => mod.instance.Update(Time.deltaTime));
             Console._update();
             if(Loader.discord_exists)
                 Loader.discord.RunCallbacks();
@@ -38,22 +31,14 @@ namespace LoadsonInternal
 
         public void FixedUpdate()
         {
-            try
-            {
-                foreach (ModEntry mod in from x in ModEntry.List where x.instance != null select x)
-                    mod.instance.FixedUpdate(Time.fixedDeltaTime);
-            }
-            catch { }
+            foreach (ModEntry mod in from x in ModEntry.List where x.instance != null select x)
+                ModLoader.SafeCall(() => mod.instance.FixedUpdate(Time.fixedDeltaTime));
         }
 
         public void OnApplicationQuit()
         {
-            try
-            {
-                foreach (ModEntry mod in from x in ModEntry.List where x.instance != null select x)
-                    mod.instance.OnDisable();
-            }
-            catch { }
+            foreach (ModEntry mod in from x in ModEntry.List where x.instance != null select x)
+                ModLoader.SafeCall(mod.instance.OnDisable);
             Loadson.Preferences._save();
             Preferences.Save();
             Process.GetCurrentProcess().Kill();

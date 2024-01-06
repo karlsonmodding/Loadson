@@ -12,6 +12,18 @@ namespace LoadsonInternal
 {
     public class ModLoader
     {
+        public static void SafeCall(Action call)
+        {
+            try
+            {
+                call();
+            }
+            catch (Exception e)
+            {
+                Console.Log(e.ToString());
+            }
+        }
+
         public static void BuildList()
         {
             Console.Log("Loadson root: " + Loader.LOADSON_ROOT);
@@ -72,7 +84,7 @@ namespace LoadsonInternal
                         ModEntry.List.Remove(mod);
                         continue;
                     }
-                    mod.instance.OnEnable();
+                    SafeCall(mod.instance.OnEnable);
                     mod.enabled = true;
                     Console.Log("<i> </i>Loaded succesfully");
 
