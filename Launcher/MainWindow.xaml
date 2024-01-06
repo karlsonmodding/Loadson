@@ -107,6 +107,28 @@
                     </Style>
                 </Button.Style>
             </Button>
+            <Button Content="Run Karlson Vanilla" HorizontalAlignment="Center" Margin="0,145,0,0" Width="180" BorderBrush="#00000000" Height="16" VerticalAlignment="Top" Click="Button_Click_4">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="#333"/>
+                        <Setter Property="Foreground" Value="#FFF"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#222"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Grid x:Name="ModManager" Margin="0, 20, 0, 0" Background="#444" Visibility="Collapsed">
 
                 <Button Content="Confirm &amp; Exit" HorizontalAlignment="Right" Width="160" BorderBrush="#00000000" Height="37" VerticalAlignment="Top" Margin="0,10,10,0" FontSize="18" Click="Button_Click_2">
@@ -136,28 +158,6 @@
                     <Grid x:Name="ModContainer"/>
                 </ScrollViewer>
             </Grid>
-            <Button Content="Run Karlson Vanilla" HorizontalAlignment="Center" Margin="0,145,0,0" Width="180" BorderBrush="#00000000" Height="16" VerticalAlignment="Top" Click="Button_Click_4">
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Background" Value="#333"/>
-                        <Setter Property="Foreground" Value="#FFF"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border Background="{TemplateBinding Background}">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#222"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
         </Grid>
     </Border>
 </Window>
