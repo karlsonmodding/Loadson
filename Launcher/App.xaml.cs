@@ -34,7 +34,7 @@ namespace Launcher
         public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
         #endregion
 
-        public const string VERSION = "2.0.1";
+        public const string VERSION = "2.0.2";
         public const int TIMEOUT = 50;
         public static string ROOT;
 
