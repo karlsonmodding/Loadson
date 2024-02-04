@@ -192,10 +192,12 @@ namespace Launcher
                 if(File.Exists(Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "_Loadson.dll")))
                 {
                     // start Karlson.exe because we need to go through doorstop
+                    Environment.SetEnvironmentVariable("Loadson", null);
                     Process.Start(new ProcessStartInfo
                     {
                         FileName = Path.Combine(File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")), "Karlson.exe"),
-                        WorkingDirectory = File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath"))
+                        WorkingDirectory = File.ReadAllText(Path.Combine(App.ROOT, "Internal", "karlsonpath")),
+                        UseShellExecute = true
                     });
                     Process.GetCurrentProcess().Kill();
                     return;
