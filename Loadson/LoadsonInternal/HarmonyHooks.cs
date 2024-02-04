@@ -19,6 +19,8 @@ namespace LoadsonInternal
             Console.Init();
             Console.Log("Detoured Managers.Start");
 
+            ForcedCultureInfo.Install();
+
             ModMenu._init();
             Loadson.Preferences._load();
 
