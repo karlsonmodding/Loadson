@@ -44,6 +44,12 @@ namespace LoadsonInternal
 
         public static void AddCategory(string id, string display, List<(string, Action)> children)
         {
+            if(mainmenu.Any(x => x.Item1 == id))
+            {
+                Console.Log("<color=red>Tried adding category with id " + id + " but it already exists.</color");
+                Console.OpenConsole();
+                return;
+            }
             children.Insert(0, ("back", () =>
             {
                 selected = -1;
@@ -57,14 +63,19 @@ namespace LoadsonInternal
         }
         public static void UpdateCategory(string id, string display, List<(string, Action)> newChildren)
         {
-            mainmenu.Remove((from x in mainmenu where x.Item1 == id select x).FirstOrDefault());
+            int idx = mainmenu.FindIndex(x => x.Item1 == id);
+            if(idx == -1)
+            {
+                AddCategory(id, display, newChildren);
+                return;
+            }
             newChildren.Insert(0, ("back", () =>
             {
                 selected = -1;
                 RenderButtons();
             }
             ));
-            mainmenu.Add((id, display, newChildren));
+            mainmenu[idx] = (id, display, newChildren);
         }
 
         private static void RenderButtons()

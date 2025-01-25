@@ -129,7 +129,7 @@ namespace LoadsonInternal
                 ModEntry mod = ModEntry.List[viewModIdx];
                 GUI.DrawTexture(new Rect(5, 25, 100, 100), mod.Icon);
                 GUI.Label(new Rect(110, 25, 280, 100),
-                    $"[File] {mod.ModGUID}.klm\n" +
+                    $"[GUID] {mod.ModGUID}\n" +
                     $"[Name] {mod.DisplayName}\n" +
                     $"[Author] {mod.Author}\n" +
                     $"[Deps] ({mod.DepsRef.Length}) {string.Join(", ", mod.DepsRef)}\n" +

@@ -257,6 +257,7 @@
     <Compile Include="LoadsonInternal\MonoHooks.cs" />
     <Compile Include="LoadsonInternal\Preferences.cs" />
     <Compile Include="LoadsonInternal\PreferencesCustom.cs" />
+    <Compile Include="LoadsonInternal\_GUIDFetcher.cs" />
     <Compile Include="LoadsonInternal\_UIHelper.cs" />
     <Compile Include="Loadson\Console.cs" />
     <Compile Include="Loadson\Mod.cs" />

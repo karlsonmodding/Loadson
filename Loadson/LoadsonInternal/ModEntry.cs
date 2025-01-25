@@ -29,9 +29,9 @@ namespace LoadsonInternal
         public Loadson.Mod instance = null;
         public bool enabled = false;
 
-        public ModEntry(string _ModGUID, string _ModName, string _ModAuthor, string _ModDescription, List<string> _ModDeps, int _ModWorkshopID, byte[] _AsmData, byte[] icon, byte[] assetbundle)
+        public ModEntry(string _ModName, string _ModAuthor, string _ModDescription, List<string> _ModDeps, int _ModWorkshopID, byte[] _AsmData, byte[] icon, byte[] assetbundle)
         {
-            ModGUID = _ModGUID;
+            ModGUID = _GUIDFetcher.ExtractGUID(_AsmData);
             DisplayName = _ModName;
             Author = _ModAuthor;
             Description = _ModDescription;

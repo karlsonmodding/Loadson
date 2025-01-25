@@ -48,7 +48,7 @@ namespace LoadsonInternal
                     byte[] ModIcon = br.ReadBytes(_iconSize);
                     int _assetBundleSize = br.ReadInt32();
                     byte[] ModAssetBundle = br.ReadBytes(_assetBundleSize);
-                    ModEntry.List.Add(new ModEntry(ModGUID, ModName, ModAuthor, ModDescription, ModDeps, ModWorkshopID, ModBinary, ModIcon, ModAssetBundle));
+                    ModEntry.List.Add(new ModEntry(ModName, ModAuthor, ModDescription, ModDeps, ModWorkshopID, ModBinary, ModIcon, ModAssetBundle));
                 }
             }
         }
