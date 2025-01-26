@@ -129,12 +129,12 @@ namespace LoadsonInternal
                 ModEntry mod = ModEntry.List[viewModIdx];
                 GUI.DrawTexture(new Rect(5, 25, 100, 100), mod.Icon);
                 GUI.Label(new Rect(110, 25, 280, 100),
+                    $"[File] {mod.FilePath}\n" +
                     $"[GUID] {mod.ModGUID}\n" +
                     $"[Name] {mod.DisplayName}\n" +
                     $"[Author] {mod.Author}\n" +
                     $"[Deps] ({mod.DepsRef.Length}) {string.Join(", ", mod.DepsRef)}\n" +
-                    (mod.AssetBundle != null ? "This mod has an AssetBundle" : "This mod does not have an AssetBundle") +
-                    $"\nMod installed on {new FileInfo(Path.Combine(Loader.LOADSON_ROOT, "Mods", mod.ModGUID + ".klm")).CreationTime}");
+                    (mod.AssetBundle != null ? "This mod has an AssetBundle" : "This mod does not have an AssetBundle"));
                 GUI.Box(new Rect(5, 130, 390, 315), "");
                 GUI.Label(new Rect(10, 135, 380, 305), mod.Description);
             }, "Mod Details");

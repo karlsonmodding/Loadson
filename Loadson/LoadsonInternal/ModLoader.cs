@@ -31,12 +31,10 @@ namespace LoadsonInternal
             {
                 using (BinaryReader br = new BinaryReader(File.OpenRead(file)))
                 {
-                    Console.Log("Preloading mod " + Path.GetFileName(file));
-                    string ModGUID = Path.GetFileNameWithoutExtension(file);
                     string ModName = br.ReadString();
                     string ModAuthor = br.ReadString();
                     string ModDescription = br.ReadString();
-                    Console.Log("[" + ModGUID + "] " + ModName + " by " + ModAuthor);
+                    Console.Log("Preloading [" + Path.GetFileName(file) + "] " + ModName + " by " + ModAuthor);
                     int _modDepCount = br.ReadInt32();
                     List<string> ModDeps = new List<string>();
                     for (int i = 0; i < _modDepCount; i++)
@@ -48,7 +46,7 @@ namespace LoadsonInternal
                     byte[] ModIcon = br.ReadBytes(_iconSize);
                     int _assetBundleSize = br.ReadInt32();
                     byte[] ModAssetBundle = br.ReadBytes(_assetBundleSize);
-                    ModEntry.List.Add(new ModEntry(ModName, ModAuthor, ModDescription, ModDeps, ModWorkshopID, ModBinary, ModIcon, ModAssetBundle));
+                    ModEntry.List.Add(new ModEntry(ModName, ModAuthor, ModDescription, ModDeps, ModWorkshopID, ModBinary, ModIcon, ModAssetBundle, file));
                 }
             }
         }

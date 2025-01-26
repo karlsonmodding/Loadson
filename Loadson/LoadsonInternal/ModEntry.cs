@@ -20,6 +20,7 @@ namespace LoadsonInternal
         public List<string> Deps = new List<string>();
         public string[] DepsRef;
         public int WorkshopId;
+        public string FilePath;
 
         public byte[] AsmData;
         public Texture2D Icon;
@@ -29,7 +30,7 @@ namespace LoadsonInternal
         public Loadson.Mod instance = null;
         public bool enabled = false;
 
-        public ModEntry(string _ModName, string _ModAuthor, string _ModDescription, List<string> _ModDeps, int _ModWorkshopID, byte[] _AsmData, byte[] icon, byte[] assetbundle)
+        public ModEntry(string _ModName, string _ModAuthor, string _ModDescription, List<string> _ModDeps, int _ModWorkshopID, byte[] _AsmData, byte[] icon, byte[] assetbundle, string filePath)
         {
             ModGUID = _GUIDFetcher.ExtractGUID(_AsmData);
             DisplayName = _ModName;
@@ -42,6 +43,7 @@ namespace LoadsonInternal
             Icon = new Texture2D(64, 64);
             Icon.LoadImage(icon);
             AssetBundle = AssetBundle.LoadFromMemory(assetbundle);
+            FilePath = filePath;
         }
     }
 }
