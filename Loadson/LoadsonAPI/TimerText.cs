@@ -59,8 +59,8 @@ namespace LoadsonAPI
             ___text.text = __instance.GetFormattedTime(___timer);
             foreach(var r in TimerText.strings)
             {
-                string res = r();
-                if (res.Length == 0) continue;
+                string res = ModLoader.SafeCall(() => r());
+                if (res == null || res.Length == 0) continue;
                 ___text.text += "\n" + res;
             }
         }

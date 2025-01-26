@@ -26,7 +26,17 @@ namespace LoadsonInternal
                 ModLoader.SafeCall(() => mod.instance.Update(Time.deltaTime));
             Console._update();
             if(Loader.discord_exists)
-                Loader.discord.RunCallbacks();
+            {
+                try
+                {
+                    Loader.discord.RunCallbacks();
+                }
+                catch
+                {
+                    // disable discord if error
+                    Loader.discord_exists = false;
+                }
+            }
         }
 
         public void FixedUpdate()

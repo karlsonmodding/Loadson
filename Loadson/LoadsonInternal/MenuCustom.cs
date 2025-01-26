@@ -80,14 +80,17 @@ namespace LoadsonInternal
 
         private static void RenderButtons()
         {
-            for (int i = 0; i < GameObject.Find("/UI/Menu/ScrollView/ScrollContainer").transform.childCount; i++)
-                UnityEngine.Object.Destroy(GameObject.Find("/UI/Menu/ScrollView/ScrollContainer").transform.GetChild(i).gameObject);
+            var container = GameObject.Find("/UI/Menu/ScrollView/ScrollContainer");
+            if (container == null)
+                return;
+            for (int i = 0; i < container.transform.childCount; i++)
+                UnityEngine.Object.Destroy(container.transform.GetChild(i).gameObject);
             if (selected == -1)
             {
                 for (int i = 0; i < mainmenu.Count; i++)
                 {
                     GameObject btn = UnityEngine.Object.Instantiate(GameObject.Find("/UI/Menu/Options"));
-                    btn.transform.parent = GameObject.Find("/UI/Menu/ScrollView/ScrollContainer").transform;
+                    btn.transform.parent = container.transform;
                     btn.transform.localPosition = new Vector3(-170, 50f * mainmenu.Count - 100f * i, 0f);
                     btn.transform.rotation = Quaternion.Euler(0, 0, 0);
                     btn.transform.localScale = new Vector3(5.6f, 2.1f, 2.1f);
@@ -103,7 +106,7 @@ namespace LoadsonInternal
             for (int i = 0; i < mainmenu[selected].Item3.Count; i++)
             {
                 GameObject btn = UnityEngine.Object.Instantiate(GameObject.Find("/UI/Menu/Options"));
-                btn.transform.parent = GameObject.Find("/UI/Menu/ScrollView/ScrollContainer").transform;
+                btn.transform.parent = container.transform;
                 btn.transform.localPosition = new Vector3(-170, 50f * mainmenu[selected].Item3.Count - 100f * i, 0f);
                 btn.transform.rotation = Quaternion.Euler(0, 0, 0);
                 btn.transform.localScale = new Vector3(5.6f, 2.1f, 2.1f);
@@ -111,7 +114,7 @@ namespace LoadsonInternal
                 ((TextMeshProUGUI)btn.GetComponent<Button>().targetGraphic).text = mainmenu[selected].Item3[i].Item1;
 
                 var remi = i;
-                _UIHelper.InterceptButton(btn.GetComponent<Button>(), () => { mainmenu[selected].Item3[remi].Item2(); RenderButtons(); });
+                _UIHelper.InterceptButton(btn.GetComponent<Button>(), () => { ModLoader.SafeCall(mainmenu[selected].Item3[remi].Item2); RenderButtons(); });
             }
             GameObject.Find("/UI/Menu/ScrollView").GetComponent<ScrollRect>().content.sizeDelta = new Vector2(1000, 100 + 100 * mainmenu[selected].Item3.Count);
         }

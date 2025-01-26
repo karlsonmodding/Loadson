@@ -23,6 +23,18 @@ namespace LoadsonInternal
                 Console.Log(e.ToString());
             }
         }
+        public static T SafeCall<T>(Func<T> call)
+        {
+            try
+            {
+                return call();
+            }
+            catch(Exception e)
+            {
+                Console.Log(e.ToString());
+                return default;
+            }
+        }
 
         public static void BuildList()
         {

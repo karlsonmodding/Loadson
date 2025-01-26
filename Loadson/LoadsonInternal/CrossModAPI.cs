@@ -29,7 +29,7 @@ namespace LoadsonInternal
                 Console.OpenConsole();
                 return null;
             }
-            return MethodMap[name](args);
+            return ModLoader.SafeCall(() => MethodMap[name](args));
         }
 
         private static readonly Dictionary<string, cmm> MethodMap = new Dictionary<string, cmm>();
