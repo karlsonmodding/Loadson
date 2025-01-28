@@ -24,7 +24,7 @@ namespace LoadsonInternal
             ModMenu._init();
             Loadson.Preferences._load();
 
-            KernelUpdater.CheckForUpdates();
+            ModLoader.SafeCall(KernelUpdater.CheckForUpdates);
 
             // check for unity explorer
             if(File.Exists(Path.Combine(Loader.LOADSON_ROOT, "UnityExplorer.STANDALONE.Mono.dll")))
