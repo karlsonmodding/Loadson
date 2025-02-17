@@ -1,0 +1,2 @@
+These files (referred to as the "Discord Game SDK") have been sampled from https://discord.com/developers/docs/developer-tools/game-sdk#getting-started specifically from this archive: https://dl-game-sdk.discordapp.net/3.2.1/discord_game_sdk.zip  
+This API is used internally by Loadson to communicate with your Discord client locally for different purposes such as: setting Rich Presence, authentication (for different mods, such as KarlsonMapEditor), profile information (username and avatar).
