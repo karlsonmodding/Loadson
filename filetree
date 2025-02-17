@@ -1,0 +1,8 @@
+Internal/
+Internal/Loadson deps/
+Internal/Common deps/
+Mods/
+Mods/Disabled/
+Internal/Launcher.dll
+Internal/Loadson.dll
+Internal/Loadson deps/0Harmony.dll
