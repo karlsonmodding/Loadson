@@ -22,6 +22,9 @@ jobs:
     - name: Install lib folder
       shell: cmd
       run: git clone https://github.com/karlsonmodding/KarlsonFiles.git lib
+    - name: Restore NuGet packages
+      shell: cmd
+      run: dotnet restore
     - name: Run builder
       shell: cmd
       run: Builder.exe
