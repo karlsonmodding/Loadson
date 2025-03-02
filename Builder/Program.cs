@@ -37,7 +37,7 @@ namespace Builder
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    Arguments = "/C dotnet build",
+                    Arguments = "/C dotnet build -c Release",
                     CreateNoWindow = true,
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
