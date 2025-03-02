@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !LoadsonAPI
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -50,3 +51,4 @@ namespace LoadsonInternal
         }
     }
 }
+#endif

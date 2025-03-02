@@ -8,7 +8,7 @@
  * This part of code is strictly licensed under MelonLoader's license, Apache-2.0 license
  * https://github.com/LavaGang/MelonLoader/blob/master/LICENSE.md
  */
-
+#if !LoadsonAPI
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -63,3 +63,4 @@ namespace LoadsonInternal
         private static bool SetMethod() => false;
     }
 }
+#endif

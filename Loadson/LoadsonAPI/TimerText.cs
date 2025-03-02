@@ -21,6 +21,7 @@ namespace LoadsonAPI
         /// <param name="text">Lambda function that returns a string. If result is empty string "", nothing is printed.</param>
         public static void AddText(resolver text)
         {
+#if !LoadsonAPI
             // get mod instance
             ModEntry e = null;
             // selector doesn't work, don't ask me why, i'm going insane
@@ -49,8 +50,12 @@ namespace LoadsonAPI
         }
 
         public static List<resolver> strings = new List<resolver>();
+#else
+        }
+#endif
     }
 
+#if !LoadsonAPI
     [HarmonyPatch(typeof(Timer), "Update")]
     public class Hook_Timer_Update
     {
@@ -65,4 +70,5 @@ namespace LoadsonAPI
             }
         }
     }
+#endif
 }

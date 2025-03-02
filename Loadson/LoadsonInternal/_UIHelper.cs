@@ -1,4 +1,5 @@
-﻿using UnityEngine.UI;
+﻿#if !LoadsonAPI
+using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine;
 using System;
@@ -64,3 +65,4 @@ namespace LoadsonInternal
         }
     }
 }
+#endif

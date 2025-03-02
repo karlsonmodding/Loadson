@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !LoadsonAPI
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace LoadsonInternal
                 ModLoader.SafeCall(mod.instance.OnGUI);
             Console._ongui();
             ModMenu._ongui();
-            KernelUpdater._ongui();
+            LoadsonAPI.FilePicker._ongui();
         }
 
         public void Update()
@@ -55,3 +56,4 @@ namespace LoadsonInternal
         }
     }
 }
+#endif

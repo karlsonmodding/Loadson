@@ -1,4 +1,5 @@
-﻿using Loadson;
+﻿#if !LoadsonAPI
+using Loadson;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -117,8 +118,10 @@ namespace LoadsonInternal
             }
             Console.Log("Loaded " + countall + " mods");
             LoadedMods = countall;
-            Loader.activity.Details = "Playing with " + countall + " mods";
-            Loader.discord.GetActivityManager().UpdateActivity(Loader.activity, (_) => { });
+            if(Loader.discord_exists)
+            {
+                DiscordRPC.UpdateRPC(details: "Playing with " + countall + " mods");
+            }
         }
 
         private static Assembly GenericAssemblyResolve(object sender, ResolveEventArgs args)
@@ -134,3 +137,4 @@ namespace LoadsonInternal
         }
     }
 }
+#endif

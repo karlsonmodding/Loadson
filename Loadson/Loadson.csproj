@@ -32,6 +32,15 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Loadson.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'LoadsonAPI|AnyCPU'">
+    <OutputPath>bin\LoadsonAPI\</OutputPath>
+    <DefineConstants>TRACE;LoadsonAPI</DefineConstants>
+    <DocumentationFile>bin\Release\Loadson.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Lib.Harmony.2.2.2\lib\net472\0Harmony.dll</HintPath>
@@ -238,17 +247,21 @@
     <Compile Include="Discord\ActivityManager.cs" />
     <Compile Include="Discord\Constants.cs" />
     <Compile Include="Discord\Core.cs" />
+    <Compile Include="LoadsonExtensions\Reflection.cs" />
+    <Compile Include="LoadsonExtensions\Texture2D_Extensions.cs" />
+    <Compile Include="LoadsonExtensions\UnityObject_Extensions.cs" />
     <Compile Include="LoadsonAPI\Coroutines.cs" />
     <Compile Include="LoadsonAPI\DiscordAPI.cs" />
+    <Compile Include="LoadsonAPI\FilePicker.cs" />
     <Compile Include="LoadsonAPI\ImGUI_WID.cs" />
     <Compile Include="LoadsonAPI\MenuEntry.cs" />
     <Compile Include="LoadsonAPI\PrefabManager.cs" />
     <Compile Include="LoadsonAPI\TimerText.cs" />
     <Compile Include="LoadsonInternal\Console.cs" />
     <Compile Include="LoadsonInternal\CrossModAPI.cs" />
+    <Compile Include="LoadsonInternal\DiscordRPC.cs" />
     <Compile Include="LoadsonInternal\ForcedCultureInfo.cs" />
     <Compile Include="LoadsonInternal\HarmonyHooks.cs" />
-    <Compile Include="LoadsonInternal\KernelUpdater.cs" />
     <Compile Include="LoadsonInternal\Loader.cs" />
     <Compile Include="LoadsonInternal\MenuCustom.cs" />
     <Compile Include="LoadsonInternal\ModEntry.cs" />
@@ -271,6 +284,19 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' != 'LoadsonAPI|AnyCPU'">
+    <EmbeddedResource Include="Assets\UpArrow.png" />
+    <EmbeddedResource Include="Assets\ArchiveIcon.png" />
+    <EmbeddedResource Include="Assets\AudioFileIcon.png" />
+    <EmbeddedResource Include="Assets\DefaultFileIcon.png" />
+    <EmbeddedResource Include="Assets\DriveIcon.png" />
+    <EmbeddedResource Include="Assets\ExecutableIcon.png" />
+    <EmbeddedResource Include="Assets\FolderIcon.png" />
+    <EmbeddedResource Include="Assets\ImageFileIcon.png" />
+    <EmbeddedResource Include="Assets\PdfFileIcon.png" />
+    <EmbeddedResource Include="Assets\TextFileIcon.png" />
+    <EmbeddedResource Include="Assets\VideoFileIcon.png" /> 
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
@@ -278,7 +304,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(SolutionDir)build"
-mkdir "$(SolutionDir)build\internal"
-copy "$(TargetPath)" "$(SolutionDir)build\internal\Loadson.dll" /Y</PostBuildEvent>
+copy "$(TargetPath)" "$(SolutionDir)build\Loadson.dll" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

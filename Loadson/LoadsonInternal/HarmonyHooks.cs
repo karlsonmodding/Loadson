@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿#if !LoadsonAPI
+using HarmonyLib;
 using System;
 using System.Collections;
 using System.IO;
@@ -22,9 +23,8 @@ namespace LoadsonInternal
             ForcedCultureInfo.Install();
 
             ModMenu._init();
+            LoadsonAPI.FilePicker.init();
             Loadson.Preferences._load();
-
-            ModLoader.SafeCall(KernelUpdater.CheckForUpdates);
 
             // check for unity explorer
             if(File.Exists(Path.Combine(Loader.LOADSON_ROOT, "UnityExplorer.STANDALONE.Mono.dll")))
@@ -119,3 +119,4 @@ namespace LoadsonInternal
         }
     }
 }
+#endif

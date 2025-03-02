@@ -12,8 +12,6 @@ namespace DevKit_Bootstrapper
 {
     class Program
     {
-        private const string API_ENDPOINT = "https://raw.githubusercontent.com/karlsonmodding/Loadson/deployment";
-
         [STAThread]
         static void Main(string[] args)
         {
@@ -78,33 +76,8 @@ namespace DevKit_Bootstrapper
                     Console.WriteLine("Copied " + Path.GetFileName(f));
                 }
             }
-            Console.WriteLine("Downloading other assemblies..");
-            HttpClient hc = new HttpClient();
-            /* Changed Harmony version to nuget
-            File.WriteAllBytes(Path.Combine(solutionRoot, "lib", "0Harmony.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/Internal/Loadson%20deps/0Harmony.dll").GetAwaiter().GetResult());
-            File.WriteAllBytes(Path.Combine(solutionRoot, "lib", "Mono.Cecil.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/Internal/Loadson%20deps/Mono.Cecil.dll").GetAwaiter().GetResult());
-            File.WriteAllBytes(Path.Combine(solutionRoot, "lib", "MonoMod.RuntimeDetour.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/Internal/Loadson%20deps/MonoMod.RuntimeDetour.dll").GetAwaiter().GetResult());
-            File.WriteAllBytes(Path.Combine(solutionRoot, "lib", "MonoMod.Utils.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/Internal/Loadson%20deps/MonoMod.Utils.dll").GetAwaiter().GetResult());*/
-            File.WriteAllBytes(Path.Combine(solutionRoot, "lib", "MInject.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/Launcher/MInject.dll").GetAwaiter().GetResult());
             Console.WriteLine("DevKit installed succesfully the lib folder. Press any key to exit..");
             Console.ReadKey();
-        }
-
-        public static void RawCopy(Stream input, string outputFilePath)
-        {
-            int bufferSize = 1024 * 1024;
-
-            using (FileStream fileStream = new FileStream(outputFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
-            {
-                fileStream.SetLength(input.Length);
-                int bytesRead = -1;
-                byte[] bytes = new byte[bufferSize];
-
-                while ((bytesRead = input.Read(bytes, 0, bufferSize)) > 0)
-                {
-                    fileStream.Write(bytes, 0, bytesRead);
-                }
-            }
         }
     }
 }

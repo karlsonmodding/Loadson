@@ -18,6 +18,7 @@ namespace Loadson
         /// <returns>Your dictionary. Empty dictionary if it doesn't exist (first load)</returns>
         public static Dictionary<string, string> GetPreferences()
         {
+#if !LoadsonAPI
             // get mod instance
             ModEntry e = null;
             // selector doesn't work, don't ask me why, i'm going insane
@@ -38,8 +39,11 @@ namespace Loadson
             if (!all_data.ContainsKey(e.ModGUID))
                 all_data.Add(e.ModGUID, new Dictionary<string, string>());
             return all_data[e.ModGUID];
+#else
+            return null;
+#endif
         }
-
+#if !LoadsonAPI
         private static Dictionary<string, Dictionary<string, string>> all_data = new Dictionary<string, Dictionary<string, string>>();
 
         public static void _load()
@@ -103,5 +107,6 @@ namespace Loadson
                 return Convert.ToBase64String(ms.ToArray());
             }
         }
+#endif
     }
 }

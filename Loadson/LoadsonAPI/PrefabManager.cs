@@ -9,149 +9,221 @@ namespace LoadsonAPI
     {
         /* Weapons */
 
-        private static GameObject pistol;
         public static GameObject NewPistol()
         {
+#if !LoadsonAPI
             GameObject _pistol = UnityEngine.Object.Instantiate(pistol);
             _pistol.name = "Pistol #" + UnityEngine.Random.Range(0, 32767);
             _pistol.SetActive(true);
             return _pistol;
         }
+        private static GameObject pistol;
+#else
+            return null;
+        }
+#endif
 
-        private static GameObject ak47;
         public static GameObject NewAk47()
         {
+#if !LoadsonAPI
             GameObject _ak47 = UnityEngine.Object.Instantiate(ak47);
             _ak47.name = "Ak47 #" + UnityEngine.Random.Range(0, 32767);
             _ak47.SetActive(true);
             return _ak47;
         }
+        private static GameObject ak47;
+#else
+            return null;
+        }
+#endif
 
-        private static GameObject shotgun;
         public static GameObject NewShotgun()
         {
+#if !LoadsonAPI
             GameObject _shotgun = UnityEngine.Object.Instantiate(shotgun);
             _shotgun.name = "Shotgun #" + UnityEngine.Random.Range(0, 32767);
             _shotgun.SetActive(true);
             return _shotgun;
         }
+        private static GameObject shotgun;
+#else
+            return null;
+        }
+#endif
 
-        private static GameObject boomer;
         public static GameObject NewBoomer()
         {
+#if !LoadsonAPI
             GameObject _boomer = UnityEngine.Object.Instantiate(boomer);
             _boomer.name = "Boomer #" + UnityEngine.Random.Range(0, 32767);
             _boomer.SetActive(true);
             return _boomer;
         }
+        private static GameObject boomer;
+#else
+            return null;
+        }
+#endif
 
-        private static GameObject grappler;
-        private static GameObject grappler_aim;
         public static GameObject NewGrappler()
         {
+#if !LoadsonAPI
             GameObject _grappler = UnityEngine.Object.Instantiate(grappler);
             _grappler.name = "Grappler #" + UnityEngine.Random.Range(0, 32767);
             _grappler.SetActive(true);
             _grappler.GetComponent<Grappler>().aim = UnityEngine.Object.Instantiate(grappler_aim);
             return _grappler;
+#else
+            return null;
+#endif
         }
         public static GameObject NewDummyGrappler()
         {
+#if !LoadsonAPI
             GameObject _grappler = UnityEngine.Object.Instantiate(grappler);
             _grappler.name = "DummyGrappler #" + UnityEngine.Random.Range(0, 32767);
             _grappler.SetActive(true);
             return _grappler;
         }
+        private static GameObject grappler;
+        private static GameObject grappler_aim;
+#else
+            return null;
+        }
+#endif
 
 
         /* Entities */
 
-        private static GameObject table;
         public static GameObject NewTable()
         {
+#if !LoadsonAPI
             GameObject _table = UnityEngine.Object.Instantiate(table);
             _table.name = "Table #" + UnityEngine.Random.Range(0, 32767);
             _table.SetActive(true);
             return _table;
         }
+        private static GameObject table;
+#else
+            return null;
+        }
+#endif
 
-        private static GameObject barrel;
         public static GameObject NewBarrel()
         {
+#if !LoadsonAPI
             GameObject _barrel = UnityEngine.Object.Instantiate(barrel);
             _barrel.name = "Barrel #" + UnityEngine.Random.Range(0, 32767);
             _barrel.SetActive(true);
             return _barrel;
         }
+        private static GameObject barrel;
+#else
+            return null;
+        }
+#endif
 
-        private static GameObject locker;
         public static GameObject NewLocker()
         {
+#if !LoadsonAPI
             GameObject _locker = UnityEngine.Object.Instantiate(locker);
             _locker.name = "Locker #" + UnityEngine.Random.Range(0, 32767);
             _locker.SetActive(true);
             return _locker;
         }
+        private static GameObject locker;
+#else
+            return null;
+        }
+#endif
 
-        private static GameObject screen;
         public static GameObject NewScreen()
         {
+#if !LoadsonAPI
             GameObject _screen = UnityEngine.Object.Instantiate(screen);
             _screen.name = "Screen #" + UnityEngine.Random.Range(0, 32767);
             _screen.SetActive(true);
             return _screen;
         }
+        private static GameObject screen;
+#else
+            return null;
+        }
+#endif
 
 
         /* Misc */
 
-        private static GameObject enemy;
         public static GameObject NewEnemy()
         {
+#if !LoadsonAPI
             GameObject _enemy = UnityEngine.Object.Instantiate(enemy);
             _enemy.name = "Enemy #" + UnityEngine.Random.Range(0, 32767);
             _enemy.SetActive(true);
             _enemy.GetComponent<NavMeshAgent>().enabled = true;
-            /*Enemy e = _enemy.GetComponent<Enemy>();
-            e.startGun = NewPistol();
-            typeof(Enemy).GetMethod("GiveGun", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Invoke(e, Array.Empty<object>());*/
             return _enemy;
         }
+        private static GameObject enemy;
+#else
+            return null;
+        }
+#endif
 
-        private static GameObject milk;
         public static GameObject NewMilk()
         {
+#if !LoadsonAPI
             GameObject _milk = UnityEngine.Object.Instantiate(milk);
             _milk.name = "Milk #" + UnityEngine.Random.Range(0, 32767);
             _milk.SetActive(true);
             return _milk;
         }
+        private static GameObject milk;
+#else
+            return null;
+        }
+#endif
 
-        private static GameObject cube;
         public static GameObject NewCube()
         {
+#if !LoadsonAPI
             GameObject _cube = UnityEngine.Object.Instantiate(cube);
             _cube.name = "Cube #" + UnityEngine.Random.Range(0, 32767);
             _cube.SetActive(true);
             return _cube;
         }
+        private static GameObject cube;
+#else
+            return null;
+        }
+#endif
 
-        private static PhysicMaterial bounce;
         public static PhysicMaterial BounceMaterial()
         {
+#if !LoadsonAPI
             PhysicMaterial _bounce = UnityEngine.Object.Instantiate(bounce);
             return _bounce;
         }
+        private static PhysicMaterial bounce;
+#else
+            return null;
+        }
+#endif
 
-        private static GameObject glass;
         public static GameObject NewGlass()
         {
+#if !LoadsonAPI
             GameObject _glass = UnityEngine.Object.Instantiate(glass);
             _glass.name = "Glass #" + UnityEngine.Random.Range(0, 32767);
             _glass.SetActive(true);
             return _glass;
         }
+        private static GameObject glass;
+#else
+            return null;
+        }
+#endif
 
+#if !LoadsonAPI
         private static bool _init = false;
         public static void Init()
         {
@@ -305,5 +377,6 @@ namespace LoadsonAPI
                 }
             }
         }
+#endif
     }
 }

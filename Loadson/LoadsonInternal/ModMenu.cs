@@ -1,4 +1,5 @@
-﻿using LoadsonAPI;
+﻿#if !LoadsonAPI
+using LoadsonAPI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,7 +35,60 @@ namespace LoadsonInternal
             GO_ModsUI.name = "Mods";
             GO_ModsUI.SetActive(false);
 
-            for (int i = 1; i < GO_ModsUI.transform.childCount; i++)
+            GameObject GO_InstallButton = UnityEngine.Object.Instantiate(GO_ModsUI.transform.Find("Back").gameObject);
+            GO_InstallButton.transform.parent = GO_ModsUI.transform;
+            GO_InstallButton.transform.SetSiblingIndex(1);
+            GO_InstallButton.transform.position = new Vector3(-7.9997f, 20.3098f, 190.6432f);
+            GO_InstallButton.transform.rotation = Quaternion.Euler(0f, -90f, 0f);
+            GO_InstallButton.transform.localScale = new Vector3(0.7635f, 0.7635f, 0.7635f);
+            GO_InstallButton.GetComponentInChildren<TextMeshProUGUI>().text = "<size=30>install</size>";
+            _UIHelper.InterceptButton(GO_InstallButton.GetComponent<Button>(), () =>
+            {
+                GO_ModsUI.SetActive(false);
+                FilePicker.PickFile("Choose mod to install (restart after install)", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), new List<(string, string)> { ("KLMI", "*.klmi"), ("KLM", "*.klm") }, (file) =>
+                {
+                    if(!File.Exists(file)) return;
+                    var fileName = Path.GetFileNameWithoutExtension(file);
+                    if(Path.GetExtension(file) == ".klm")
+                    {
+                        if (File.Exists(Path.Combine(Loader.LOADSON_ROOT, "Mods", fileName + ".klm")))
+                            File.Delete(Path.Combine(Loader.LOADSON_ROOT, "Mods", fileName + ".klm"));
+                        if (File.Exists(Path.Combine(Loader.LOADSON_ROOT, "Mods", "Disabled", fileName + ".klm")))
+                            File.Delete(Path.Combine(Loader.LOADSON_ROOT, "Mods", "Disabled", fileName + ".klm"));
+                        File.Copy(file, Path.Combine(Loader.LOADSON_ROOT, "Mods", fileName + ".klm"));
+                    }
+                    else
+                    {
+                        if (File.Exists(Path.Combine(Loader.LOADSON_ROOT, "Mods", fileName + ".klm")))
+                            File.Delete(Path.Combine(Loader.LOADSON_ROOT, "Mods", fileName + ".klm"));
+                        if (File.Exists(Path.Combine(Loader.LOADSON_ROOT, "Mods", "Disabled", fileName + ".klm")))
+                            File.Delete(Path.Combine(Loader.LOADSON_ROOT, "Mods", "Disabled", fileName + ".klm"));
+                        using(BinaryReader br = new BinaryReader(File.OpenRead(file)))
+                        {
+                            int _extDeps = br.ReadInt32();
+                            List<(string, byte[])> extDeps = new List<(string, byte[])>();
+                            while(_extDeps-- > 0)
+                            {
+                                var name = br.ReadString();
+                                var _len = br.ReadInt32();
+                                var data = br.ReadBytes(_len);
+                                extDeps.Add((name, data));
+                            }
+                            int _modSize = br.ReadInt32();
+                            byte[] modData = br.ReadBytes(_modSize);
+                            foreach (var dep in extDeps)
+                                File.WriteAllBytes(Path.Combine(Loader.LOADSON_ROOT, "Internal", "Common deps", dep.Item1), dep.Item2);
+                            File.WriteAllBytes(Path.Combine(Loader.LOADSON_ROOT, "Mods", fileName + ".klm"), modData);
+                        }
+                    }
+                    GO_ModsUI.SetActive(true);
+                }, () =>
+                {
+                    GO_ModsUI.SetActive(true);
+                });
+            });
+
+            for (int i = 2; i < GO_ModsUI.transform.childCount; i++)
                 UnityEngine.Object.Destroy(GO_ModsUI.transform.GetChild(i).gameObject);
 
             GameObject ScrollView = UnityEngine.Object.Instantiate(GameObject.Find("/UI").transform.Find("About").Find("SteamBtn").gameObject);
@@ -148,3 +202,4 @@ namespace LoadsonInternal
     }
 
 }
+#endif

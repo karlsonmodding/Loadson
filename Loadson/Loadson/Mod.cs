@@ -31,6 +31,7 @@ namespace Loadson
         /// <returns>The loaded asset</returns>
         protected T LoadAsset<T>(string name) where T : UnityEngine.Object
         {
+#if !LoadsonAPI
             // get mod instance
             ModEntry e = null;
             // selector doesn't work, don't ask me why, i'm going insane
@@ -55,6 +56,9 @@ namespace Loadson
                 return default;
             }
             return e.AssetBundle.LoadAsset<T>(name);
+#else
+            return default;
+#endif
         }
 
         /// <summary>
@@ -64,7 +68,9 @@ namespace Loadson
         /// <param name="execute">The API function itself, takes one parameter as list of objects, returns an object (can be null for void functions)</param>
         protected void AddAPIFunction(string name, CrossModAPI.cmm execute)
         {
+#if !LoadsonAPI
             CrossModAPI.AddMethod(name, execute);
+#endif
         }
 
         /// <summary>
@@ -75,7 +81,11 @@ namespace Loadson
         /// <returns>API function return value</returns>
         protected object CallAPIFunction(string name, object[] args)
         {
+#if !LoadsonAPI
             return CrossModAPI.CallMethod(name, args);
+#else
+            return null;
+#endif
         }
 
         /// <summary>
@@ -84,6 +94,7 @@ namespace Loadson
         /// <returns>The directory. Please don't escape with '/..'</returns>
         protected string GetUserFilesFolder()
         {
+#if !LoadsonAPI
             // get mod instance
             ModEntry e = null;
             // selector doesn't work, don't ask me why, i'm going insane
@@ -107,6 +118,9 @@ namespace Loadson
             if(!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
             return dir;
+#else
+            return "";
+#endif
         }
     }
 }

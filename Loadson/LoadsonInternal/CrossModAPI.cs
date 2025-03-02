@@ -10,6 +10,7 @@ namespace LoadsonInternal
     public static class CrossModAPI
     {
         public delegate object cmm(object[] args);
+#if !LoadsonAPI
         public static void AddMethod(string name, cmm action)
         {
             if(MethodMap.ContainsKey(name))
@@ -33,5 +34,6 @@ namespace LoadsonInternal
         }
 
         private static readonly Dictionary<string, cmm> MethodMap = new Dictionary<string, cmm>();
+#endif
     }
 }

@@ -17,8 +17,10 @@ namespace LoadsonAPI
         /// <param name="display">[OPTIONAL] Display name of category</param>
         public static void AddMenuEntry(List<(string, Action)> list, string display = "")
         {
+#if !LoadsonAPI
             if(display == "") MenuCustom.AddCategory(Assembly.GetCallingAssembly().GetName().Name, Assembly.GetCallingAssembly().GetName().Name, list);
             else MenuCustom.AddCategory(Assembly.GetCallingAssembly().GetName().Name, display, list);
+#endif
         }
 
         /// <summary>
@@ -28,8 +30,10 @@ namespace LoadsonAPI
         /// <param name="display">[OPTIONAL] Display name of category</param>
         public static void UpdateMenuEntry(List<(string, Action)> list, string display = "")
         {
+#if !LoadsonAPI
             if (display == "") MenuCustom.UpdateCategory(Assembly.GetCallingAssembly().GetName().Name, Assembly.GetCallingAssembly().GetName().Name, list);
             else MenuCustom.UpdateCategory(Assembly.GetCallingAssembly().GetName().Name, display, list);
+#endif
         }
 
         /// <summary>
@@ -37,7 +41,9 @@ namespace LoadsonAPI
         /// </summary>
         public static void RemoveMenuEntry()
         {
+#if !LoadsonAPI
             MenuCustom.RemoveCategory(Assembly.GetCallingAssembly().GetName().Name);
+#endif
         }
     }
 }

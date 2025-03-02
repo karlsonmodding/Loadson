@@ -15,7 +15,9 @@ namespace Loadson
         /// <param name="str">The string to be logged</param>
         public static void Log(string str)
         {
+#if !LoadsonAPI
             LoadsonInternal.Console.Log("[" + Assembly.GetCallingAssembly().GetName().Name + "] " + str);
+#endif
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !LoadsonAPI
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -71,3 +72,4 @@ namespace LoadsonInternal
         private static List<GameObject[]> CustomOptions = new List<GameObject[]>();
     }
 }
+#endif

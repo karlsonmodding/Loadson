@@ -12,7 +12,11 @@ namespace LoadsonAPI
         /// <returns>The started coroutine object</returns>
         public static Coroutine StartCoroutine(IEnumerator coroutine)
         {
+#if !LoadsonAPI
             return LoadsonInternal.Loader.MonoHooks.StartCoroutine(coroutine);
+#else
+            return null;
+#endif
         }
 
         /// <summary>
@@ -21,7 +25,9 @@ namespace LoadsonAPI
         /// <param name="coroutine">The started coroutine</param>
         public static void StopCoroutine(Coroutine coroutine)
         {
+#if !LoadsonAPI
             LoadsonInternal.Loader.MonoHooks.StopCoroutine(coroutine);
+#endif
         }
     }
 }
