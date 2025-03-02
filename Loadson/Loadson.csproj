@@ -295,7 +295,7 @@
     <EmbeddedResource Include="Assets\ImageFileIcon.png" />
     <EmbeddedResource Include="Assets\PdfFileIcon.png" />
     <EmbeddedResource Include="Assets\TextFileIcon.png" />
-    <EmbeddedResource Include="Assets\VideoFileIcon.png" /> 
+    <EmbeddedResource Include="Assets\VideoFileIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -303,7 +303,7 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>mkdir "$(SolutionDir)build"
-copy "$(TargetPath)" "$(SolutionDir)build\Loadson.dll" /Y</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

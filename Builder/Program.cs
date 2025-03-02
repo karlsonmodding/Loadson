@@ -21,7 +21,7 @@ namespace Builder
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    Arguments = "/C dotnet build -c LoadsonAPI",
+                    Arguments = "/C dotnet build Loadson -c LoadsonAPI",
                     CreateNoWindow = true,
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
@@ -47,9 +47,9 @@ namespace Builder
             proc.Start();
             Console.WriteLine(proc.StandardOutput.ReadToEnd());
             proc.WaitForExit();
-            File.Copy(Path.Combine("build", "_Loadson.dll"), Path.Combine("files", "_Loadson.dll"));
-            File.Copy(Path.Combine("build", "Launcher.dll"), Path.Combine("files", "Internal", "Launcher.dll"));
-            File.Copy(Path.Combine("build", "Loadson.dll"), Path.Combine("files", "Internal", "Loadson.dll"));
+            File.Copy(Path.Combine("Kernel", "bin", "Release", "_Loadson.dll"), Path.Combine("files", "_Loadson.dll"));
+            File.Copy(Path.Combine("Launcher", "bin", "Release", "Launcher.dll"), Path.Combine("files", "Internal", "Launcher.dll"));
+            File.Copy(Path.Combine("Loadson", "bin", "Release", "Loadson.dll"), Path.Combine("files", "Internal", "Loadson.dll"));
             File.Copy(Path.Combine("Loadson", "bin", "Release", "0Harmony.dll"), Path.Combine("files", "Internal", "Loadson deps", "0Harmony.dll"));
             Console.WriteLine("Constructing hashmap");
             File.WriteAllText("hashmap", "");
