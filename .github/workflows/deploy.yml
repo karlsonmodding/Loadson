@@ -31,13 +31,18 @@ jobs:
     - name: Run builder
       shell: cmd
       run: Builder.exe
+    - name: Bring changes to deploy branch
+      run: |
+        git add files
+        git add loadsonapi
+        git add hashmap
+        git stash save
+        git checkout deploy
+        git stash pop
     - name: Upload to deploy branch
       shell: cmd
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
-        git add files
-        git add loadsonapi
-        git add hashmap
         git commit -m "sync with main"
         git push origin deploy
