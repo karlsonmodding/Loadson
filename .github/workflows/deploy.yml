@@ -39,6 +39,9 @@ jobs:
         git stash save
         git checkout deploy
         git stash pop
+        git add files
+        git add loadsonapi
+        git add hashmap
     - name: Upload to deploy branch
       shell: cmd
       run: |
