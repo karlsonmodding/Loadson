@@ -1,0 +1,228 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Loadson</name>
+    </assembly>
+    <members>
+        <member name="M:Discord.NetworkManager.GetPeerId">
+            <summary>
+            Get the local peer ID for this process.
+            </summary>
+        </member>
+        <member name="M:Discord.NetworkManager.Flush">
+            <summary>
+            Send pending network messages.
+            </summary>
+        </member>
+        <member name="M:Discord.NetworkManager.OpenPeer(System.UInt64,System.String)">
+            <summary>
+            Open a connection to a remote peer.
+            </summary>
+        </member>
+        <member name="M:Discord.NetworkManager.UpdatePeer(System.UInt64,System.String)">
+            <summary>
+            Update the route data for a connected peer.
+            </summary>
+        </member>
+        <member name="M:Discord.NetworkManager.ClosePeer(System.UInt64)">
+            <summary>
+            Close the connection to a remote peer.
+            </summary>
+        </member>
+        <member name="M:Discord.NetworkManager.OpenChannel(System.UInt64,System.Byte,System.Boolean)">
+            <summary>
+            Open a message channel to a connected peer.
+            </summary>
+        </member>
+        <member name="M:Discord.NetworkManager.CloseChannel(System.UInt64,System.Byte)">
+            <summary>
+            Close a message channel to a connected peer.
+            </summary>
+        </member>
+        <member name="M:Discord.NetworkManager.SendMessage(System.UInt64,System.Byte,System.Byte[])">
+            <summary>
+            Send a message to a connected peer over an opened message channel.
+            </summary>
+        </member>
+        <member name="M:LoadsonExtensions.Reflection.ReflectionGet``1(System.Object,System.String)">
+            <summary>
+            Get field value of object via reflection
+            Use only on private fields
+            </summary>
+            <typeparam name="T">Field type</typeparam>
+            <param name="obj">Object instance (syntactic sugar)</param>
+            <param name="FieldName">Field name</param>
+            <returns>Field value</returns>
+        </member>
+        <member name="M:LoadsonExtensions.Reflection.ReflectionSet``1(System.Object,System.String,``0)">
+            <summary>
+            Set field value of object via reflection
+            </summary>
+            <typeparam name="T">Field type (syntactic sugar)</typeparam>
+            <param name="obj">Object instance (syntactic sugar)</param>
+            <param name="FieldName">Field name</param>
+            <param name="value">Value to set</param>
+        </member>
+        <member name="M:LoadsonExtensions.Reflection.ReflectionInvoke(System.Object,System.String)">
+            <summary>
+            Invoke method with no arguments with no return value via reflection
+            Use only on private methods
+            </summary>
+            <param name="obj">Object instance (syntactic sugar)</param>
+            <param name="MethodName">Method name</param>
+        </member>
+        <member name="M:LoadsonExtensions.Reflection.ReflectionInvoke(System.Object,System.String,System.Object[])">
+            <summary>
+            Invoke method with no return value via reflection
+            Use only on private methods
+            </summary>
+            <param name="obj">Object instance (syntactic sugar)</param>
+            <param name="MethodName">Method name</param>
+            <param name="Args">Arguments to pass to method</param>
+        </member>
+        <member name="M:LoadsonExtensions.Reflection.ReflectionInvoke``1(System.Object,System.String)">
+            <summary>
+            Invoke method with no arguments with return value via reflection
+            Use only on private methods
+            </summary>
+            <typeparam name="T">Return type</typeparam>
+            <param name="obj">Object instance (syntactic sugar)</param>
+            <param name="MethodName">Method name</param>
+            <returns></returns>
+        </member>
+        <member name="M:LoadsonExtensions.Reflection.ReflectionInvoke``1(System.Object,System.String,System.Object[])">
+            <summary>
+            Invoke method with return value via reflection
+            Use only on private methods
+            </summary>
+            <typeparam name="T">Return type</typeparam>
+            <param name="obj">Object instance (syntactic sugar)</param>
+            <param name="MethodName">Method name</param>
+            <param name="Args">Arguments to pass to method</param>
+            <returns></returns>
+        </member>
+        <member name="M:LoadsonExtensions.Texture2D_Extensions.LoadFromResources(UnityEngine.Texture2D,System.String)">
+            <summary>
+            Load an image from Embedded Resources into this texture.
+            </summary>
+            <param name="texture2D">Texture (syntactic sugar)</param>
+            <param name="resource">Resource name (best way to find it is with dnSpy)</param>
+        </member>
+        <member name="M:LoadsonAPI.Coroutines.StartCoroutine(System.Collections.IEnumerator)">
+            <summary>
+            Start a coroutine. Equivalent of <see cref="M:UnityEngine.MonoBehaviour.StartCoroutine(System.Collections.IEnumerator)"/>
+            </summary>
+            <param name="coroutine">The coroutine</param>
+            <returns>The started coroutine object</returns>
+        </member>
+        <member name="M:LoadsonAPI.Coroutines.StopCoroutine(UnityEngine.Coroutine)">
+            <summary>
+            Stop a running coroutine. Equivalent of <see cref="M:UnityEngine.MonoBehaviour.StopCoroutine(UnityEngine.Coroutine)"/>
+            </summary>
+            <param name="coroutine">The started coroutine</param>
+        </member>
+        <member name="P:LoadsonAPI.DiscordAPI.Discord">
+            <summary>
+            Get the Discord instance created by Loadson
+            </summary>
+        </member>
+        <member name="P:LoadsonAPI.DiscordAPI.User">
+            <summary>
+            Get the local Discord user
+            </summary>
+        </member>
+        <member name="P:LoadsonAPI.DiscordAPI.Bearer">
+            <summary>
+            Get the Bearer token for username and profile picture.
+            You can use this in your server-side API to validate user.
+            </summary>
+        </member>
+        <member name="P:LoadsonAPI.DiscordAPI.HasDiscord">
+            <summary>
+            True if discord initialized without errors.
+            </summary>
+        </member>
+        <member name="M:LoadsonAPI.FilePicker.PickFile(System.String,System.String,System.Collections.Generic.List{System.ValueTuple{System.String,System.String}},LoadsonAPI.FilePicker.OnSelect,LoadsonAPI.FilePicker.OnCancel)">
+            <summary>
+            Show file picker (displayed with Unity ImGUI for cross-platform)
+            </summary>
+            <param name="title">ImGUI window title</param>
+            <param name="path">Starting folder</param>
+            <param name="filter">Filter for files as (name,filter) where filter is [name].[extension] (eg. '*.*' '*.png') or multiple filters separated with '|'</param>
+            <param name="select">Function to be called when a file is picked</param>
+            <param name="cancel">Function to be called when file picker is closed</param>
+        </member>
+        <member name="M:LoadsonAPI.ImGUI_WID.GetWindowId">
+            <summary>
+            Get next available Unity ImGUI window id
+            </summary>
+            <returns>The window id</returns>
+        </member>
+        <member name="M:LoadsonAPI.MenuEntry.AddMenuEntry(System.Collections.Generic.List{System.ValueTuple{System.String,System.Action}},System.String)">
+            <summary>
+            Create a custom menu category for your mod
+            </summary>
+            <param name="list">List containing of sub-menu entries: (name - to be displayed, action - on click)</param>
+            <param name="display">[OPTIONAL] Display name of category</param>
+        </member>
+        <member name="M:LoadsonAPI.MenuEntry.UpdateMenuEntry(System.Collections.Generic.List{System.ValueTuple{System.String,System.Action}},System.String)">
+            <summary>
+            Change sub-menu entries
+            </summary>
+            <param name="list">List containing of sub-menu entries: (name - to be displayed, action - on click)</param>
+            <param name="display">[OPTIONAL] Display name of category</param>
+        </member>
+        <member name="M:LoadsonAPI.MenuEntry.RemoveMenuEntry">
+            <summary>
+            Removes your mod category from the custom menu
+            </summary>
+        </member>
+        <member name="M:LoadsonAPI.TimerText.AddText(LoadsonAPI.TimerText.resolver)">
+            <summary>
+            Add text below the in-game timer.
+            </summary>
+            <param name="text">Lambda function that returns a string. If result is empty string "", nothing is printed.</param>
+        </member>
+        <member name="M:Loadson.Console.Log(System.String)">
+            <summary>
+            Log a string to the console (and file)
+            </summary>
+            <param name="str">The string to be logged</param>
+        </member>
+        <member name="M:Loadson.Mod.LoadAsset``1(System.String)">
+            <summary>
+            Load an asset by its name from your asset bundle. The same as <see cref="M:UnityEngine.AssetBundle.LoadAsset``1(System.String)"/>
+            </summary>
+            <typeparam name="T">Asset type</typeparam>
+            <param name="name">Asset name</param>
+            <returns>The loaded asset</returns>
+        </member>
+        <member name="M:Loadson.Mod.AddAPIFunction(System.String,LoadsonInternal.CrossModAPI.cmm)">
+            <summary>
+            "Write" and API function that can be later called by <see cref="M:Loadson.Mod.CallAPIFunction(System.String,System.Object[])"/>
+            </summary>
+            <param name="name">Name of the function. Be carefull to add a prefix to it that is unique to your mod.</param>
+            <param name="execute">The API function itself, takes one parameter as list of objects, returns an object (can be null for void functions)</param>
+        </member>
+        <member name="M:Loadson.Mod.CallAPIFunction(System.String,System.Object[])">
+            <summary>
+            "Call" an API function. Be sure to add the mod that you are calling to the dependencies list.
+            </summary>
+            <param name="name">Name of the function.</param>
+            <param name="args">Function parameters as an object list</param>
+            <returns>API function return value</returns>
+        </member>
+        <member name="M:Loadson.Mod.GetUserFilesFolder">
+            <summary>
+            Get User Files directory where you can store any files.
+            </summary>
+            <returns>The directory. Please don't escape with '/..'</returns>
+        </member>
+        <member name="M:Loadson.Preferences.GetPreferences">
+            <summary>
+            Get your set preferences. All modifications to the dictionary are automatically saved.
+            </summary>
+            <returns>Your dictionary. Empty dictionary if it doesn't exist (first load)</returns>
+        </member>
+    </members>
+</doc>
