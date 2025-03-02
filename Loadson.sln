@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "Launcher\Launcher.csproj", "{D81A115D-1D00-4564-9457-483C1FB98E63}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Builder", "Builder\Builder.csproj", "{02A2FB7A-C1F8-4D60-9BBE-3A03DEAF8154}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +102,18 @@ Global
 		{D81A115D-1D00-4564-9457-483C1FB98E63}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D81A115D-1D00-4564-9457-483C1FB98E63}.Release|x64.ActiveCfg = Release|Any CPU
 		{D81A115D-1D00-4564-9457-483C1FB98E63}.Release|x64.Build.0 = Release|Any CPU
+		{02A2FB7A-C1F8-4D60-9BBE-3A03DEAF8154}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02A2FB7A-C1F8-4D60-9BBE-3A03DEAF8154}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02A2FB7A-C1F8-4D60-9BBE-3A03DEAF8154}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{02A2FB7A-C1F8-4D60-9BBE-3A03DEAF8154}.Debug|x64.Build.0 = Debug|Any CPU
+		{02A2FB7A-C1F8-4D60-9BBE-3A03DEAF8154}.LoadsonAPI|Any CPU.ActiveCfg = Debug|Any CPU
+		{02A2FB7A-C1F8-4D60-9BBE-3A03DEAF8154}.LoadsonAPI|Any CPU.Build.0 = Debug|Any CPU
+		{02A2FB7A-C1F8-4D60-9BBE-3A03DEAF8154}.LoadsonAPI|x64.ActiveCfg = Debug|Any CPU
+		{02A2FB7A-C1F8-4D60-9BBE-3A03DEAF8154}.LoadsonAPI|x64.Build.0 = Debug|Any CPU
+		{02A2FB7A-C1F8-4D60-9BBE-3A03DEAF8154}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02A2FB7A-C1F8-4D60-9BBE-3A03DEAF8154}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02A2FB7A-C1F8-4D60-9BBE-3A03DEAF8154}.Release|x64.ActiveCfg = Release|Any CPU
+		{02A2FB7A-C1F8-4D60-9BBE-3A03DEAF8154}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
