@@ -19,6 +19,9 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    - name: Install lib folder
+      shell: cmd
+      run: git clone https://github.com/karlsonmodding/KarlsonFiles.git lib
     - name: Run builder
       shell: cmd
       run: Builder.exe
