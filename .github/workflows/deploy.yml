@@ -22,9 +22,12 @@ jobs:
     - name: Install lib folder
       shell: cmd
       run: git clone https://github.com/karlsonmodding/KarlsonFiles.git lib
+    - name: Install NuGet
+      uses: nuget/setup-nuget@v2
+      with:
+        nuget-version: '5.x'
     - name: Restore NuGet packages
-      shell: cmd
-      run: dotnet restore
+      run: nuget restore Loadson.sln
     - name: Run builder
       shell: cmd
       run: Builder.exe
