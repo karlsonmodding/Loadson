@@ -38,7 +38,8 @@ jobs:
         git add hashmap
         git stash save
         git checkout deploy
-        git stash pop
+        git checkout stash -- .
+        git rm --cached -r .
         git add files
         git add loadsonapi
         git add hashmap
