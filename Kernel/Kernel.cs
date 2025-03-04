@@ -43,7 +43,7 @@ namespace Doorstop
                 AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 AppDomain.CurrentDomain.AssemblyLoad += CurrentDomain_AssemblyLoad;
 
-                var preloader = Assembly.Load(bytes);
+                var preloader = AppDomain.CurrentDomain.Load(bytes);
                 preloader.GetType("Updater.Entrypoint").GetMethod("Start").Invoke(null, Array.Empty<object>());
             }).Start();
         }
