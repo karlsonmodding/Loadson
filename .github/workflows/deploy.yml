@@ -38,11 +38,7 @@ jobs:
         git add hashmap
         git stash save
         git checkout deploy
-        git checkout stash -- .
-        git rm --cached -r .
-        git add files
-        git add loadsonapi
-        git add hashmap
+        git checkout stash -- files/ loadsonapi/ hashmap
     - name: Upload to deploy branch
       shell: cmd
       run: |
