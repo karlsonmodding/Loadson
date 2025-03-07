@@ -235,7 +235,7 @@
 del Assembly-CSharp.dll
 del LoadsonAPI.*
 del Unity*
-"$(SolutionDir)ModBuilder.exe"</PostBuildEvent>
+"$(SolutionDir)ModBuilder.exe" "%name%"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>del "$(TargetDir)" /Q</PreBuildEvent>

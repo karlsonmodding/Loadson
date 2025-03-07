@@ -11,11 +11,11 @@ namespace ModBuilder
 {
     class Program
     {
-        public const string API_ENDPOINT = "https://raw.githubusercontent.com/karlsonmodding/Loadson/deployment";
-        public const string VERSION = "v3";
+        public const string API_ENDPOINT = "https://raw.githubusercontent.com/karlsonmodding/Loadson/deploy";
+        public const string VERSION = "v4";
 
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             DateTime start = DateTime.Now;
             Console.Title = "Loadson ModBuilder";
@@ -61,12 +61,12 @@ namespace ModBuilder
                 }
                 Console.WriteLine("Downloading LoadsonAPI.dll");
                 HttpClient hc = new HttpClient();
-                File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "LoadsonAPI.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/LoadsonAPI.dll").GetAwaiter().GetResult());
-                File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "LoadsonAPI.xml"), hc.GetByteArrayAsync(API_ENDPOINT + "/files/LoadsonAPI.xml").GetAwaiter().GetResult());
+                File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "LoadsonAPI.dll"), hc.GetByteArrayAsync(API_ENDPOINT + "/loadsonapi/LoadsonAPI.dll").GetAwaiter().GetResult());
+                File.WriteAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "LoadsonAPI.xml"), hc.GetByteArrayAsync(API_ENDPOINT + "/loadsonapi/LoadsonAPI.xml").GetAwaiter().GetResult());
                 Console.WriteLine("ModBuilder installed succesfully the lib folder.");
                 if(!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LoadsonMod.csproj")))
                 {
-                    Console.WriteLine("Enter the name of the mod here (GUID, has to be unique to other mod). To set the Display Name edit the 'metadata.txt' file.");
+                    Console.WriteLine("Enter the name of the mod here (GUID, has to be unique among other mods). To set the Display Name edit the 'metadata.txt' file.");
                     Console.Write("Mod name: ");
                     string name = Console.ReadLine().Replace(" ", "_");
                     File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LoadsonMod.csproj"), new StreamReader(Assembly.GetEntryAssembly().GetManifestResourceStream("ModBuilder.modproj")).ReadToEnd().Replace("%name%", name));
@@ -94,7 +94,7 @@ namespace ModBuilder
                 Console.ReadKey();
                 return;
             }
-            string mod_guid = Path.GetFileNameWithoutExtension(Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Release")).FirstOrDefault());
+            string mod_guid = args.Length == 1 ? args[0] : Path.GetFileNameWithoutExtension(Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Release")).FirstOrDefault());
             Console.WriteLine("Detected mod GUID: " + mod_guid);
             Console.WriteLine("Loading mod binary..");
             byte[] mod_asm = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Release", mod_guid + ".dll"));
@@ -155,18 +155,30 @@ namespace ModBuilder
                 bw.Write(img_data);
                 if (assetbundle == null) bw.Write(0);
                 else { bw.Write(assetbundle.Length); bw.Write(assetbundle); }
-                while (bw.BaseStream.Length % 16 != 15)
-                    bw.Write(false);
-                bw.Write(">> LoadsonMDK   " +
-                         ">  ModBuilder " + VERSION +
-                         ">  github.com/  " +
-                         "> karlsonmodding");
                 bw.Close();
             }
             using (FileStream fs = File.OpenWrite(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klmi")))
             using (BinaryWriter bw = new BinaryWriter(fs))
             {
-                bw.Write(0); // external deps
+                List<string> extDeps = new List<string>();
+                foreach (var file in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Release")))
+                {
+                    if (!file.EndsWith(".dll"))
+                        continue;
+                    if (Path.GetFileNameWithoutExtension(file) == mod_guid)
+                        continue;
+                    extDeps.Add(file);
+                }
+                Console.WriteLine("External deps: " + extDeps.Count);
+                bw.Write(extDeps.Count); // external deps
+                foreach (var dep in extDeps)
+                {
+                    Console.WriteLine("Adding " + Path.GetFileName(dep));
+                    bw.Write(Path.GetFileName(dep));
+                    var bytes = File.ReadAllBytes(dep);
+                    bw.Write(bytes.Length);
+                    bw.Write(bytes);
+                }
                 byte[] mod = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klm"));
                 bw.Write(mod.Length);
                 bw.Write(mod);
