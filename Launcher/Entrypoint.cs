@@ -193,7 +193,7 @@ namespace Launcher
 
         void Load()
         {
-            var asm = AppDomain.CurrentDomain.Load(File.ReadAllBytes(Path.Combine(LOADSON_ROOT, "Internal", "Loadson.dll")));
+            var asm = Assembly.LoadFrom(Path.Combine(LOADSON_ROOT, "Internal", "Loadson.dll"));
             asm.GetType("LoadsonInternal.Loader").GetMethod("Start").Invoke(null, new object[] { Entrypoint.HasDiscordAPI });
         }
     }

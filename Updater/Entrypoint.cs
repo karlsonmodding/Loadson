@@ -212,7 +212,7 @@ namespace Updater
             if(loaded) return;
             loaded = true;
             UnityEngine.SceneManagement.SceneManager.sceneLoaded -= Entrypoint.SceneManager_sceneLoaded;
-            var assembly = AppDomain.CurrentDomain.Load(File.ReadAllBytes(Path.Combine(LOADSON_ROOT, "Internal", "Launcher.dll")));
+            var assembly = Assembly.LoadFrom(Path.Combine(LOADSON_ROOT, "Internal", "Launcher.dll"));
             assembly.GetType("Launcher.Entrypoint").GetMethod("Start").Invoke(null, new object[] { DiscordAPI.hasDiscord });
             Destroy(gameObject);
         }
