@@ -93,9 +93,9 @@ namespace Updater
                             path.AddRange(file.Split('/'));
                             if (!File.Exists(Path.Combine(path.ToArray())))
                                 update.Add(file);
-                            else if (hashmap.ContainsKey(file) && hashmap[file] != CheckHash(Path.Combine(path.ToArray())))
+                            else if (hashmap.ContainsKey(_file) && hashmap[_file] != CheckHash(Path.Combine(path.ToArray())))
                             {
-                                update.Add(file);
+                                update.Add(_file);
                             }
                         }
                     }

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -40,6 +41,7 @@ namespace LoadsonAPI
             CurrentFile = "";
             Dropup = new Dropup(Filter.Select(x => x.Item1).ToArray(), 0);
             showHiddenFiles = false;
+            refreshDrives();
             refreshFiles();
         }
         static bool inFilePick = false;
@@ -88,7 +90,6 @@ namespace LoadsonAPI
             fileButton = new GUIStyle();
             fileButton.normal.background = Texture2D.blackTexture;
             fileButton.normal.textColor = Color.white;
-            drives = DriveInfo.GetDrives().Select(x => x.Name).ToArray();
         }
         public static void _ongui()
         {
@@ -97,6 +98,11 @@ namespace LoadsonAPI
             GUI.Box(windowRect, "");
             windowRect = GUI.ModalWindow(windowId, windowRect, _ =>
             {
+                if (loadingDrives)
+                {
+                    GUI.Label(new Rect(5, 20, windowRect.width, windowRect.height), "Please wait . .\nLoading drives");
+                    return;
+                }
                 if (GUI.Button(new Rect(5, 20, 20, 20), imageUpArrow, fileButton))
                 {
                     CurrentFolder = Directory.GetParent(CurrentFolder)?.FullName ?? CurrentFolder;
@@ -106,8 +112,13 @@ namespace LoadsonAPI
                 CurrentFolder = GUI.TextField(new Rect(30, 20, 565, 20), CurrentFolder);
                 if (oldFolder != CurrentFolder)
                     refreshFiles();
-                GUI.Box(new Rect(5, 45, 100, 300), "");
-                driveScroll = GUI.BeginScrollView(new Rect(5, 45, 100, 300), driveScroll, new Rect(0, 0, 100, 20 * drives.Length));
+                if(GUI.Button(new Rect(5, 325, 100, 20), "Refresh Drives"))
+                {
+                    shouldRefreshDrives = true;
+                    refreshDrives();
+                }
+                GUI.Box(new Rect(5, 45, 100, 280), "");
+                driveScroll = GUI.BeginScrollView(new Rect(5, 45, 100, 280), driveScroll, new Rect(0, 0, 100, 20 * drives.Length));
                 for (int i = 0; i < drives.Length; i++)
                     if (GUI.Button(new Rect(0, i * 20, 100, 20), new GUIContent($" <color={(CurrentFolder.StartsWith(drives[i]) ? "orange" : "white")}>" + drives[i] + "</color>", imageDrive), fileButton))
                     {
@@ -154,6 +165,20 @@ namespace LoadsonAPI
 
                 GUI.DragWindow();
             }, Title);
+        }
+        static bool loadingDrives = false;
+        static bool shouldRefreshDrives = true;
+        static void refreshDrives()
+        {
+            if (!shouldRefreshDrives)
+                return;
+            shouldRefreshDrives = false;
+            new Thread(() =>
+            {
+                loadingDrives = true;
+                drives = DriveInfo.GetDrives().Select(x => x.Name).ToArray();
+                loadingDrives = false;
+            }).Start();
         }
         static void refreshFiles()
         {

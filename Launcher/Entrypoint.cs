@@ -191,10 +191,15 @@ namespace Launcher
                 }, "Delete " + deletePromptMod.Name + "?");
         }
 
+        static bool loaded = false;
         void Load()
         {
+            if (loaded)
+                return;
+            loaded = true;
             var asm = Assembly.LoadFrom(Path.Combine(LOADSON_ROOT, "Internal", "Loadson.dll"));
             asm.GetType("LoadsonInternal.Loader").GetMethod("Start").Invoke(null, new object[] { Entrypoint.HasDiscordAPI });
+            Destroy(gameObject);
         }
     }
 }
