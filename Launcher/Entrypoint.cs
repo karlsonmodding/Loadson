@@ -5,6 +5,8 @@ using System.Diagnostics.SymbolStore;
 using System.IO;
 using System.Linq;
 using System.Management.Instrumentation;
+using System.Net;
+using System.Net.Security;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,6 +78,7 @@ namespace Launcher
         List<ModInfo> mods = new List<ModInfo>();
         string LOADSON_ROOT;
         Texture2D grayTx;
+        bool has_kmp;
         public void Start()
         {
             LOADSON_ROOT = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Loadson");
@@ -84,9 +87,11 @@ namespace Launcher
             grayTx.Apply();
             ReloadMods();
             modManagerScroll = new Vector2(0, 0);
+            has_kmp = File.Exists(Path.Combine(LOADSON_ROOT, "KarlsonMP", "Preloader.dll"));
         }
         void ReloadMods()
         {
+            mods.Clear();
             foreach (var file in Directory.GetFiles(Path.Combine(LOADSON_ROOT, "Mods")))
                 mods.Add(new ModInfo(file));
             foreach (var file in Directory.GetFiles(Path.Combine(LOADSON_ROOT, "Mods", "Disabled")))
@@ -122,11 +127,24 @@ namespace Launcher
             if (GUI.Button(new Rect(300 + buttonGap, Screen.height - 30, 100, 30), "<size=14>Start Loadson</size>")) Load();
             if (GUI.Button(new Rect(400 + 2 * buttonGap, Screen.height - 30, 100, 30), "<size=14>Start Vanilla</size>")) SceneManager.LoadScene(0);
             if (GUI.Button(new Rect(500 + 3 * buttonGap, Screen.height - 30, 100, 30), "<size=14>Exit Game</size>")) Application.Quit();
+            if (!has_kmp && GUI.Button(new Rect(Screen.width - 150, 0, 150, 30), "<size=14>Download KarlsonMP</size>"))
+            {
+                Directory.CreateDirectory(Path.Combine(LOADSON_ROOT, "KarlsonMP"));
+                ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(delegate { return true; });
+                using (var wc = new WebClient())
+                {
+                    File.WriteAllBytes(Path.Combine(LOADSON_ROOT, "KarlsonMP", "Preloader.dll"), wc.DownloadData("https://raw.githubusercontent.com/karlsonmodding/KarlsonMP/refs/heads/deploy/files/Preloader.dll"));
+                    has_kmp = true;
+                }
+            }
+            if (has_kmp && GUI.Button(new Rect(Screen.width - 150, 0, 150, 30), "<size=14>Open KarlsonMP</size>")) LoadKMP();
 
             GUI.Window(0, new Rect(0, 0, 300, Screen.height), _ =>
             {
                 if (GUI.Button(new Rect(200, 0, 100, 20), "Open Folder"))
                     Process.Start(Path.Combine(LOADSON_ROOT, "Mods"));
+                if (GUI.Button(new Rect(0, 0, 100, 20), "Refresh"))
+                    ReloadMods();
                 modManagerScroll = GUI.BeginScrollView(new Rect(5, 20, 295, Screen.height - 20), modManagerScroll, new Rect(0, 0, 275, mods.Count * 65 - 5));
                 for (int i = 0; i < mods.Count; i++)
                 {
@@ -200,6 +218,25 @@ namespace Launcher
             var asm = Assembly.LoadFrom(Path.Combine(LOADSON_ROOT, "Internal", "Loadson.dll"));
             asm.GetType("LoadsonInternal.Loader").GetMethod("Start").Invoke(null, new object[] { Entrypoint.HasDiscordAPI });
             Destroy(gameObject);
+        }
+
+        static bool kmp_loaded = false;
+        void LoadKMP()
+        {
+            if (kmp_loaded) return;
+            kmp_loaded = true;
+            // add kmp assembly resolver
+            AppDomain.CurrentDomain.AssemblyResolve += KarlsonMP_AssemblyResolve;
+            var asm = AppDomain.CurrentDomain.Load(File.ReadAllBytes(Path.Combine(LOADSON_ROOT, "KarlsonMP", "Preloader.dll")));
+            asm.GetType("Preloader.Entrypoint").GetMethod("Start").Invoke(null, Array.Empty<object>());
+            SceneManager.LoadScene(0);
+        }
+
+        private Assembly KarlsonMP_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            var resolved = Path.Combine(LOADSON_ROOT, "KarlsonMP", new AssemblyName(args.Name).Name + ".dll");
+            if (File.Exists(resolved)) return Assembly.LoadFrom(resolved);
+            return null;
         }
     }
 }
