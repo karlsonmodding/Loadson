@@ -69,7 +69,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entrypoint.cs" />
+    <Compile Include="FilePicker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\ArchiveIcon.png" />
+    <EmbeddedResource Include="Assets\AudioFileIcon.png" />
+    <EmbeddedResource Include="Assets\DefaultFileIcon.png" />
+    <EmbeddedResource Include="Assets\DriveIcon.png" />
+    <EmbeddedResource Include="Assets\ExecutableIcon.png" />
+    <EmbeddedResource Include="Assets\FolderIcon.png" />
+    <EmbeddedResource Include="Assets\ImageFileIcon.png" />
+    <EmbeddedResource Include="Assets\PdfFileIcon.png" />
+    <EmbeddedResource Include="Assets\TextFileIcon.png" />
+    <EmbeddedResource Include="Assets\UpArrow.png" />
+    <EmbeddedResource Include="Assets\VideoFileIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -18,7 +18,7 @@ namespace LoadsonInternal
                 ModLoader.SafeCall(mod.instance.OnGUI);
             Console._ongui();
             ModMenu._ongui();
-            LoadsonAPI.FilePicker._ongui();
+            Launcher.FilePicker._ongui(); // take over the launcher mono behaviour
         }
 
         public void Update()

@@ -23,7 +23,6 @@ namespace LoadsonInternal
             ForcedCultureInfo.Install();
 
             ModMenu._init();
-            LoadsonAPI.FilePicker.init();
             Loadson.Preferences._load();
 
             // check for unity explorer

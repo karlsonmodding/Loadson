@@ -8,6 +8,7 @@ using System.Management.Instrumentation;
 using System.Net;
 using System.Net.Security;
 using System.Reflection;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -121,7 +122,9 @@ namespace Launcher
                 backdropText = $"<size={Mathf.FloorToInt(baseSize.y / 2)}><color=#413d3eff><b>LOADSON</b></color></size>";
                 var widthLeft = Screen.width - 300;
                 buttonGap = (widthLeft - 300) / 4;
+                FilePicker.init();
             }
+            FilePicker._ongui();
             GUI.DrawTextureWithTexCoords(new Rect(0, 0, Screen.width, Screen.height), grayTx, new Rect(0, 0, 1, 1));
             GUI.Label(new Rect(0, 0, Screen.width, Screen.height), backdropText, backdrop);
             if (GUI.Button(new Rect(300 + buttonGap, Screen.height - 30, 100, 30), "<size=14>Start Loadson</size>")) Load();
@@ -139,6 +142,45 @@ namespace Launcher
             }
             if (has_kmp && GUI.Button(new Rect(Screen.width - 150, 0, 150, 30), "<size=14>Open KarlsonMP</size>")) LoadKMP();
 
+            if (GUI.Button(new Rect(300, 0, 100, 30), "<size=14>Install Mod</size>"))
+                FilePicker.PickFile("Select mod to install", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), new List<(string, string)> { ("KLMI file", "*.klmi"), ("KLM file", "*.klm") }, (file) =>
+                {
+                    if (!File.Exists(file)) return;
+                    var fileName = Path.GetFileNameWithoutExtension(file);
+                    if (Path.GetExtension(file) == ".klm")
+                    {
+                        if (File.Exists(Path.Combine(LOADSON_ROOT, "Mods", fileName + ".klm")))
+                            File.Delete(Path.Combine(LOADSON_ROOT, "Mods", fileName + ".klm"));
+                        if (File.Exists(Path.Combine(LOADSON_ROOT, "Mods", "Disabled", fileName + ".klm")))
+                            File.Delete(Path.Combine(LOADSON_ROOT, "Mods", "Disabled", fileName + ".klm"));
+                        File.Copy(file, Path.Combine(LOADSON_ROOT, "Mods", fileName + ".klm"));
+                    }
+                    else
+                    {
+                        if (File.Exists(Path.Combine(LOADSON_ROOT, "Mods", fileName + ".klm")))
+                            File.Delete(Path.Combine(LOADSON_ROOT, "Mods", fileName + ".klm"));
+                        if (File.Exists(Path.Combine(LOADSON_ROOT, "Mods", "Disabled", fileName + ".klm")))
+                            File.Delete(Path.Combine(LOADSON_ROOT, "Mods", "Disabled", fileName + ".klm"));
+                        using (BinaryReader br = new BinaryReader(File.OpenRead(file)))
+                        {
+                            int _extDeps = br.ReadInt32();
+                            List<(string, byte[])> extDeps = new List<(string, byte[])>();
+                            while (_extDeps-- > 0)
+                            {
+                                var name = br.ReadString();
+                                var _len = br.ReadInt32();
+                                var data = br.ReadBytes(_len);
+                                extDeps.Add((name, data));
+                            }
+                            int _modSize = br.ReadInt32();
+                            byte[] modData = br.ReadBytes(_modSize);
+                            foreach (var dep in extDeps)
+                                File.WriteAllBytes(Path.Combine(LOADSON_ROOT, "Internal", "Common deps", dep.Item1), dep.Item2);
+                            File.WriteAllBytes(Path.Combine(LOADSON_ROOT, "Mods", fileName + ".klm"), modData);
+                        }
+                    }
+                    ReloadMods();
+                }, () => { });
             GUI.Window(0, new Rect(0, 0, 300, Screen.height), _ =>
             {
                 if (GUI.Button(new Rect(200, 0, 100, 20), "Open Folder"))
@@ -148,8 +190,8 @@ namespace Launcher
                 modManagerScroll = GUI.BeginScrollView(new Rect(5, 20, 295, Screen.height - 20), modManagerScroll, new Rect(0, 0, 275, mods.Count * 65 - 5));
                 for (int i = 0; i < mods.Count; i++)
                 {
-                    GUI.BeginGroup(new Rect(0, 65 * i, 275, 60));
-                    GUI.Box(new Rect(0, 0, 275, 60), "");
+                    GUI.BeginGroup(new Rect(0, 75 * i, 275, 70));
+                    GUI.Box(new Rect(0, 0, 275, 70), "");
                     if (mods[i].Enabled != GUI.Toggle(new Rect(0, 0, 20, 20), mods[i].Enabled, ""))
                     {
                         mods[i].Enabled = !mods[i].Enabled;
@@ -162,12 +204,12 @@ namespace Launcher
                         File.Move(mods[i].FilePath, newFile);
                         mods[i].FilePath = newFile;
                     }
-                    GUI.DrawTexture(new Rect(25, 0, 60, 60), mods[i].Image);
-                    GUI.Label(new Rect(90, 0, 165, 20), mods[i].Name);
-                    GUI.Label(new Rect(90, 20, 165, 20), "by " + mods[i].Author);
-                    if(GUI.Button(new Rect(90, 40, 50, 20), "Info"))
+                    GUI.DrawTexture(new Rect(25, 5, 60, 60), mods[i].Image);
+                    GUI.Label(new Rect(90, 0, 165, 25), mods[i].Name);
+                    GUI.Label(new Rect(90, 25, 165, 25), "by " + mods[i].Author);
+                    if(GUI.Button(new Rect(90, 50, 50, 20), "Info"))
                         showInfoMod = mods[i];
-                    if (GUI.Button(new Rect(145, 40, 50, 20), "Delete"))
+                    if (GUI.Button(new Rect(145, 50, 50, 20), "Delete"))
                         deletePromptMod = mods[i];
                     GUI.EndGroup();
                 }
@@ -192,17 +234,17 @@ namespace Launcher
                 }, "Mod Details");
 
             if (deletePromptMod != null)
-                GUI.ModalWindow(2, new Rect(Screen.width / 2 - 200, Screen.height / 2 - 40, 400, 85), _ =>
+                GUI.ModalWindow(2, new Rect(Screen.width / 2 - 200, Screen.height / 2 - 43, 400, 87), _ =>
                 {
-                    GUI.Label(new Rect(5, 20, 400, 20), "Are you sure you want to delete " + deletePromptMod.Name + "?");
-                    GUI.Label(new Rect(5, 40, 400, 20), "You won't be able to get it back unless you re-install it.");
-                    if(GUI.Button(new Rect(5, 60, 195, 20), "Confirm delete"))
+                    GUI.Label(new Rect(5, 20, 400, 22), "Are you sure you want to delete " + deletePromptMod.Name + "?");
+                    GUI.Label(new Rect(5, 40, 400, 22), "You won't be able to get it back unless you re-install it.");
+                    if(GUI.Button(new Rect(5, 62, 192, 20), "Confirm delete"))
                     {
-                        File.Delete(deletePromptMod.Name);
-                        deletePromptMod = null;
+                        File.Delete(deletePromptMod.FilePath);
                         ReloadMods();
+                        deletePromptMod = null;
                     }
-                    if(GUI.Button(new Rect(200, 60, 195, 20), "Cancel"))
+                    if(GUI.Button(new Rect(203, 62, 192, 20), "Cancel"))
                     {
                         deletePromptMod = null;
                     }

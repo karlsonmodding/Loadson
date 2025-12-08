@@ -18,12 +18,7 @@ namespace LoadsonExtensions
         public static void LoadFromResources(this Texture2D texture2D, string resource)
         {
 #if !LoadsonAPI
-            using(var stream = Assembly.GetCallingAssembly().GetManifestResourceStream(resource))
-            {
-                var bytes = new byte[stream.Length];
-                stream.Read(bytes, 0, bytes.Length);
-                texture2D.LoadImage(bytes);
-            }
+            Launcher.FilePicker.LoadFromResources(texture2D, resource);
 #endif
         }
     }
