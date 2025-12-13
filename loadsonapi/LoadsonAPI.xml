@@ -183,6 +183,19 @@
             </summary>
             <param name="text">Lambda function that returns a string. If result is empty string "", nothing is printed.</param>
         </member>
+        <member name="M:LoadsonInternal.DiscordRPC.UpdateRPC(System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{Discord.ActivityParty},System.Nullable{Discord.ActivitySecrets})">
+            <summary>
+            Change Discord RPC. Only non-default values will be changed.
+            </summary>
+            <param name="largeImage"></param>
+            <param name="largeText"></param>
+            <param name="smallImage"></param>
+            <param name="smallText"></param>
+            <param name="details"></param>
+            <param name="state"></param>
+            <param name="party"></param>
+            <param name="secrets"></param>
+        </member>
         <member name="M:Loadson.Console.Log(System.String)">
             <summary>
             Log a string to the console (and file)
@@ -199,6 +212,7 @@
         </member>
         <member name="M:Loadson.Mod.AddAPIFunction(System.String,LoadsonInternal.CrossModAPI.cmm)">
             <summary>
+            <b>Crossmod API is deprecated as of Loadson 2.2.0. It will get completely removed starting with 3.*.*</b><br/>
             "Write" and API function that can be later called by <see cref="M:Loadson.Mod.CallAPIFunction(System.String,System.Object[])"/>
             </summary>
             <param name="name">Name of the function. Be carefull to add a prefix to it that is unique to your mod.</param>
@@ -206,6 +220,7 @@
         </member>
         <member name="M:Loadson.Mod.CallAPIFunction(System.String,System.Object[])">
             <summary>
+            <b>Crossmod API is deprecated as of Loadson 2.2.0. It will get completely removed starting with 3.*.*</b><br/>
             "Call" an API function. Be sure to add the mod that you are calling to the dependencies list.
             </summary>
             <param name="name">Name of the function.</param>
