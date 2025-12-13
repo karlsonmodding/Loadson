@@ -15,7 +15,7 @@ namespace LoadsonInternal
         {
             if(Preferences.instance.fileLog) File.AppendAllText(Path.Combine(Loader.LOADSON_ROOT, "log"), s + "\n");
             content += s + '\n';
-            if(content.Split('\n').Length > 500) content = content.Substring(content.IndexOf("\n") + 1);
+            while(content.Split('\n').Length > 500) content = content.Substring(content.IndexOf("\n") + 1);
         }
 
         public static void Init()
@@ -51,10 +51,13 @@ namespace LoadsonInternal
             {
                 blackTx.SetPixel(0, 0, new Color(35f / 255f, 31f / 255f, 32f / 255f));
                 blackTx.Apply();
-                GUI.DrawTextureWithTexCoords(new Rect(0f, 0f, Screen.width, Screen.height), blackTx, new Rect(0, 0, 1, 1));
-                GUI.Label(new Rect(0f, 0f, Screen.width, Screen.height), "[Loadson]\n" + content);
+                GUI.DrawTextureWithTexCoords(new Rect(0, 0, Screen.width, Screen.height), blackTx, new Rect(0, 0, 1, 1));
+                GUI.Label(new Rect(0, 0, Screen.width, Screen.height), "[Loadson]\n" + content);
             }
-            GUI.Label(new Rect(0f, Screen.height - 20f, 1000f, 100f), "<b>Loadson v" + Version.ver + "</b> Loaded " + ModLoader.LoadedMods + " mods.");
+            if(ModLoader.LoadedMods == 1)
+                GUI.Label(new Rect(0, Screen.height - 16, 1000, 100), "<b>Loadson v" + Version.ver + "</b> Loaded 1 mod.");
+            else
+                GUI.Label(new Rect(0, Screen.height - 16, 1000, 100), "<b>Loadson v" + Version.ver + "</b> Loaded " + ModLoader.LoadedMods + " mods.");
         }
 
         public static void _update()

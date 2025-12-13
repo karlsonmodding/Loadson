@@ -30,6 +30,7 @@ namespace LoadsonInternal
         public Assembly assembly;
         public Loadson.Mod instance = null;
         public bool enabled = false;
+        public bool isLegacy = false;
 
         public ModEntry(string _ModName, string _ModAuthor, string _ModDescription, List<string> _ModDeps, int _ModWorkshopID, byte[] _AsmData, byte[] icon, byte[] assetbundle, string filePath)
         {
@@ -45,6 +46,22 @@ namespace LoadsonInternal
             Icon.LoadImage(icon);
             AssetBundle = AssetBundle.LoadFromMemory(assetbundle);
             FilePath = filePath;
+            isLegacy = true;
+        }
+
+        public ModEntry(string _ModName, string _ModAuthor, string _ModDescription, byte[] _AsmData, byte[] icon, byte[] assetbundle, string filePath)
+        {
+            ModGUID = _GUIDFetcher.ExtractGUID(_AsmData);
+            DisplayName = _ModName;
+            Author = _ModAuthor;
+            Description = _ModDescription;
+            DepsRef = Deps.ToArray();
+            AsmData = _AsmData;
+            Icon = new Texture2D(64, 64);
+            Icon.LoadImage(icon);
+            AssetBundle = AssetBundle.LoadFromMemory(assetbundle);
+            FilePath = filePath;
+            isLegacy = false;
         }
     }
 }

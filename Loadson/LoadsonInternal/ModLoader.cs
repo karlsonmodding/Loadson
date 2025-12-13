@@ -37,6 +37,8 @@ namespace LoadsonInternal
             }
         }
 
+        static readonly Dictionary<string, (System.Version, byte[])> external_deps = new Dictionary<string, (System.Version, byte[])>();
+
         public static void BuildList()
         {
             Console.Log("Loadson root: " + Loader.LOADSON_ROOT);
@@ -47,19 +49,73 @@ namespace LoadsonInternal
                     string ModName = br.ReadString();
                     string ModAuthor = br.ReadString();
                     string ModDescription = br.ReadString();
-                    Console.Log("Preloading [" + Path.GetFileName(file) + "] " + ModName + " by " + ModAuthor);
                     int _modDepCount = br.ReadInt32();
-                    List<string> ModDeps = new List<string>();
-                    for (int i = 0; i < _modDepCount; i++)
-                        ModDeps.Add(br.ReadString());
-                    int ModWorkshopID = br.ReadInt32();
-                    int _modSize = br.ReadInt32();
-                    byte[] ModBinary = br.ReadBytes(_modSize);
-                    int _iconSize = br.ReadInt32();
-                    byte[] ModIcon = br.ReadBytes(_iconSize);
-                    int _assetBundleSize = br.ReadInt32();
-                    byte[] ModAssetBundle = br.ReadBytes(_assetBundleSize);
-                    ModEntry.List.Add(new ModEntry(ModName, ModAuthor, ModDescription, ModDeps, ModWorkshopID, ModBinary, ModIcon, ModAssetBundle, file));
+                    if(_modDepCount >= 0)
+                    {
+                        // legacy loading
+                        Console.Log("Preloading LEGACY [" + Path.GetFileName(file) + "] " + ModName + " by " + ModAuthor);
+                        List<string> ModDeps = new List<string>();
+                        for (int i = 0; i < _modDepCount; i++)
+                            ModDeps.Add(br.ReadString());
+                        int ModWorkshopID = br.ReadInt32();
+                        int _modSize = br.ReadInt32();
+                        byte[] ModBinary = br.ReadBytes(_modSize);
+                        int _iconSize = br.ReadInt32();
+                        byte[] ModIcon = br.ReadBytes(_iconSize);
+                        int _assetBundleSize = br.ReadInt32();
+                        byte[] ModAssetBundle = br.ReadBytes(_assetBundleSize);
+                        ModEntry.List.Add(new ModEntry(ModName, ModAuthor, ModDescription, ModDeps, ModWorkshopID, ModBinary, ModIcon, ModAssetBundle, file));
+                    }
+                    else if(_modDepCount == -1)
+                    {
+                        Console.Log("Preloading [" + Path.GetFileName(file) + "] " + ModName + " by " + ModAuthor);
+                        int count = br.ReadInt32();
+                        while(count-- > 0)
+                        {
+                            string name = br.ReadString();
+                            System.Version ver = System.Version.Parse(br.ReadString());
+                            Console.Log($"  External dependency {name} ({ver})");
+                            byte[] bytes = br.ReadBytes(br.ReadInt32());
+                            if (!external_deps.ContainsKey(name))
+                                external_deps.Add(name, (ver, bytes));
+                            else
+                            {
+                                // check if versions are compatible (ie major is the same)
+                                // pick the newer one if that's the case
+                                // else don't load this mod and show error.
+                                System.Version old_version = external_deps[name].Item1;
+                                if(old_version.Major == ver.Major)
+                                {
+                                    if (ver.CompareTo(old_version) > 0)
+                                    {
+                                        external_deps[name] = (ver, bytes);
+                                        Console.Log($"    Using this version instead of the previously loaded one.");
+                                    }
+                                    else
+                                    {
+                                        Console.Log($"    Ignored because a newer or the same version is already loaded.");
+                                    }
+                                }
+                                else
+                                {
+                                    Console.Log($"    <color=red>This version is incompatible with the already loaded one ({old_version}).\n    Not loading this mod due to this conflict.</color>");
+                                    continue;
+                                }
+                            }
+                        }
+                        int _modSize = br.ReadInt32();
+                        byte[] ModBinary = br.ReadBytes(_modSize);
+                        int _iconSize = br.ReadInt32();
+                        byte[] ModIcon = br.ReadBytes(_iconSize);
+                        int _assetBundleSize = br.ReadInt32();
+                        byte[] ModAssetBundle = br.ReadBytes(_assetBundleSize);
+                        ModEntry.List.Add(new ModEntry(ModName, ModAuthor, ModDescription, ModBinary, ModIcon, ModAssetBundle, file));
+                    }
+                    else
+                    {
+                        Console.Log("<color=red>[" + Path.GetFileName(file) + "] " + ModName + " by " + ModAuthor + " reported unknown mod version " + (-_modDepCount) + ".</color>");
+                        continue;
+                    }
                 }
             }
         }
@@ -126,13 +182,23 @@ namespace LoadsonInternal
 
         private static Assembly GenericAssemblyResolve(object sender, ResolveEventArgs args)
         {
-            Console.Log("Resolving " + new AssemblyName(args.Name).Name + " (" + args.Name + ")");
-            string resolved = Path.Combine(Loader.LOADSON_ROOT, "Internal", "Loadson deps", new AssemblyName(args.Name).Name + ".dll");
+            var Name = new AssemblyName(args.Name);
+            Console.Log("Resolving " + Name.Name + " (" + args.Name + ")");
+
+            string resolved = Path.Combine(Loader.LOADSON_ROOT, "Internal", "Loadson deps", Name.Name + ".dll");
             if (File.Exists(resolved)) return Assembly.LoadFile(resolved);
-            resolved = Path.Combine(Loader.LOADSON_ROOT, "Internal", "Common deps", new AssemblyName(args.Name).Name + ".dll");
+
+            if (external_deps.ContainsKey(Name.Name))
+                // don't really need to check for compatiblity because preloader takes care of that
+                return Assembly.Load(external_deps[Name.Name].Item2);
+
+            // common deps will also get depracated in favor of embedded ones
+            resolved = Path.Combine(Loader.LOADSON_ROOT, "Internal", "Common deps", Name.Name + ".dll");
             if (File.Exists(resolved)) return Assembly.LoadFile(resolved);
+
             ModEntry resolveMod = (from x in ModEntry.List where x.assembly.FullName == args.Name select x).FirstOrDefault(null);
             if (resolveMod != null) return resolveMod.assembly;
+
             return null; // jump to next
         }
     }

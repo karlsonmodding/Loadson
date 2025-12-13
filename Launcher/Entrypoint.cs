@@ -38,6 +38,7 @@ namespace Launcher
         public int WorkshopID;
         public string FilePath;
         public bool Enabled;
+        public bool isLegacy;
         public ModInfo(string filePath)
         {
             FilePath = filePath;
@@ -48,18 +49,41 @@ namespace Launcher
                 Author = br.ReadString();
                 Description = br.ReadString();
                 int x = br.ReadInt32();
-                List<string> ModDeps = new List<string>();
-                while (x-- > 0)
-                    ModDeps.Add(br.ReadString());
-                Deps = ModDeps.ToArray();
-                WorkshopID = br.ReadInt32();
-                x = br.ReadInt32();
-                GUID = ExtractGUID(br.ReadBytes(x));
-                x = br.ReadInt32();
-                Image = new Texture2D(1, 1);
-                Image.LoadImage(br.ReadBytes(x));
-                x = br.ReadInt32();
-                HasBundle = x > 0;
+                if(x >= 0)
+                {
+                    isLegacy = true;
+                    List<string> ModDeps = new List<string>();
+                    while (x-- > 0)
+                        ModDeps.Add(br.ReadString());
+                    Deps = ModDeps.ToArray();
+                    WorkshopID = br.ReadInt32();
+                    x = br.ReadInt32();
+                    GUID = ExtractGUID(br.ReadBytes(x));
+                    x = br.ReadInt32();
+                    Image = new Texture2D(1, 1);
+                    Image.LoadImage(br.ReadBytes(x));
+                    x = br.ReadInt32();
+                    HasBundle = x > 0;
+                }
+                else
+                {
+                    isLegacy = false;
+                    x = br.ReadInt32();
+                    List<string> ExternalDeps = new List<string>();
+                    while (x-- > 0)
+                    {
+                        ExternalDeps.Add(br.ReadString() + $"({br.ReadString()})");
+                        br.ReadBytes(br.ReadInt32());
+                    }
+                    Deps = ExternalDeps.ToArray();
+                    x = br.ReadInt32();
+                    GUID = ExtractGUID(br.ReadBytes(x));
+                    x = br.ReadInt32();
+                    Image = new Texture2D(1, 1);
+                    Image.LoadImage(br.ReadBytes(x));
+                    x = br.ReadInt32();
+                    HasBundle = x > 0;
+                }
             }
         }
 
@@ -205,7 +229,10 @@ namespace Launcher
                         mods[i].FilePath = newFile;
                     }
                     GUI.DrawTexture(new Rect(25, 5, 60, 60), mods[i].Image);
-                    GUI.Label(new Rect(90, 0, 165, 25), mods[i].Name);
+                    if (mods[i].isLegacy)
+                        GUI.Label(new Rect(90, 0, 165, 25), "<color=yellow>[L]</color> " + mods[i].Name);
+                    else
+                        GUI.Label(new Rect(90, 0, 165, 25), mods[i].Name);
                     GUI.Label(new Rect(90, 25, 165, 25), "by " + mods[i].Author);
                     if(GUI.Button(new Rect(90, 50, 50, 20), "Info"))
                         showInfoMod = mods[i];
@@ -227,7 +254,7 @@ namespace Launcher
                         $"[GUID] {showInfoMod.GUID}\n" +
                         $"[Name] {showInfoMod.Name}\n" +
                         $"[Author] {showInfoMod.Author}\n" +
-                        $"[Deps] ({showInfoMod.Deps.Length}) {string.Join(", ", showInfoMod.Deps)}\n" +
+                        $"[Deps] ({showInfoMod.Deps.Length}) {string.Join(", ", showInfoMod.Deps)} {(showInfoMod.isLegacy ? " <color=yellow>This mod uses a legacy format</color>." : "")}\n" +
                         (showInfoMod.HasBundle ? "This mod has an AssetBundle" : "This mod does not have an AssetBundle"));
                     GUI.Box(new Rect(5, 130, 390, 315), "");
                     GUI.Label(new Rect(10, 135, 380, 305), showInfoMod.Description);

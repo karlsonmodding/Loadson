@@ -12,7 +12,7 @@ namespace ModBuilder
     class Program
     {
         public const string API_ENDPOINT = "https://raw.githubusercontent.com/karlsonmodding/Loadson/deploy";
-        public const string VERSION = "v4";
+        public const string VERSION = "v5";
 
         [STAThread]
         static void Main(string[] args)
@@ -101,7 +101,6 @@ namespace ModBuilder
             Console.WriteLine("Loading metadata..");
             string metadata = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "metadata.txt"));
             string m_name = "null", m_author = "null", m_description = "null";
-            List<string> deps = new List<string>();
             foreach(string a in metadata.Split('\n'))
             {
                 string line = a.Trim();
@@ -122,10 +121,6 @@ namespace ModBuilder
                     case "description":
                         m_description = val.Replace("\\n", "\n"); // add LF
                         break;
-                    case "deps":
-                        if (val.Length == 0 || val == "") break;
-                        foreach (string entry in val.Split(',')) deps.Add(entry);
-                        break;
                 }
             }
             Console.WriteLine("Loading icon data..");
@@ -137,18 +132,34 @@ namespace ModBuilder
             Console.WriteLine("Building mod..");
             if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klm")))
                 File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klm"));
-            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klmi")))
-                File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klmi"));
+            List<string> extDeps = new List<string>();
+            foreach (var file in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Release")))
+            {
+                if (!file.EndsWith(".dll"))
+                    continue;
+                if (Path.GetFileNameWithoutExtension(file) == mod_guid)
+                    continue;
+                extDeps.Add(file);
+            }
+            Console.WriteLine("External deps: " + extDeps.Count);
             using (FileStream fs = File.OpenWrite(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klm")))
             using (BinaryWriter bw = new BinaryWriter(fs))
             {
                 bw.Write(m_name);
                 bw.Write(m_author);
                 bw.Write(m_description);
-                bw.Write(deps.Count);
-                if (deps.Count > 0)
-                    foreach (string dep in deps) bw.Write(dep);
-                bw.Write(-1); // WorkshopID
+                bw.Write(-1); // new format specifier
+                bw.Write(extDeps.Count);
+                foreach(string dep in extDeps)
+                {
+                    Console.WriteLine("Adding " + Path.GetFileName(dep));
+                    var bytes = File.ReadAllBytes(dep);
+                    var asm_name = Assembly.Load(bytes).GetName();
+                    bw.Write(asm_name.Name);
+                    bw.Write(asm_name.Version.ToString());
+                    bw.Write(bytes.Length);
+                    bw.Write(bytes);
+                }
                 bw.Write(mod_asm.Length);
                 bw.Write(mod_asm);
                 bw.Write(img_data.Length);
@@ -157,36 +168,8 @@ namespace ModBuilder
                 else { bw.Write(assetbundle.Length); bw.Write(assetbundle); }
                 bw.Close();
             }
-            using (FileStream fs = File.OpenWrite(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klmi")))
-            using (BinaryWriter bw = new BinaryWriter(fs))
-            {
-                List<string> extDeps = new List<string>();
-                foreach (var file in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Release")))
-                {
-                    if (!file.EndsWith(".dll"))
-                        continue;
-                    if (Path.GetFileNameWithoutExtension(file) == mod_guid)
-                        continue;
-                    extDeps.Add(file);
-                }
-                Console.WriteLine("External deps: " + extDeps.Count);
-                bw.Write(extDeps.Count); // external deps
-                foreach (var dep in extDeps)
-                {
-                    Console.WriteLine("Adding " + Path.GetFileName(dep));
-                    bw.Write(Path.GetFileName(dep));
-                    var bytes = File.ReadAllBytes(dep);
-                    bw.Write(bytes.Length);
-                    bw.Write(bytes);
-                }
-                byte[] mod = File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klm"));
-                bw.Write(mod.Length);
-                bw.Write(mod);
-                bw.Close();
-            }
             Console.WriteLine("\nBuild succesfully in (" + Math.Ceiling((DateTime.Now - start).TotalMilliseconds) + "ms).");
             Console.WriteLine("Mod size: " + File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klm")).Length + " B");
-            Console.WriteLine("Install size: " + File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, mod_guid + ".klmi")).Length + " B");
         }
     }
 }

@@ -55,6 +55,17 @@ namespace LoadsonInternal
             Loader.discord.GetActivityManager().UpdateActivity(lastActivity, (_) => ProcessUpdate());
         }
 #endif
+        /// <summary>
+        /// Change Discord RPC. Only non-default values will be changed.
+        /// </summary>
+        /// <param name="largeImage"></param>
+        /// <param name="largeText"></param>
+        /// <param name="smallImage"></param>
+        /// <param name="smallText"></param>
+        /// <param name="details"></param>
+        /// <param name="state"></param>
+        /// <param name="party"></param>
+        /// <param name="secrets"></param>
         public static void UpdateRPC(string largeImage = "", string largeText = "", string smallImage = "", string smallText = "", string details = "", string state = "", ActivityParty? party = null, ActivitySecrets? secrets = null)
         {
 #if !LoadsonAPI

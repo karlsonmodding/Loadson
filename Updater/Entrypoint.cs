@@ -56,6 +56,12 @@ namespace Updater
             // check if discord exists
             DiscordAPI.Check();
 
+            if (Environment.GetCommandLineArgs().Contains("-debug"))
+            {
+                checking = false;
+                return;
+            }
+
             ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(delegate { return true; });
             wc = new WebClient();
             new Thread(() =>

@@ -129,13 +129,25 @@ namespace LoadsonInternal
                 }
                 ModEntry mod = ModEntry.List[viewModIdx];
                 GUI.DrawTexture(new Rect(5, 25, 100, 100), mod.Icon);
-                GUI.Label(new Rect(110, 25, 280, 100),
+                if(mod.isLegacy)
+                {
+                    GUI.Label(new Rect(110, 25, 280, 100),
                     $"[File] {Path.GetFileName(mod.FilePath)}\n" +
                     $"[GUID] {mod.ModGUID}\n" +
                     $"[Name] {mod.DisplayName}\n" +
                     $"[Author] {mod.Author}\n" +
-                    $"[Deps] ({mod.DepsRef.Length}) {string.Join(", ", mod.DepsRef)}\n" +
+                    $"[Deps] ({mod.DepsRef.Length}) {string.Join(", ", mod.DepsRef)} <color=yellow>This mod uses a legacy format</color>.\n" +
                     (mod.AssetBundle != null ? "This mod has an AssetBundle" : "This mod does not have an AssetBundle"));
+                }
+                else
+                {
+                    GUI.Label(new Rect(110, 25, 280, 100),
+                    $"[File] {Path.GetFileName(mod.FilePath)}\n" +
+                    $"[GUID] {mod.ModGUID}\n" +
+                    $"[Name] {mod.DisplayName}\n" +
+                    $"[Author] {mod.Author}\n\n" +
+                    (mod.AssetBundle != null ? "This mod has an AssetBundle" : "This mod does not have an AssetBundle"));
+                }
                 GUI.Box(new Rect(5, 130, 390, 315), "");
                 GUI.Label(new Rect(10, 135, 380, 305), mod.Description);
             }, "Mod Details");

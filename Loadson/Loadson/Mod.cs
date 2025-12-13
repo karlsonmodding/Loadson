@@ -62,10 +62,12 @@ namespace Loadson
         }
 
         /// <summary>
+        /// <b>Crossmod API is deprecated as of Loadson 2.2.0. It will get completely removed starting with 3.*.*</b><br/>
         /// "Write" and API function that can be later called by <see cref="CallAPIFunction(string, object[])"/>
         /// </summary>
         /// <param name="name">Name of the function. Be carefull to add a prefix to it that is unique to your mod.</param>
         /// <param name="execute">The API function itself, takes one parameter as list of objects, returns an object (can be null for void functions)</param>
+        [Obsolete("Crossmod API is deprecated as of Loadson 2.2.0. It will get completely removed starting with 3.*.*")]
         protected void AddAPIFunction(string name, CrossModAPI.cmm execute)
         {
 #if !LoadsonAPI
@@ -74,11 +76,13 @@ namespace Loadson
         }
 
         /// <summary>
+        /// <b>Crossmod API is deprecated as of Loadson 2.2.0. It will get completely removed starting with 3.*.*</b><br/>
         /// "Call" an API function. Be sure to add the mod that you are calling to the dependencies list.
         /// </summary>
         /// <param name="name">Name of the function.</param>
         /// <param name="args">Function parameters as an object list</param>
         /// <returns>API function return value</returns>
+        [Obsolete("Crossmod API is deprecated as of Loadson 2.2.0. It will get completely removed starting with 3.*.*")]
         protected object CallAPIFunction(string name, object[] args)
         {
 #if !LoadsonAPI
