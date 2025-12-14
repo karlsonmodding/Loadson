@@ -212,7 +212,7 @@ namespace Launcher
                     Process.Start(Path.Combine(LOADSON_ROOT, "Mods"));
                 if (GUI.Button(new Rect(0, 0, 100, 20), "Refresh"))
                     ReloadMods();
-                modManagerScroll = GUI.BeginScrollView(new Rect(5, 20, 295, Screen.height - 20), modManagerScroll, new Rect(0, 0, 275, mods.Count * 65 - 5));
+                modManagerScroll = GUI.BeginScrollView(new Rect(5, 20, 295, Screen.height - 20), modManagerScroll, new Rect(0, 0, 275, mods.Count * 75));
                 for (int i = 0; i < mods.Count; i++)
                 {
                     GUI.BeginGroup(new Rect(0, 75 * i, 275, 70));
