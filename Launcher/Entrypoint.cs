@@ -167,7 +167,7 @@ namespace Launcher
             if (has_kmp && GUI.Button(new Rect(Screen.width - 150, 0, 150, 30), "<size=14>Open KarlsonMP</size>")) LoadKMP();
 
             if (GUI.Button(new Rect(300, 0, 100, 30), "<size=14>Install Mod</size>"))
-                FilePicker.PickFile("Select mod to install", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), new List<(string, string)> { ("KLMI file", "*.klmi"), ("KLM file", "*.klm") }, (file) =>
+                FilePicker.PickFile("Select mod to install", Environment.GetFolderPath(Environment.SpecialFolder.Desktop), new List<(string, string)> { ("KLM file", "*.klm"), ("KLMI file", "*.klmi"), }, (file) =>
                 {
                     if (!File.Exists(file)) return;
                     var fileName = Path.GetFileNameWithoutExtension(file);
@@ -187,6 +187,7 @@ namespace Launcher
                             File.Delete(Path.Combine(LOADSON_ROOT, "Mods", "Disabled", fileName + ".klm"));
                         using (BinaryReader br = new BinaryReader(File.OpenRead(file)))
                         {
+                            // klmi files only exist for legacy mods
                             int _extDeps = br.ReadInt32();
                             List<(string, byte[])> extDeps = new List<(string, byte[])>();
                             while (_extDeps-- > 0)

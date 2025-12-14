@@ -239,31 +239,44 @@ namespace Launcher
         {
             Options = options;
             Index = defaultIdx;
-            buttonText = new GUIStyle();
-            buttonText.normal.background = Texture2D.blackTexture;
-            buttonText.alignment = TextAnchor.MiddleLeft;
         }
         public string[] Options;
         public int Index;
         private bool dropped = false;
-        GUIStyle buttonText;
+        static GUIStyle dropdownButton, buttonText, dropdownText;
         public bool Draw(Rect pos)
         {
+            if(dropdownButton == null)
+            {
+                dropdownButton = new GUIStyle(GUI.skin.button);
+                dropdownButton.normal.background = Texture2D.blackTexture;
+                dropdownButton.alignment = TextAnchor.MiddleLeft;
+            }
+            if(buttonText == null)
+            {
+                buttonText = new GUIStyle(GUI.skin.button);
+                buttonText.alignment = TextAnchor.MiddleLeft;
+            }
+            if(dropdownText == null)
+            {
+                dropdownText = new GUIStyle(GUI.skin.label);
+                dropdownText.alignment = TextAnchor.MiddleCenter;
+            }
             if (!dropped)
             {
-                if (GUI.Button(pos, Options[Index])) dropped = true;
-                GUI.Label(new Rect(pos.x + pos.width - pos.height, pos.y, pos.height, pos.height), "▲");
+                if (GUI.Button(pos, Options[Index], buttonText)) dropped = true;
+                GUI.Label(new Rect(pos.x + pos.width - pos.height, pos.y, pos.height, pos.height), "▲", dropdownText);
             }
             else
             {
-                if (GUI.Button(pos, Options[Index])) dropped = false;
-                GUI.Label(new Rect(pos.x + pos.width - pos.height, pos.y, pos.height, pos.height), "▼");
+                if (GUI.Button(pos, Options[Index], buttonText)) dropped = false;
+                GUI.Label(new Rect(pos.x + pos.width - pos.height, pos.y, pos.height, pos.height), "▼", dropdownText);
                 GUI.Box(new Rect(pos.x, pos.y - pos.height * Options.Length, pos.width, pos.height * Options.Length), "");
                 for (int i = 0; i < Options.Length; i++)
                 {
                     string color = "<color=white>";
-                    if (i == Index) color = "<color=green>";
-                    if (GUI.Button(new Rect(pos.x, pos.y - pos.height * (Options.Length - i), pos.width, pos.height), color + Options[i] + "</color>", buttonText))
+                    if (i == Index) color = "<color=#00FF00>";
+                    if (GUI.Button(new Rect(pos.x, pos.y - pos.height * (Options.Length - i), pos.width, pos.height), color + Options[i] + "</color>", dropdownButton))
                     {
                         Index = i;
                         dropped = false;
