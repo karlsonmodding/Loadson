@@ -54,10 +54,6 @@ namespace LoadsonInternal
                 GUI.DrawTextureWithTexCoords(new Rect(0, 0, Screen.width, Screen.height), blackTx, new Rect(0, 0, 1, 1));
                 GUI.Label(new Rect(0, 0, Screen.width, Screen.height), "[Loadson]\n" + content);
             }
-            if(ModLoader.LoadedMods == 1)
-                GUI.Label(new Rect(0, Screen.height - 16, 1000, 100), "<b>Loadson v" + Version.ver + "</b> Loaded 1 mod.");
-            else
-                GUI.Label(new Rect(0, Screen.height - 16, 1000, 100), "<b>Loadson v" + Version.ver + "</b> Loaded " + ModLoader.LoadedMods + " mods.");
         }
 
         public static void _update()
