@@ -15,6 +15,7 @@ namespace LoadsonInternal
     public class Hook_Managers_Start
     {
         public static bool done { get; private set; } = false;
+        public static bool unity_exporer { get; private set; } = false;
         public static bool Prefix(Managers __instance)
         {
             Console.Init();
@@ -30,6 +31,7 @@ namespace LoadsonInternal
             {
                 Assembly obe = AppDomain.CurrentDomain.Load(File.ReadAllBytes(Path.Combine(Loader.LOADSON_ROOT, "UnityExplorer.STANDALONE.Mono.dll")));
                 obe.GetType("UnityExplorer.ExplorerStandalone").GetMethod("CreateInstance", Array.Empty<Type>()).Invoke(null, Array.Empty<object>());
+                unity_exporer = true;
             }
 
             Loader.InitDiscord();
@@ -115,6 +117,15 @@ namespace LoadsonInternal
                 ___fpsOn = true;
                 ___speedOn = true;
             }
+        }
+    }
+
+    public class Hook_PlayerMovement_Pause
+    {
+        public static void PausePostfix(bool ___paused)
+        {
+            if(___paused)
+                Cursor.lockState = CursorLockMode.Confined;
         }
     }
 }

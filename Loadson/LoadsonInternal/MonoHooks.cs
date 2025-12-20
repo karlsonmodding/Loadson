@@ -20,10 +20,7 @@ namespace LoadsonInternal
             foreach (ModEntry mod in from x in ModEntry.List where x.instance != null select x)
                 ModLoader.SafeCall(mod.instance.OnGUI);
 
-            if (ModLoader.LoadedMods == 1)
-                GUI.Label(new Rect(1, Screen.height - 17, 1000, 100), "<b>Loadson v" + Version.ver + "</b> Loaded 1 mod.");
-            else
-                GUI.Label(new Rect(1, Screen.height - 17, 1000, 100), "<b>Loadson v" + Version.ver + "</b> Loaded " + ModLoader.LoadedMods + " mods.");
+            GUI.Label(new Rect(1, Screen.height - 17, 1000, 100), string.Format("<b>Loadson v{0}</b> Loaded {1}{2} mod{3}.", Version.ver, Hook_Managers_Start.unity_exporer ? "UE and " : "", ModLoader.LoadedMods, ModLoader.LoadedMods == 1 ? "" : "s"));
         }
 
         public void Update()

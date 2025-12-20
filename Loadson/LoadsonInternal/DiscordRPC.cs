@@ -20,20 +20,14 @@ namespace LoadsonInternal
 
         public static void Init()
         {
-            // determine platform
-            string platform = "";
-            var managed_path = Application.dataPath;
-            if (managed_path.EndsWith("Karlson_Data"))
+            string platform_name = "";
+            switch(Loader.platform)
             {
-                if (Environment.Is64BitProcess)
-                    platform = "[Win64]";
-                else
-                    platform = "[Win32]";
+                case Loader.Platform.Win64: platform_name = "[Win64] "; break;
+                case Loader.Platform.Win32: platform_name = "[Win32] "; break;
+                case Loader.Platform.Linux: platform_name = "[Linux] "; break;
+                case Loader.Platform.MacOS: platform_name = "[MacOS] "; break;
             }
-            else if (managed_path.EndsWith("Karlson_linux_Data"))
-                platform = "[Linux]";
-            else
-                platform = "[MacOS]";
             timestampStart = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
             lastActivity = new Activity
             {
@@ -43,7 +37,7 @@ namespace LoadsonInternal
                     LargeImage = "loadson",
                     LargeText = "Loadson v" + Version.ver,
                     SmallImage = "karlson",
-                    SmallText = platform + " Karlson (itch.io)"
+                    SmallText = platform_name + "Karlson (itch.io)"
                 },
                 Details = "Loading mods..",
                 State = "github.com/karlsonmodding",

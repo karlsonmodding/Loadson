@@ -28,9 +28,34 @@ namespace LoadsonInternal
         public static long DISCORD_CLIENTID = 1101662131868409947;
         public static bool discord_lib_installed;
 
+        public enum Platform
+        {
+            Unknown,
+            Win64,
+            Win32,
+            Linux,
+            MacOS
+        }
+        public static Platform platform;
+
         public static void Start(bool discord)
         {
             discord_lib_installed = discord;
+
+            // determine platform
+            var managed_path = Application.dataPath;
+            if (managed_path.EndsWith("Karlson_Data"))
+            {
+                if (Environment.Is64BitProcess)
+                    platform = Platform.Win64;
+                else
+                    platform = Platform.Win32;
+            }
+            else if (managed_path.EndsWith("Karlson_linux_Data"))
+                platform = Platform.Linux;
+            else
+                platform = Platform.MacOS;
+
             UnityEngine.Debug.Log("Hello from LoadsonInternal");
             Preferences.Load();
 
@@ -49,6 +74,10 @@ namespace LoadsonInternal
             try
             {
                 Harmony.PatchAll();
+                if(platform == Platform.Linux)
+                {
+                    Harmony.Patch(typeof(PlayerMovement).GetMethod("Pause", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance), postfix: new HarmonyMethod(typeof(Hook_PlayerMovement_Pause).GetMethod("PausePostfix")));
+                }
             } catch (Exception e)
             {
                 Console.Log(e.ToString());
